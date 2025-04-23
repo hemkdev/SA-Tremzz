@@ -1,4 +1,23 @@
 * {
-    background-color: #322d35 ;
+    background-color: #322f35 ;
 }
 
+header > .menu-iphone {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 20px;
+}
+
+nav ul {
+    list-style: none;
+    justify-content: flex-end;
+}
+
+nav ul li {
+    display: inline;
+}
+
+nav ul img {
+    height: 20px;
+}
