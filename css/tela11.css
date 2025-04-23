@@ -1,2 +1,26 @@
 
+.rodape {
+    background-color: rgb(41, 41, 41);
+    text-align: center;
+    padding: 10px 0;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.2);
+    color: rgb(0, 0, 0);
+}
 
+.container {
+    max-width: 1000px;
+    max-height: 852px;
+}
+
+.rodape button {
+    background-color: rgb(41, 41, 41);
+    
+}
+
+.rodape img {
+    max-width: 30px;
+    
+}
