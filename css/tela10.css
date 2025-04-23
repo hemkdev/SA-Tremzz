@@ -1,3 +1,24 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    background-color: rgb(41, 41, 41);
+    color: white; 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+.container {
+    text-align: center;
+    max-width: 400px;
+    padding: 20px;
+}
+
 
 .rodape {
     background-color: rgb(41, 41, 41);
@@ -7,12 +28,16 @@
     bottom: 0;
     width: 100%;
     box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.2);
-    color: white;
-}
-
-.container {
-    max-width: 400px;
-    max-height: 852px;
+    color: rgb(0, 0, 0);
 }
 
 
+.rodape button {
+    background-color: rgba(41, 41, 41, 0);
+    
+}
+
+.rodape img {
+    max-width: 30px;
+    
+}

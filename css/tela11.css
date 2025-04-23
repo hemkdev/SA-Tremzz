@@ -1,4 +1,21 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
 
+
+
+
+body {
+    background-color: rgb(41, 41, 41);
+    color: white; 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
 .rodape {
     background-color: rgb(41, 41, 41);
     text-align: center;
@@ -10,17 +27,58 @@
     color: rgb(0, 0, 0);
 }
 
-.container {
-    max-width: 1000px;
-    max-height: 852px;
-}
 
 .rodape button {
-    background-color: rgb(41, 41, 41);
+    background-color: rgba(41, 41, 41, 0);
     
 }
 
 .rodape img {
     max-width: 30px;
     
+}
+
+.container {
+    text-align: center;
+    max-width: 400px;
+    padding: 20px;
+}
+
+
+.header {
+    margin-bottom: 20px;
+}
+
+.header .back-button {
+    margin-right: 400px;
+}
+
+.back-button {
+    font-size: 24px;
+    cursor: pointer;
+}
+
+h1 {
+    font-size: 36px;
+    margin-top: 10px;
+}
+
+
+.ilustracao img {
+    width: 100%;
+    max-width: 300px;
+    height: auto;
+    margin: 20px 0;
+}
+
+
+.message h2 {
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+.message p {
+    font-size: 18px;
+    line-height: 1.5;
+    color: #aaa; 
 }
