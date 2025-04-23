@@ -1,0 +1,10 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    max-width: 400px;
+    max-height: 852px;
+}
+
