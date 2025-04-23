@@ -1,2 +1,25 @@
+body {
+    background-color: rgb(6, 54, 56);
+}
+
+.tela {
+    color: white;
+    position: absolute;
+    top: 30%;
+    left: 50%;
+    transform: translate(-40%, -40%);
+    font-size: 30px;
+}
+
+.layout {
+font-size: 8px;
+    color: white;
+    position: absolute;
+    top:20px;
+
+}
+
+h1 {
 
 
+}

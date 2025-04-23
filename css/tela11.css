@@ -23,7 +23,7 @@ body {
     position: fixed;
     bottom: 0;
     width: 100%;
-    box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.2);
+
     color: rgb(0, 0, 0);
 }
 
@@ -31,6 +31,8 @@ body {
 .rodape button {
     background-color: rgba(41, 41, 41, 0);
     
+    background-color: rgb(41, 41, 41);
+    style    
 }
 
 .rodape img {
