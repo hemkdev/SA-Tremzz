@@ -12,14 +12,33 @@ body {
 }
 
 .layout {
-font-size: 8px;
+    font-size: 8px;
     color: white;
     position: absolute;
-    top:20px;
-
+    top: 60%;
+    left: 30%
 }
 
-h1 {
-
-
+button{
+    background-color: black;
+    border-radius: 10px;
+    font-size: 20px;
 }
+
+.login {
+position: absolute;
+top: 70%;
+left: 35%;
+}
+
+.login a {
+    color: white;
+}
+
+.login-2 {
+    position: absolute;
+    top: 80%;
+    left: 35%; 
+}
+
+button
