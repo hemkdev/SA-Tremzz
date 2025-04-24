@@ -4,9 +4,10 @@ body {
 
 .tela {
     color: white;
+   
     position: absolute;
     top: 30%;
-    left: 50%;
+    left: 46%;
     transform: translate(-40%, -40%);
     font-size: 30px;
 }
@@ -16,14 +17,14 @@ body {
     color: white;
     position: absolute;
     top: 60%;
-    left: 30%
+    left: 38%
 }
 
-button{
-    background-color: black;
-    border-radius: 10px;
-    font-size: 20px;
+.layout h1 {
+    font-family:serif;
 }
+
+
 
 .login {
 position: absolute;
@@ -32,7 +33,17 @@ left: 35%;
 }
 
 .login a {
-    color: white;
+    color: rgb(238, 238, 238);
+    font-family:serif;
+}
+
+.login button {
+    background-color: black;
+    border-radius: 10px;
+    font-size: 25px;
+    width: 350px; 
+    border-color: transparent;
+
 }
 
 .login-2 {
@@ -41,4 +52,16 @@ left: 35%;
     left: 35%; 
 }
 
-button
+.login-2 a {
+    color: white;
+    font-family:serif;
+}
+
+.login-2 button {
+    background-color: transparent;
+    text-align:center;
+    width: 350px;
+    font-size:25px;
+    border-radius: 10px;
+    border-color:white;
+}
