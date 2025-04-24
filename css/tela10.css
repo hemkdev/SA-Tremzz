@@ -65,3 +65,8 @@ hr {
     margin-top: 10px;
 }
 
+img {
+    margin-left:40px;
+    margin-right: 30px;
+    justify-content: center;
+}
