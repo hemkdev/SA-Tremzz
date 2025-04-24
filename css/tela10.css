@@ -47,10 +47,21 @@ nav {
     margin-right: 250px;
     font-size: 20px;
     font-family: Arial, sans-serif;
+    margin-top: 10px;
 }
 
 h5 {
     margin-left: 40px;
     margin-top: 10px;
     font-weight: 200;
+    width: 100%;
 }
+
+hr {
+    color: white;
+    opacity: 60%;
+    margin-left: 30px;
+    width: 330px;
+    margin-top: 10px;
+}
+
