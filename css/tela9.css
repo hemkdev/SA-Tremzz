@@ -60,6 +60,7 @@ h5 {
 }
 
 
+
 .rodape button {
     background-color: rgba(41, 41, 41, 0);
     
@@ -77,8 +78,24 @@ h5 {
     
 }
 
+.perfil {
+    margin-bottom: 20px;
+}
+
 img {
     margin-left:40px;
     margin-right: 30px;
     justify-content: center;
+    
 }
+
+h3 {
+    margin-left: 10px;
+ 
+}
+
+a {
+    text-decoration: none;
+    color: white;
+}
+
