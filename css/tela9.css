@@ -29,6 +29,12 @@ nav {
     margin-bottom: 300px;
 }
 
+nav img {
+    border-radius: 100px;
+    height: 100px;
+    width: 100px;
+}
+
 .info {
     margin-right: 250px;
     font-size: 20px;
