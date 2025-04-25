@@ -4,11 +4,18 @@
     color: whitesmoke;
 }
 
-.botaoFace {
-    text-align: center;
+.botao-azul {
+    background-color: blue;
+    color: whitesmoke;
+    
+    
 }
 
-.botaoGoogle {
+.botao-branco {
+    background-color: white;
+}
+
+.botaooo {
     text-align: center;
 }
 
@@ -30,3 +37,4 @@ fieldset {
 body {
     background-color: #414141;
 }
+
