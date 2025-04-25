@@ -2,7 +2,7 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: Arial, sans-serif;
+    font-family: 'Poppins', sans-serif;
     color: white;
 }
 
@@ -57,7 +57,18 @@ body {
 }
 
 /* MAIN */
+.ult-atividade span {
+    font-size: larger;
+    font-weight: lighter;
+}
 
+.ult-atividade {
+    margin-top: 10%;
+}
+
+.card-atividade {
+    display: flex;
+}
 
 /* Barra de navegação */
 .rodape {
