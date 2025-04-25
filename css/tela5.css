@@ -1,2 +1,42 @@
+.registro {
+    padding-top: 100px ;
+    text-align: center;
+    color: whitesmoke;
+}
+
+.botao-azul {
+    background-color: blue;
+    color: whitesmoke;
+    
+    
+}
+
+.botao-branco {
+    background-color: white;
+}
+
+.botaooo {
+    text-align: center;
+}
+
+h1 {
+    text-align: center;
+    padding-top: 190px;
+    color: whitesmoke;
+}
+
+img {
+    width: 30px;
+}
+
+fieldset {
+    border: none;
+    text-align: center;
+}
+
+body {
+    background-color: #414141;
+}
+
 
 
