@@ -3,11 +3,13 @@
     text-align: center;
     color: whitesmoke;
     
+    
 }
 
 .botao-azul {
     background-color: blue;
     color: whitesmoke;
+    
     
     
 }
@@ -34,6 +36,7 @@ img {
 fieldset {
     border: none;
     text-align: center;
+    
 }
 
 body {
@@ -43,5 +46,11 @@ body {
 .login {
     text-align: center;
     color: whitesmoke;
-    
+
 }
+
+.login a {
+    text-decoration: none;
+    color: red;
+}
+
