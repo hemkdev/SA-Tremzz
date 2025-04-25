@@ -2,6 +2,7 @@
     padding-top: 100px ;
     text-align: center;
     color: whitesmoke;
+    
 }
 
 .botao-azul {
@@ -23,6 +24,7 @@ h1 {
     text-align: center;
     padding-top: 190px;
     color: whitesmoke;
+    font-family: "Lexend", sans-serif;
 }
 
 img {
@@ -38,3 +40,8 @@ body {
     background-color: #414141;
 }
 
+.login {
+    text-align: center;
+    color: whitesmoke;
+    
+}
