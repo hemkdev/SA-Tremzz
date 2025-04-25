@@ -88,3 +88,8 @@ img {
     margin-right: 30px;
     justify-content: center;
 }
+
+a {
+    text-decoration: none;
+    color: white;
+}
