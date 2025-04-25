@@ -59,6 +59,8 @@ nav ul img {
     width: 100%;
     box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.2);
     color: rgb(0, 0, 0);
+    width: 3000px;
+
 }
 
 
@@ -68,6 +70,7 @@ nav ul img {
 
 .rodape img {
     max-width: 30px;
+   
 }
 
 .container {
@@ -81,4 +84,12 @@ img {
     margin-left:40px;
     margin-right: 30px;
     justify-content: center;
+}
+
+footer.rodape {
+    width: 1000px;
+}
+
+a {
+    text-decoration: none;
 }
