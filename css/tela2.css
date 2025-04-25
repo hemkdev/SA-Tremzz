@@ -5,7 +5,7 @@
 }
 
 body {
-    background-color: rgb(85, 40, 40);
+background-color: rgb(85, 40, 40);
     color: white;
     font-family: sans-serif;
     display: flex;
@@ -30,4 +30,22 @@ body {
     font-family: "Lexend", sans-serif;
     font-optical-sizing: auto;
     font-style: normal;
+    margin-bottom: 100%;
+}
+
+.loader {
+    width: 80px;
+    height: 80px;
+    border: 2px solid rgb(255, 255, 255);
+    border-top-color: rgb(206, 94, 94);
+    border-radius: 50%;
+    animation: rotate ease 1s infinite;
+    bottom: 2;
+    position: absolute;
+}
+
+@keyframes rotate {
+    to {
+        transform: rotate(360deg);
+    }
 }
