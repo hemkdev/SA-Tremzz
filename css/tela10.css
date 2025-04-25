@@ -41,8 +41,7 @@ nav {
     width: 100%;
     text-align: center;
     margin-bottom: 300px;
-    justify-content: center;
-    justify-items: center;
+    
 }
 
 .info {
@@ -57,7 +56,8 @@ h5 {
     margin-left: 40px;
     margin-top: 10px;
     font-weight: 200;
-    width: 300px
+    width: 300px;
+    
 }
 
 hr {
