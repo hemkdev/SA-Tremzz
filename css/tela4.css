@@ -9,6 +9,7 @@
 .botao-azul {
     background-color: blue;
     color: whitesmoke;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
     
     
     
@@ -16,6 +17,7 @@
 
 .botao-branco {
     background-color: white;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
 }
 
 .botaooo {
@@ -41,6 +43,7 @@ fieldset {
 
 body {
     background-color: #414141;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .login {
