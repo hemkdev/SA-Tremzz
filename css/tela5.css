@@ -2,6 +2,8 @@
     padding-top: 100px ;
     text-align: center;
     color: whitesmoke;
+    
+
 }
 
 .botao-azul {
@@ -13,16 +15,19 @@
 
 .botao-branco {
     background-color: white;
+    
 }
 
 .botaooo {
     text-align: center;
+    
 }
 
 h1 {
     text-align: center;
     padding-top: 190px;
     color: whitesmoke;
+    font-family:"Lexend", sans-serif;
 }
 
 img {
@@ -32,10 +37,18 @@ img {
 fieldset {
     border: none;
     text-align: center;
+    
+    
 }
 
 body {
     background-color: #414141;
+   
+}
+
+.login a {
+    text-decoration: none;
+    color: red;
 }
 
 
