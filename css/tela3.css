@@ -2,13 +2,14 @@ body {
     margin: 0;
     padding: 0;
     background-color: rgb(85, 40, 40);
-    font-family: serif;
+    font-family: sans-serif;
     color: white;
     display: flex;
     justify-content: center;
     align-items: center;
     min-height: 100vh;
     flex-direction: column;
+    text-shadow: 0 -2px 5px rgba(0, 0, 0, 0.2);;
 }
 
 
