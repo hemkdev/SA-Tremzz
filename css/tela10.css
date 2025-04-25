@@ -41,6 +41,7 @@ nav {
     width: 100%;
     text-align: center;
     margin-bottom: 300px;
+    
 }
 
 .info {
@@ -48,13 +49,15 @@ nav {
     font-size: 20px;
     font-family: Arial, sans-serif;
     margin-top: 10px;
+    
 }
 
 h5 {
     margin-left: 40px;
     margin-top: 10px;
     font-weight: 200;
-    width: 100%;
+    width: 300px;
+    
 }
 
 hr {
@@ -63,10 +66,15 @@ hr {
     margin-left: 30px;
     width: 330px;
     margin-top: 10px;
+    
 }
 
 img {
     margin-left:40px;
     margin-right: 30px;
     justify-content: center;
+}
+
+a {
+    text-decoration: none;
 }

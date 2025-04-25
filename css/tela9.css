@@ -5,6 +5,7 @@
     padding: 0;
     box-sizing: border-box;
     font-family: Arial, sans-serif;
+    
 }
 
 body {
@@ -14,6 +15,7 @@ body {
     justify-content: center;
     align-items: center;
     height: 100vh;
+    margin-top: 20px;
 }
 .container {
     text-align: center;
