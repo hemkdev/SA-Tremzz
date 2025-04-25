@@ -1,21 +1,26 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title> TREMzz </title>
-    <link rel="stylesheet" href="../css/style.css">
+    <title>Abertura</title>
+    <link rel="stylesheet" href="../css/tela1.css">
 </head>
 <body>
-
+    <div class="splash-screen">
+        <h1></h1>
     </div>
-    <script>
-        document.addEventListener("DOMContentLoaded", () => {
-    setTimeout(() => {
-        document.querySelector(".splash-screen").style.display = "none";
-    }, 5000);
-});
-    </script>
-</body>
+    <script src="../js/main.js"></script>
 
+    <script >
+
+        setTimeout(function () {
+            
+            window.location.href = "tela2.html"
+        
+        }, 3000);
+
+    </script>
+
+</body>
 </html>
