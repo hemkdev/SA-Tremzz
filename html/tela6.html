@@ -1,12 +1,40 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="../css/style.css">
+    <title>Localização</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="../css/tela6.css">
 </head>
 <body>
-    
+    <div class="container">
+        <h1>Select Location</h1>
+        
+        <div class="address-input">
+            <label for="address"> Endereço:</label>
+            <input type="text" id="address" name="address" placeholder="Selecione seu endereço">
+        </div>
+        
+        <div class="save-as-section">
+            <h2>Locais Salvos</h2>
+            <div class="location-options">
+                <button class="location-btn">Casa</button>
+                <button class="location-btn">Trabalho</button>
+            </div>
+        </div>
+        
+        <div class="others-section">
+            <h2>Outros endereços</h2>
+            <button class="location-btn">
+            <div class="butao">
+                <img src="../img/adicionar.png"> 
+                <span>Salve mais endereços</span>
+            </div>
+        </button>
+        </div>
+        
+        <button class="save-btn"> Calcular Rota </button>
+    </div>
 </body>
 </html>
