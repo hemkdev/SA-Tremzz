@@ -13,6 +13,7 @@ body {
 }
 
 /* HEADER */
+
 .top {
     display: flex;
     justify-content: space-between;
@@ -57,6 +58,7 @@ body {
 }
 
 /* MAIN */
+
 .ult-atividade span {
     font-size: larger;
     font-weight: lighter;
