@@ -1,55 +1,169 @@
+body {
+    background-color: #414141;
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    padding: 0;
+    color: whitesmoke;
+    display: flex;
+    flex-direction: column;
+    min-height: 100px;
+}
+
+
+header h1 {
+    text-align: center;
+    padding-top: 50px;
+    font-size: 2.5rem;
+    margin-bottom: 30px;
+    color: #fff;
+    margin-top: 110px;
+}
+
+
+main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    max-width: 500px;
+    margin: 0 auto;
+    width: 90%;
+}
+
+
 .registro {
-    padding-top: 100px ;
     text-align: center;
-    color: whitesmoke;
-    
-
-}
-
-.botao-azul {
-    background-color: blue;
-    color: whitesmoke;
-    
-}
-
-.botao-branco {
-    background-color: white;
-    
-}
-
-.botaooo {
-    text-align: center;
-    
-}
-
-h1 {
-    text-align: center;
-    padding-top: 190px;
-    color: whitesmoke;
-    font-family:"Lexend", sans-serif;
-}
-
-img {
-    width: 30px;
+    padding: 20px 0;
+    margin-top: 120px;
 }
 
 fieldset {
     border: none;
+    padding: 0;
+    margin: 0;
+}
+
+legend {
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+    font-weight: 500;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="tel"],
+input[type="password"] {
+    width: 80%;
+    max-width: 350px;
+    padding: 12px 15px;
+    margin: 8px 0;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background-color: #f8f8f8;
+    font-size: 1rem;
+}
+
+input[type="submit"] {
+    width: 85%;
+    max-width: 380px;
+    padding: 12px;
+    margin-top: 15px;
+    background-color: #940000;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+input[type="submit"]:hover {
+    background-color: #ff0000;
+}
+
+
+.social-login {
     text-align: center;
-    
-    
+    margin: 20px 0;
 }
 
-body {
-    background-color: #414141;
-   
+.social-login p {
+    color: #ccc;
+    margin-bottom: 15px;
 }
 
-.login a {
+.social-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.social-btn {
+    padding: 10px 20px;
+    border-radius: 8px;
+    border: none;
+    font-size: 1rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: transform 0.2s;
+}
+
+.social-btn:hover {
+    transform: translateY(-2px);
+}
+
+.social-btn.google {
+    background-color: #fff;
+    color: #757575;
+}
+
+.social-btn.facebook {
+    background-color: #3b5998;
+    color: white;
+}
+
+.botao:hover {
+    opacity: 0.9;
+}
+
+
+.texto-login {
+    text-align: center;
+    margin: 20px 0 40px;
+}
+
+.texto-login a {
+    color: #ff3333;
     text-decoration: none;
-    color: red;
+    margin-left: 5px;
 }
 
-.botao-branco {
-    margin-bottom: 10px;
+
+@media (max-width: 600px) {
+    header h1 {
+        padding-top: 30px;
+        font-size: 2rem;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="tel"],
+    input[type="password"],
+    input[type="submit"],
+    .botao {
+        width: 90%;
+    }
+
+    .social-buttons {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .social-btn {
+        width: 85%;
+        justify-content: center;
+    }
 }

@@ -1,64 +1,59 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TremZZ</title>
     <link rel="stylesheet" href="../css/style.css">
     <link rel="stylesheet" href="../css/tela4.css">
-    <!-- fonte -->
+    <!-- Fontes -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
-    <!-- fim fonte -->
-
-
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;400;700&display=swap" rel="stylesheet">
+    <!-- Ícones -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
-<header>
-    <h1> TremZZ </h1>
-
-</header>
-
 <body>
-    <form>
+    <header>
+        <h1>TremZZ</h1>
+    </header>
 
-        <div class="registro">
-            <fieldset>
-                <legend> Registro </legend>
-                <input type="text" id="address" name="address" placeholder="Nome" required>
-                <p></p>
-                <input type="text" id="address" name="address" placeholder="E-mail" required>
-                <p></p>
-                <input type="text" id="address" name="address" placeholder="Telefone" required>
-                <p></p>
-                <input type="text" id="address" name="address" placeholder="Senha" required>
-                <p></p>
-                <input type="text" id="address" name="address" placeholder="Confirmar Senha" required>
-                <p> </p>
-                <input type="submit" value="Registre-se" />
-            </fieldset>
+    <main>
+        <form>
+            <div class="registro">
+                <fieldset>
+                    <legend>Registro</legend>
+                    <input type="text" id="nome" name="nome" placeholder="Nome" required>
+                    <br>
+                    <input type="email" id="email" name="email" placeholder="E-mail" required>
+                    <br>
+                    <input type="tel" id="telefone" name="telefone" placeholder="Telefone" required>
+                    <br>
+                    <input type="password" id="senha" name="senha" placeholder="Senha" required>
+                    <br>
+                    <input type="password" id="confirmar_senha" name="confirmar_senha" placeholder="Confirmar Senha" required>
+                    <br>
+                    <input type="submit" value="Registre-se">
+                </fieldset>
+            </div>
+        </form>
 
-
-
-
-            <p> Faça login por outras plataformas:</p>
-
+        <div class="login">
+            <p>Faça login por outras plataformas:</p>
+            <div class="social-buttons">
+                <button class="social-btn google">
+                     <a>Google</a>
+                </button>
+                <button class="social-btn facebook">
+                     <a>Facebook</a>
+                </button>
+            </div>
         </div>
 
-        <div class="botaooo">
-            <button class="botao-azul"> <img src="../img/logofacebook.png"> <a>FACEBOOK </a> </button>
-
-            <p> </p>
-
-            <button class="botao-branco"><img src="../img/logogoogle.png"> GOOGLE </button>
+        <div class="texto-login">
+            <span>Já tem uma conta?</span>
+            <a href="../html/tela5.html">Login</a>
         </div>
-    </form>
-    <p></p>
-    <div class="login">
-        <span> Já tem uma conta?</span> <br>
-        <a href="../html/tela5.html"> Login </a>
-    </div>
+    </main>
 </body>
-
 </html>
