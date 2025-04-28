@@ -93,3 +93,20 @@ a {
     text-decoration: none;
     color: white;
 }
+
+@media(max-width: 450px) {
+    .ilustracao img {
+        height: 200px;
+        width: 200px;
+    }
+    .message h2{
+        font-size: 20px;
+        margin-bottom: 30px;
+    }
+    .message p {
+        font-size: 15px;
+    }
+    .rodape img{
+        max-width: 5%;
+    }
+}
