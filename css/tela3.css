@@ -9,7 +9,9 @@ body {
     align-items: center;
     min-height: 100vh;
     flex-direction: column;
-    text-shadow: 0 -2px 5px rgba(0, 0, 0, 0.2);;
+    text-shadow: 0 -2px 5px rgba(0, 0, 0, 0.2);
+    ;
+
 }
 
 
@@ -18,6 +20,7 @@ body {
     text-align: center;
     margin-bottom: 1rem;
     margin-left: 20px;
+
 }
 
 
@@ -25,7 +28,9 @@ body {
     font-size: 0.75rem;
     text-align: center;
     margin-bottom: 2rem;
-    margin-left: 30px;
+
+
+
 }
 
 
@@ -34,7 +39,8 @@ body {
     max-width: 350px;
     margin-bottom: 1rem;
     text-align: center;
-    margin-left: 50px;
+    margin-left: 25px;
+
 }
 
 .login-2 {
@@ -42,36 +48,42 @@ body {
     max-width: 350px;
     margin-bottom: 1rem;
     text-align: center;
-    margin-left: 50px;
+    margin-left: 25px;
+
 }
 
 
 .login-2 a {
     color: rgb(238, 238, 238);
     text-decoration: none;
+
 }
 
-.login button{
+.login button {
     width: 100%;
     font-size: 1.2rem;
     border-radius: 10px;
     padding: 0.75rem;
     cursor: pointer;
-    
+
+
 }
+
 .login-2 button {
     width: 100%;
     font-size: 1.2rem;
     border-radius: 10px;
     padding: 0.75rem;
     cursor: pointer;
+
 }
 
 
 .login button {
-    background-color: black;
+    background-color: rgb(0, 0, 0);
     border: none;
     color: white;
+    
 }
 
 
@@ -79,25 +91,74 @@ body {
     background-color: transparent;
     border: 2px solid white;
     color: white;
+
 }
 
 
-    .tela {
-        font-size: 1.5rem;
-    }
+.tela {
+    font-size: 1.5rem;
 
+}
+
+.layout {
+    font-size: 0.65rem;
+
+}
+
+.login button {
+    font-size: 1rem;
+
+}
+
+.login-2 button {
+    font-size: 1rem;
+
+}
+
+a {
+    text-decoration: none;
+    color: white;
+}
+
+
+
+
+/* telas maiores */
+
+@media(min-width: 768px) and (max-width: 1600px) {
+    .login-2 a {
+        font-size: 20px;
+    }
+    .logins {
+        font-size: 20px;
+    }
+    .tela h1 {
+        font-size: 50px;
+    }
+     .layout h1 {
+        font-size: 20px;
+    }
+    .login a {
+        font-size: 20px;
+    }
+}
+
+/* telas menores */
+
+@media(max-width: 450px) {
+    .tela h1 {
+        font-size: 40px;
+    }
     .layout {
-        font-size: 0.65rem;
+        font-size:  9px;
     }
+    .logins button {
+        font-size: 13px;
+    }
+    .logins button {
+        margin: 0 auto;
+    }
+}
 
-    .login button{
-        font-size: 1rem;
-    }
-    .login-2 button {
-        font-size: 1rem;
-    }
 
-    a {
-        text-decoration: none;
-        color: white;
-    }
+
