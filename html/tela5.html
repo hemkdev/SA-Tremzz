@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TremZZ</title>
     <link rel="stylesheet" href="../css/style.css">
-    <link rel="stylesheet" href="../css/tela4.css">
+    <link rel="stylesheet" href="../css/tela5.css">
     <!-- fonte -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -15,43 +15,41 @@
 
 </head>
 <header> 
-    <h1> TremZZ </h1>
+    
+    <header>
+        <h1>TremZZ</h1>
+    </header>
 
-</header>
-<body>
-    <form>
+    <main>
+        <form>
+            <div class="registro">
+                <fieldset>
+                    <legend>Registro</legend>
+                    <input type="email" id="email" name="email" placeholder="E-mail" required>
+                    <br>
+                    <input type="password" id="senha" name="senha" placeholder="Senha" required>
+                    <br>
+                    <input type="submit" value="Login">
+                </fieldset>
+            </div>
+        </form>
 
-        <div class="registro">
-        <fieldset>
-            <label for="email"> E-mail: </label> <input type="text" id="email" name="email" >
-            <p></p>
-            
-            <label for="senha"> Senha: </label> <input type="password" id="senha" name="senha">
-            <p></p>
-            
-            <a href="tela8.html"><input type="button" value="Login" /></a>
-        </fieldset>
-
-        
-
-
-        <p> Faça login por outras plataformas:</p>
-
+        <div class="social-login">
+            <p>Faça login por outras plataformas:</p>
+            <div class="social-buttons">
+                <button class="social-btn google">
+                    <i class="fab fa-google"></i> Google
+                </button>
+                <button class="social-btn facebook">
+                    <i class="fab fa-facebook-f"></i> Facebook
+                </button>
+            </div>
         </div>
-        
-        <div class="botaooo"> 
-            <button class="botao-azul"> <img src="../img/logofacebook.png" alt="FACEBOOK"> FACEBOOK </button>
-       
-        <p> </p>
-        
-            <button class="botao-branco"><img src="../img/logogoogle.png" alt="GOOGLE"> GOOGLE </button>
+
+        <div class="texto-login">
+            <span>Não tem uma conta ainda?</span>
+            <a href="../html/tela4.html">Registrar-se</a>
         </div>
-    </form>
-
-    <div class="login">
-        <span>Não tem uma conta ainda?</span> <br>
-        <a href="../html/tela4.html"> Registre-se </a>
-    </div>
-
+    </main>
 </body>
 </html>

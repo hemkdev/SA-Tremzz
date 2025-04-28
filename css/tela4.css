@@ -6,7 +6,7 @@ body {
     color: whitesmoke;
     display: flex;
     flex-direction: column;
-    min-height: 100vh;
+    min-height: 100px;
 }
 
 
@@ -66,7 +66,7 @@ input[type="submit"] {
     max-width: 380px;
     padding: 12px;
     margin-top: 15px;
-    background-color: #ff3333;
+    background-color: #940000;
     color: white;
     border: none;
     border-radius: 8px;
@@ -76,7 +76,7 @@ input[type="submit"] {
 }
 
 input[type="submit"]:hover {
-    background-color: #ff0000;
+    background-color: crimson;
 }
 
 
@@ -134,7 +134,7 @@ input[type="submit"]:hover {
 }
 
 .texto-login a {
-    color: #ff3333;
+    color: crimson;
     text-decoration: none;
     margin-left: 5px;
 }
