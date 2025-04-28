@@ -107,3 +107,33 @@ a {
     color: white;
 }
 
+@media(min-width: 768px) and (max-width: 1600px) {
+    .rodape {
+        padding: 20px;
+    }
+    .rodape img {
+        height: 50px;
+        max-width: 300px;
+    }
+    img {
+        margin-left: 60px;
+        margin-right: 60px;
+    }
+    .info {
+        font-size: 25px;
+    }
+    nav img {
+        height: 200px;
+        width: 200px;
+    }
+    nav h3 {
+        font-size: 40px;
+    }
+    
+}
+
+@media(max-height: 700px) {
+    nav img {
+        margin-top: 180px;
+    }
+}
