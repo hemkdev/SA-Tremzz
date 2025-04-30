@@ -1,2 +1,76 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #414141;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.container {
+    background-color: #383838;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(8, 8, 8, 0.1);
+    padding: 20px;
+    width: 300px;
+    text-align: center;
+    color: white;
+    
+}
 
 
+  
+  
+  
+  .pedidos {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 20px 0;
+  }
+  
+  .pedidos img {
+    width: 60px;
+    height: 60px;
+  }
+  
+  .entregador {
+    flex: 1;
+    margin-left: 10px;
+  }
+  
+  .nome {
+    font-weight: bold;
+    margin: 0;
+  }
+  
+  .cargo {
+    color: #e70f0f;
+    margin: 0;
+    font-size: 0.9em;
+  }
+  
+  .endereco {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .local {
+    display: flex;
+    justify-content: center;
+  }
+  
+  
+  .rua {
+    font-size: 0.9em;
+    color: #e41313;
+    margin: 0;
+  }
+  
+  .horario {
+    margin: 2px 0 0 0;
+    font-size: 0.95em;
+  }
