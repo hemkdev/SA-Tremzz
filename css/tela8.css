@@ -121,13 +121,12 @@ body {
 .rodape {
     background-color: rgb(41, 41, 41);
     text-align: center;
-    margin-left: 0%;
-    padding: 10px 0;
     position: fixed;
     bottom: 0;
     width: 100%;
     box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.2);
     color: rgb(0, 0, 0);
+    padding: 8px;
 }
 
 
@@ -136,8 +135,7 @@ body {
 }
 
 .rodape img {
-    max-width: 30px;
-
+    max-width: 40px;
 }
 
 footer img {
@@ -155,3 +153,13 @@ footer a {
     text-decoration: none;
 }
 
+
+@media(max-width: 450px) {
+    .rodape img{
+        max-width: 9%;
+    }
+    .rodape {
+        width: 1500px;
+        max-width: 2000px;
+    }
+}
