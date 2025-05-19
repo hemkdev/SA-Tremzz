@@ -78,8 +78,6 @@ body {
     border-radius: 40px;
 }
 
-.card-img {}
-
 .card-img img {
     margin: 0 auto;
     height: 100%;
@@ -108,14 +106,40 @@ body {
     font-weight: 200;
 }
 
+.servicos {
+    margin-top: 20px;
+}
 .servicos-titulo {
     text-align: center;
 }
 
 .servicos-cards {
     display: flex;
+    justify-content: space-between;
+    gap: 30px;
+    padding: 0 auto;
+    margin-top: 20px;
 }
 
+.card-servico {
+    text-align: center;
+    width: 100px;
+}
+
+.servico-img {
+    background-color: #d9d9d9;
+    border-radius: 20px;
+    margin: 0 auto;
+    width: 100px;
+    height: 70px;
+}
+
+.servico-img img {
+    justify-content: center;
+    height: 50px;
+    width: 50px;
+    margin: 10px 25px;
+}
 
 /* Barra de navegação */
 .rodape {
@@ -162,4 +186,8 @@ footer a {
         width: 1500px;
         max-width: 2000px;
     }
+}
+
+@media screen and (min-width : 1024px) {
+    
 }
