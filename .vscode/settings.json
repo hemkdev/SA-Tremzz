@@ -1,0 +1,8 @@
+{
+    "workbench.activityBar.location": "top",
+    "breadcrumbs.enabled": false,
+    "workbench.startupEditor": "none",
+    "workbench.editor.showTabs": "multiple",
+    "workbench.secondarySideBar.defaultVisibility": "hidden",
+    "workbench.sideBar.location": "left"
+}
