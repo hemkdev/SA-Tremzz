@@ -11,16 +11,24 @@ body {
 
 .container {
     background-color: #383838;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    padding: 20px;
-    width: 300px;
-    text-align: center;
+  padding: 72px;
+  width: 97%;
+  text-align: center;
+  color: white;
+  position: fixed;
+  z-index: 0;
+  bottom: 0;
+  border: none;
+  max-width: 3750px;
+
 }
 
 h1 {
     color: #fffefe;
     margin-bottom: 20px;
+    font-size: 35px
+   
+    
 }
 
 h2 {
