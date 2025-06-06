@@ -6,6 +6,7 @@ body {
     justify-content: center;
     align-items: center;
     height: 100vh;
+
 }
 
 .container {
@@ -20,6 +21,7 @@ body {
   bottom: 0;
   border: none;
   max-width: 3750px;
+  
 
 }
 
@@ -123,6 +125,7 @@ img {
     display: flex;
     justify-content: center;
     align-items: center;
+    
 }
 
 .rodape {
@@ -181,4 +184,9 @@ footer a {
   
   position: relative;
   z-index: -1;
+}
+
+.butao a {
+    text-decoration: none;
+    color: black;
 }
