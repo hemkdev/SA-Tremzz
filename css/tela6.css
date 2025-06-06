@@ -2,7 +2,6 @@ body {
     font-family: Arial, sans-serif;
     background-color: #414141;
     margin: 0;
-    padding: 10px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -12,6 +11,7 @@ body {
 .container {
     background-color: #383838;
   padding: 72px;
+  padding-top: 10px;
   width: 97%;
   text-align: center;
   color: white;
@@ -21,6 +21,22 @@ body {
   border: none;
   max-width: 3750px;
 
+}
+
+.mapBox {
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  z-index: -1;
+}
+
+.mapBox iframe {
+    width: 100%;
+    position: fixed;
+}
+
+.container h1{
+    margin-top: 0;
 }
 
 h1 {
@@ -162,6 +178,7 @@ footer a {
 .mapBox {
   width: 100%;
   height: 100%;
-  position: fixed;
-  z-index: 100;
+  
+  position: relative;
+  z-index: -1;
 }
