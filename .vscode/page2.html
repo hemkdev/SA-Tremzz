@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Página 2</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: sans-serif;
+      background-color: #26a69a;
+      color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      opacity: 1;
+      transition: opacity 0.5s ease;
+    }
+
+    a {
+      font-size: 24px;
+      color: white;
+      background: rgba(0,0,0,0.2);
+      padding: 10px 20px;
+      text-decoration: none;
+      border-radius: 5px;
+    }
+  </style>
+  <script>
+    function transitionTo(url) {
+      document.body.style.opacity = 0;
+      setTimeout(() => {
+        window.location.href = url;
+      }, 500);
+    }
+
+    window.onload = () => {
+      document.body.style.opacity = 1;
+    }
+  </script>
+</head>
+<body>
+  <a href="javascript:void(0)" onclick="transitionTo('page1.html')">Voltar para Página 1</a>
+</body>
+</html>

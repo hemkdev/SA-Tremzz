@@ -1,0 +1,49 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+    color: white;
+}
+
+body {
+    background-color: rgb(41, 41, 41);
+    height: 100vh;
+}
+
+footer.rodape {
+    background-color: rgb(41, 41, 41);
+    text-align: center;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.2);
+    padding: 8px;
+}
+
+footer.rodape button {
+    background-color: rgb(41, 41, 41);
+}
+
+footer.rodape img {
+    max-width: 40px;
+    margin: 0 30px;
+}
+
+footer a {
+    text-decoration: none;
+    color: inherit;
+}
+
+
+/* RESPONSIVO */
+@media (max-width: 450px) {
+    footer.rodape img {
+        max-width: 9%;
+    }
+
+    footer.rodape {
+        width: 100%;
+    }
+}
