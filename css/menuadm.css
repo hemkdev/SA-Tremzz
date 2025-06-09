@@ -9,6 +9,17 @@
 body {
     background-color: rgb(41, 41, 41);
     height: 100vh;
+    margin: 0;
+}
+
+.top {
+    background-color: rgb(114, 3, 3);
+    text-align: center;
+}
+
+.top h1 {
+    padding: 30px 10px 10px ;
+    color: #c0c0c0;
 }
 
 footer.rodape {
