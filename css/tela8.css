@@ -183,7 +183,7 @@ footer a {
    }
 }
 
-@media (min-width: 820px) {
+@media screen and (min-width: 820px) and (max-width: 991) {
     .card-atividade {
         width: 400px;
         height: 100px;
