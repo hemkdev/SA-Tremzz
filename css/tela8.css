@@ -187,7 +187,6 @@ footer a {
     .card-atividade {
         width: 400px;
         height: 100px;
-        margin-left: 30px;
     }
     .card-titulo a{
         font-size: 30px;
@@ -236,16 +235,48 @@ footer a {
         width: 700px;
         margin-right: 100px;
         margin-bottom: 0;
-    }
-    .searchbar span {
+        
+        span {
         font-size: 20px;
-    }
-    .searchbar img {
+        }
+        
+        img {
         height: 50px;
         width: 50px;
         margin-right: 0;
+        }
     }
-
+    
+    .ult-atividade {
+        margin-top: 5%;
+        font-size: 35px;
+    }
+    .card-atividade {
+        justify-content: space-between;
+        width: 800px;
+        height: 100px
+    }
+    .card-img img {
+        width: 100px;
+        border-radius: 40px;
+    }
+    .card-text {
+        margin: 0 auto;
+        text-align: center;
+    }
+    .card-titulo {
+        margin: 0;
+        
+        a {font-size: 40px;
+        }
+    }
+    .card-endereco {
+        text-align: center;
+        
+        span {
+            font-size: 15px;
+        }
+    }
     .rodape {
         display: none;
     }
