@@ -33,76 +33,6 @@ body {
     }
 }
 
-.menu-icon {
-    font-size: 1.8rem;
-    cursor: pointer;
-}
-
-.cards {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 12px;
-    margin: 20px 0;
-}
-
-.card {
-    background-color: rgb(51, 51, 51);
-    border-radius: 10px;
-    padding: 16px;
-    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-}
-
-.card-icon {
-    font-size: 2rem;
-    margin-bottom: 8px;
-}
-
-.card-number {
-    font-size: 1.6rem;
-    font-weight: 700;
-    margin-bottom: 4px;
-    color: #c5c5c5;
-}
-
-.card-text {
-    font-size: 0.9rem;
-    color: #666;
-}
-
-.incidentes {
-    background: rgb(51, 51, 51);
-    border-radius: 10px;
-    padding: 16px;
-    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
-    margin-bottom: 60px;
-    text-align: center;
-        h2 {
-    font-size: 1.2rem;
-    margin-bottom: 12px;
-    color: #ffffff;
-    }
-}
-
-.incidente-item {
-    font-size: 0.9rem;
-    margin-bottom: 8px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-        
-        .linhaVerde {
-    color: rgb(80, 196, 80);
-    }
-        .linhaAzul {
-    color: rgb(74, 202, 202);
-    }
-
-}
-
 footer.rodape {
     background-color: rgb(41, 41, 41);
     text-align: center;
@@ -148,3 +78,25 @@ footer.rodape {
         justify-content: center;
     }
 }
+
+.ult-atividade {
+    margin-top: 10%;
+    text-align: center;
+}
+
+.ult-atividade span {
+    font-size: larger;
+    font-weight: lighter;
+}
+
+.card-atividade {
+    display: flex;
+    margin: 5% auto;
+    border: 1px solid;
+    border-radius: 40px;
+    max-width: 90%;
+    color: whitesmoke;
+    align-items: center;
+    
+}
+
