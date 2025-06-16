@@ -97,6 +97,8 @@ h2 {
     transition: background-color 0.3s;
 }
 
+.location-btn button
+
 .location-btn:hover {
     background-color: #fffefe;
 }
@@ -111,6 +113,11 @@ h2 {
     font-size: 16px;
     cursor: pointer;
     transition: background-color 0.3s;
+}
+
+.save-btn a {
+    text-decoration: none;
+    color: whitesmoke
 }
 
 .save-btn:hover {

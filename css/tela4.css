@@ -166,3 +166,23 @@ input[type="submit"]:hover {
         justify-content: center;
     }
 }
+
+.registrar-se button {
+    width: 85%;
+    max-width: 380px;
+    padding: 12px;
+    margin-top: 15px;
+    background-color: #940000;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: background-color 0.3s;
+
+}
+
+.registrar-se a{
+    text-decoration: none;
+    color: white;
+}
