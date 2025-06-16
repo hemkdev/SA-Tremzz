@@ -79,6 +79,7 @@ body {
     padding: 16px;
     box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
     margin-bottom: 60px;
+    text-align: center;
         h2 {
     font-size: 1.2rem;
     margin-bottom: 12px;
@@ -92,8 +93,15 @@ body {
     display: flex;
     align-items: center;
     gap: 8px;
-}
+        
+        .linhaVerde {
+    color: rgb(80, 196, 80);
+    }
+        .linhaAzul {
+    color: rgb(74, 202, 202);
+    }
 
+}
 
 footer.rodape {
     background-color: rgb(41, 41, 41);
@@ -129,5 +137,14 @@ footer.rodape {
         img {
             max-width: 9%;
         }
+    }
+}
+
+@media (min-width: 768px) {
+    .incidentes {
+        text-align: center;
+    }
+    .incidente-item {
+        justify-content: center;
     }
 }
