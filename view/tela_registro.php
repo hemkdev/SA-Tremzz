@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
@@ -36,8 +37,8 @@
                     <br>
 
                     <div class="registrar-se">
-                        <button>
-                        <a href="tela8.html">Registrar-se</a>
+                        <button >
+                        <a>Registrar-se</a>
                         </button>
                     </div>
                 </fieldset>

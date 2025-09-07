@@ -3,7 +3,7 @@
     $servidor = "localhost";
     $usuario = "root";
     $senha = "root";
-    $dbname = "crud";
+    $dbname = "TREMzz_db";
 
     $conn = new mysqli($servidor, $usuario, $senha, $dbname);
 

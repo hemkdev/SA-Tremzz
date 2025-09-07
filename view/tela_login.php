@@ -1,3 +1,36 @@
+<?php
+    require "../config/bd.php";
+    session_start(); 
+
+    $erro = "";
+    
+    if ($_SERVER["REQUEST_METHOD"] === "POST") {
+        if (isset($_POST["login"])) { //verifica se o botão foi clicado
+            $email = trim($_POST["email"] ?? ""); //evita espaços vazios
+            $senha = trim($_POST["senha"] ?? "");
+
+            // Verifica se o nome de usuário e senha estão corretos
+           $stmt = $conn->prepare("SELECT * FROM usuarios WHERE email = ? AND senha = ? ");
+           $stmt -> bind_param("ss", $email, $senha);
+           $stmt -> execute();
+           $resultado = $stmt->get_result();
+        
+           // Verifica se encontrou um usuário com as credenciais fornecidas
+           if  ($resultado->num_rows === 1) {
+                $dados = $resultado->fetch_assoc();
+
+                $_SESSION['email'] = $dados['email'];
+                $_SESSION['id'] = $dados['id'];
+
+                header("location: pagina_inicial.php");
+                exit;
+            } else {
+                $erro = "Usuário ou senha inválidos";
+            }
+        }
+    }
+?>
+<!DOCTYPE html>
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -30,7 +63,7 @@
                     <br>
                     <input type="password" id="senha" name="senha" placeholder="Senha" required>
                     <br>
-                    <input type="submit" value="Login" href="tela8.html">
+                    <button type="submit" name="login">Login</button>
                 </fieldset>
             </div>
         </form>
