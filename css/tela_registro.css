@@ -80,55 +80,6 @@ input[type="submit"]:hover {
     background-color: crimson;
 }
 
-
-.login {
-    text-align: center;
-    margin: 20px 0;
-}
-
-.social-login p {
-    color: #ccc;
-    margin-bottom: 15px;
-}
-
-.social-buttons {
-    display: flex;
-    justify-content: center;
-    gap: 15px;
-    margin-bottom: 20px;
-}
-
-.social-btn {
-    padding: 10px 20px;
-    border-radius: 8px;
-    border: none;
-    font-size: 1rem;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    transition: transform 0.2s;
-}
-
-.social-btn:hover {
-    transform: translateY(-2px);
-}
-
-.social-btn.google {
-    background-color: #fff;
-    color: #757575;
-}
-
-.social-btn.facebook {
-    background-color: #3b5998;
-    color: white;
-}
-
-.botao:hover {
-    opacity: 0.9;
-}
-
-
 .texto-login {
     text-align: center;
     margin: 20px 0 40px;
@@ -151,19 +102,8 @@ input[type="submit"]:hover {
     input[type="email"],
     input[type="tel"],
     input[type="password"],
-    input[type="submit"],
-    .botao {
+    input[type="submit"] {
         width: 90%;
-    }
-
-    .social-buttons {
-        flex-direction: column;
-        align-items: center;
-    }
-
-    .social-btn {
-        width: 85%;
-        justify-content: center;
     }
 }
 

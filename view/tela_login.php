@@ -78,7 +78,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
         <div class="texto-login">
             <span>Não tem uma conta ainda?</span>
-            <a href="../html/tela4.html">Registrar-se</a>
+            <a href="tela_registro.php">Registrar-se</a>
         </div>
 
     </main>

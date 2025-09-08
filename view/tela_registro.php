@@ -1,4 +1,38 @@
-<!DOCTYPE html>
+<?php
+    require "../config/bd.php";
+    session_start(); 
+
+    $erro = "";
+    
+    if ($_SERVER["REQUEST_METHOD"] === "POST") {
+        if (isset($_POST["registrar-se"])) { //verifica se o botão foi clicado
+            $nome = trim($_POST["nome"] ?? ""); //evita espaços vazios
+            $email = trim($_POST["email"] ?? "");
+            $telefone = trim($_POST["telefone"] ?? "");
+            $senha = trim($_POST["senha"] ?? "");
+
+            // Verifica se o nome de usuário já existe
+            $stmt = $conn->prepare("SELECT * FROM usuario WHERE email = ?");
+            $stmt->bind_param("s", $email);
+            $stmt->execute();
+            $resultado = $stmt->get_result();
+
+            if ($resultado->num_rows > 0) {
+                $erro = "O email já esta registrado. Tente outro.";
+            } else {
+                // Insere o novo usuário no banco de dados
+                $stmt = $conn->prepare("INSERT INTO usuarios (nome, email, telefone, senha) VALUES (?, ?)");
+                $stmt->bind_param("ss", $nome, $email, $telefone, $senha);
+                
+                if ($stmt->execute()) {
+                    $mensagem = "Registro bem-sucedido! Você pode voltar para a página inicial e fazer login agora.";
+                } else {
+                    $erro = "Erro ao registrar. Tente novamente.";
+                }
+            }
+        }
+    }
+?>
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -21,7 +55,7 @@
     </header>
 
     <main>
-        <form>
+        <form method="POST" action="">
             <div class="registro">
                 <fieldset>
                     <legend>Registro</legend>
@@ -45,21 +79,9 @@
             </div>
         </form>
 
-        <div class="login">
-            <p>Faça login por outras plataformas:</p>
-            <div class="social-buttons">
-                <button class="social-btn google">
-                     <a>Google</a>
-                </button>
-                <button class="social-btn facebook">
-                     <a>Facebook</a>
-                </button>
-            </div>
-        </div>
-
         <div class="texto-login">
             <span>Já tem uma conta?</span>
-            <a href="../html/tela5.html">Login</a>
+            <a href="tela_login.php">Entrar</a>
         </div>
     </main>
 </body>
