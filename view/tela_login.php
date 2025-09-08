@@ -1,44 +1,45 @@
 <?php
-    require "../config/bd.php";
-    session_start(); 
+require "../config/bd.php";
+session_start();
 
-    $erro = "";
-    
-    if ($_SERVER["REQUEST_METHOD"] === "POST") {
-        if (isset($_POST["login"])) { //verifica se o botão foi clicado
-            $email = trim($_POST["email"] ?? ""); //evita espaços vazios
-            $senha = trim($_POST["senha"] ?? "");
+$erro = "";
 
-            // Verifica se o nome de usuário e senha estão corretos
-           $stmt = $conn->prepare("SELECT * FROM usuarios WHERE email = ? AND senha = ? ");
-           $stmt -> bind_param("ss", $email, $senha);
-           $stmt -> execute();
-           $resultado = $stmt->get_result();
-        
-           // Verifica se encontrou um usuário com as credenciais fornecidas
-           if  ($resultado->num_rows === 1) {
-                $dados = $resultado->fetch_assoc();
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    if (isset($_POST["login"])) { //verifica se o botão foi clicado
+        $email = trim($_POST["email"] ?? ""); //evita espaços vazios
+        $senha = trim($_POST["senha"] ?? "");
 
-                $_SESSION['email'] = $dados['email'];
-                $_SESSION['id'] = $dados['id'];
+        // Verifica se o nome de usuário e senha estão corretos
+        $stmt = $conn->prepare("SELECT * FROM usuarios WHERE email = ? AND senha = ? ");
+        $stmt->bind_param("ss", $email, $senha);
+        $stmt->execute();
+        $resultado = $stmt->get_result();
 
-                header("location: pagina_inicial.php");
-                exit;
-            } else {
-                $erro = "Usuário ou senha inválidos";
-            }
+        // Verifica se encontrou um usuário com as credenciais fornecidas
+        if ($resultado->num_rows === 1) {
+            $dados = $resultado->fetch_assoc();
+
+            $_SESSION['email'] = $dados['email'];
+            $_SESSION['senha'] = $dados['senha'];
+
+            header("location: tela8.html");
+            exit;
+        } else {
+            $erro = "Usuário ou senha inválidos";
         }
     }
+}
 ?>
 <!DOCTYPE html>
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TREMzz - Login</title>
     <link rel="stylesheet" href="../css/style.css">
-    <link rel="stylesheet" href="../css/tela5.css">
+    <link rel="stylesheet" href="../css/tela_login.css">
     <link rel="shortcut icon" href="../img/tremlogo.png">
     <!-- fonte -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -48,42 +49,39 @@
 
 
 </head>
-<header> 
-    
+<header>
+
     <header>
         <h1>TremZZ</h1>
     </header>
 
     <main>
-        <form>
+        <form method="POST" action="">
             <div class="registro">
                 <fieldset>
                     <legend>Faça o Login:</legend>
-                    <input type="email" id="email" name="email" placeholder="E-mail" required>
+                    <input type="email" name="email" placeholder="E-mail" required>
                     <br>
-                    <input type="password" id="senha" name="senha" placeholder="Senha" required>
+                    <input type="password" name="senha" placeholder="Senha" required>
                     <br>
                     <button type="submit" name="login">Login</button>
+            
                 </fieldset>
             </div>
         </form>
 
-        <div class="social-login">
-            <p>Faça login por outras plataformas:</p>
-            <div class="social-buttons">
-                <button class="social-btn google">
-                  <a>Google</a>
-                </button>
-                <button class="social-btn facebook">
-                    <a>Facebook</a>
-                </button>
-            </div>
-        </div>
+        <?php
+            if($erro) {
+                echo "<div class='erro'>  $erro </div>";
+            }
+        ?>
 
         <div class="texto-login">
             <span>Não tem uma conta ainda?</span>
             <a href="../html/tela4.html">Registrar-se</a>
         </div>
+
     </main>
-</body>
+    </body>
+
 </html>
