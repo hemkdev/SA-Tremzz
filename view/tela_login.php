@@ -9,6 +9,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $email = trim($_POST["email"] ?? ""); //evita espaços vazios
         $senha = trim($_POST["senha"] ?? "");
 
+
         // Verifica se o nome de usuário e senha estão corretos
         $stmt = $conn->prepare("SELECT * FROM usuarios WHERE email = ? AND senha = ? ");
         $stmt->bind_param("ss", $email, $senha);
