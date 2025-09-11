@@ -1,5 +1,5 @@
-// Confirmação de senha
-document.getElementById("form_registro").addEventListener("submit", function(event) {
+function confirmarSenha() {
+    document.getElementById("form_registro").addEventListener("submit", function (event) {
         event.preventDefault();
 
         const senha1Input = document.getElementById("senha");
@@ -19,14 +19,15 @@ document.getElementById("form_registro").addEventListener("submit", function(eve
         }
     });
 
-    document.getElementById("senha").addEventListener("input", function() {
+    document.getElementById("senha").addEventListener("input", function () {
         document.getElementById("SenhaErro").textContent = "";
         this.style.borderColor = "";
         document.getElementById("senha2").style.borderColor = "";
     });
 
-    document.getElementById("senha2").addEventListener("input", function() {
+    document.getElementById("senha2").addEventListener("input", function () {
         document.getElementById("SenhaErro").textContent = "";
         this.style.borderColor = "";
         document.getElementById("senha").style.borderColor = "";
     });
+}

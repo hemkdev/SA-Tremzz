@@ -73,7 +73,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 <input type="password" id="senha2" name="confirmar_senha" placeholder="Confirmar Senha">
                 <span id="SenhaErro" style="color: red;"></span>
 
-                <button type="submit" name="registrar-se">
+                <button type="submit" name="registrar-se" onclick="confirmarSenha()">
                     Registrar-se
                 </button>
 

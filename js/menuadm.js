@@ -3,6 +3,7 @@
       max = Math.floor(max);
       return Math.floor(Math.random() * (max - min + 1)) + min;
     }
+
     // Mostra um número aleatoroio entre o peridodo
     const randomNumberEl_1 = document.getElementById('trem-num');
     const randomNum1 = getRandomInt(15, 40);
@@ -25,6 +26,7 @@
         maximumFractionDigits: 2
       }).format(valor);
     }
+    
     // Exemplo: valor que será formatado
     const cotacao = getRandomInt(10000, 30000);
     const elementoValor = document.getElementById('dinheiro-num');

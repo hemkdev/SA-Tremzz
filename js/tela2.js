@@ -1,5 +1,5 @@
-    setTimeout(function () {
+  setTimeout(function () {
             
             window.location.href = "tela3.html"
         
-        }, 3000);   
+        }, 3000);  
