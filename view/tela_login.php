@@ -1,5 +1,6 @@
 <?php
 require "../config/bd.php";
+require "tela_registro.php";
 session_start();
 
 $erro = "";
@@ -9,24 +10,29 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $email = trim($_POST["email"] ?? ""); //evita espaços vazios
         $senha = trim($_POST["senha"] ?? "");
 
-
         // Verifica se o nome de usuário e senha estão corretos
-        $stmt = $conn->prepare("SELECT * FROM usuarios WHERE email = ? AND senha = ? ");
-        $stmt->bind_param("ss", $email, $senha);
+        $stmt = $conn->prepare("SELECT * FROM usuarios WHERE email = ? ");
+        $stmt->bind_param("s", $email);
         $stmt->execute();
         $resultado = $stmt->get_result();
 
         // Verifica se encontrou um usuário com as credenciais fornecidas
         if ($resultado->num_rows === 1) {
             $dados = $resultado->fetch_assoc();
+            $senha_armazenada_rash = $dados["senha"];
+
+            if (password_verify($senha, $senha_armazenada_rash)) {
 
             $_SESSION['email'] = $dados['email'];
             $_SESSION['senha'] = $dados['senha'];
 
             header("location: tela8.html");
             exit;
+            } else {
+               $erro = "Usuário ou senha inválidos"; 
+            }
         } else {
-            $erro = "Usuário ou senha inválidos";
+            $erro = "Usuário não encontrado";
         }
     }
 }

@@ -63,14 +63,15 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     </header>
 
     <main>
-        <form method="POST" action="">
+        <form method="POST" action="" id="form_registro">
             <fieldset>
                 <legend>Registro</legend>
                 <input type="text" id="nome" name="nome" placeholder="Nome">
                 <input type="email" id="email" name="email" placeholder="E-mail">
                 <input type="tel" id="telefone" name="telefone" placeholder="Telefone">
                 <input type="password" id="senha" name="senha" placeholder="Senha">
-                <input type="password" id="senha" name="confirmar_senha" placeholder="Confirmar Senha">
+                <input type="password" id="senha2" name="confirmar_senha" placeholder="Confirmar Senha">
+                <span id="SenhaErro" style="color: red;"></span>
 
                 <button type="submit" name="registrar-se">
                     Registrar-se
@@ -90,6 +91,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             <a href="tela_login.php">Entrar</a>
         </div>
     </main>
+    <script src="../js/registro.js"> </script>
 </body>
-
 </html>
