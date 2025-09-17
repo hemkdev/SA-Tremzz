@@ -1,6 +1,5 @@
 <?php
 require "../config/bd.php";
-require "tela_registro.php";
 session_start();
 
 $erro = "";

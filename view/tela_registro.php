@@ -5,35 +5,39 @@ session_start();
 $erro = "";
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    if (isset($_POST["registrar-se"])) { //verifica se o botão foi clicado
-        $nome = trim($_POST["nome"] ?? ""); //evita espaços vazios
+    if (isset($_POST["registrar-se"])) { // verifica se o botão foi clicado
+        $nome = trim($_POST["nome"] ?? "");
         $email = trim($_POST["email"] ?? "");
         $telefone = trim($_POST["telefone"] ?? "");
         $senha = trim($_POST["senha"] ?? "");
         $confirmar_senha = trim($_POST["confirmar_senha"] ?? "");
 
-        // Verifica se o nome de usuário já existe
-        $stmt = $conn->prepare("SELECT * FROM usuarios WHERE email = ?");
-        $stmt->bind_param("s", $email);
-        $stmt->execute();
-        $resultado = $stmt->get_result();
-
+        // Verifica se as senhas coincidem
         if ($senha !== $confirmar_senha) {
             $erro = "As senhas não coincidem.";
-        } else if ($resultado->num_rows > 0) {
-            $erro = "O email já esta registrado. Tente outro.";
         } else {
+            // Verifica se já existe usuário com o mesmo e-mail ou telefone
+            $stmt = $conn->prepare("SELECT id FROM usuarios WHERE email = ? OR telefone = ?");
+            $stmt->bind_param("ss", $email, $telefone);
+            $stmt->execute();
+            $resultado = $stmt->get_result();
 
-            $senha_rash = password_hash($senha, PASSWORD_DEFAULT);
-            // Insere o novo usuário no banco de dados
-            $stmt = $conn->prepare("INSERT INTO usuarios (nome, email, telefone, senha) VALUES (?, ?, ?, ?)");
-            $stmt->bind_param("ssss", $nome, $email, $telefone, $senha_rash);
-
-            if ($stmt->execute()) {
-                header("location: tela_login.php");
-                exit;
+            if ($resultado->num_rows > 0) {
+                $erro = "E-mail ou telefone já registrados. Tente outros.";
             } else {
-                $erro = "Erro ao registrar. Tente novamente.";
+                // Criptografa a senha
+                $senha_hash = password_hash($senha, PASSWORD_DEFAULT);
+
+                // Insere o novo usuário no banco
+                $stmt = $conn->prepare("INSERT INTO usuarios (nome, email, telefone, senha) VALUES (?, ?, ?, ?)");
+                $stmt->bind_param("ssss", $nome, $email, $telefone, $senha_hash);
+
+                if ($stmt->execute()) {
+                    header("Location: tela_login.php");
+                    exit;
+                } else {
+                    $erro = "Erro ao registrar. Tente novamente.";
+                }
             }
         }
     }
@@ -73,7 +77,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 <input type="password" id="senha2" name="confirmar_senha" placeholder="Confirmar Senha">
                 <span id="SenhaErro" style="color: red;"></span>
 
-                <button type="submit" name="registrar-se" onclick="confirmarSenha()">
+                <button type="submit" name="registrar-se">
                     Registrar-se
                 </button>
 
@@ -91,6 +95,5 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             <a href="tela_login.php">Entrar</a>
         </div>
     </main>
-    <script src="../js/registro.js"> </script>
 </body>
 </html>
