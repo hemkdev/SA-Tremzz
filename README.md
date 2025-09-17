@@ -59,53 +59,6 @@ Certifique-se de ter os seguintes softwares instalados em seu ambiente:
 *   **PHP**: Versão 7.x ou superior.
 *   **Banco de Dados**: MySQL/MariaDB.
 
-### Passos de Instalação
-
-1.  **Clone o Repositório**:
-
-    ```bash
-    git clone https://github.com/hemkdev/SA-Tremzz.git
-    cd SA-Tremzz
-    ```
-
-2.  **Configurar o Banco de Dados**:
-
-    *   Crie um banco de dados MySQL/MariaDB com o nome `TREMzz_db`.
-    *   Importe o esquema do banco de dados usando o arquivo `schema.sql`:
-
-        ```bash
-        mysql -u [seu_usuario] -p TREMzz_db < database/schema.sql
-        ```
-
-    *   Edite o arquivo `config/bd.php` com suas credenciais de banco de dados:
-
-        ```php
-        <?php
-        // Exemplo de configuração (ajuste conforme necessário)
-        $servername = "localhost";
-        $username = "seu_usuario_bd";
-        $password = "sua_senha_bd";
-        $dbname = "TREMzz_db";
-
-        // Cria a conexão
-        $conn = new mysqli($servername, $username, $password, $dbname);
-
-        // Verifica a conexão
-        if ($conn->connect_error) {
-            die("Conexão falhou: " . $conn->connect_error);
-        }
-        ?>
-        ```
-
-3.  **Configurar o Servidor Web**:
-
-    *   Mova o conteúdo do repositório clonado para o diretório raiz do seu servidor web (ex: `/var/www/html/SA-Tremzz` para Apache).
-    *   Certifique-se de que o servidor web está configurado para interpretar arquivos PHP.
-
-4.  **Acessar a Aplicação**:
-
-    *   Abra seu navegador e acesse `http://localhost/SA-Tremzz` (ou o caminho configurado no seu servidor web).
-
 ## Contribuição
 
 Contribuições são bem-vindas! Se você deseja contribuir para o projeto, por favor, siga os seguintes passos:
