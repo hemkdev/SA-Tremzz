@@ -25,7 +25,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $_SESSION['email'] = $dados['email'];
             $_SESSION['senha'] = $dados['senha'];
 
-            header("location: tela8.html");
+            header("location: home.html");
             exit;
             } else {
                $erro = "Usuário ou senha inválidos"; 
@@ -36,7 +36,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     }
 }
 ?>
-<!DOCTYPE html>
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 
@@ -84,7 +84,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
         <div class="texto-login">
             <span>Não tem uma conta ainda?</span>
-            <a href="tela_registro.php">Registrar-se</a>
+            <a href="registro.php">Registrar-se</a>
         </div>
 
     </main>

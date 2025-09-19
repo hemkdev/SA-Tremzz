@@ -33,7 +33,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 $stmt->bind_param("ssss", $nome, $email, $telefone, $senha_hash);
 
                 if ($stmt->execute()) {
-                    header("Location: tela_login.php");
+                    header("Location: login.php");
                     exit;
                 } else {
                     $erro = "Erro ao registrar. Tente novamente.";
@@ -92,7 +92,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
         <div class="texto-login">
             <span>Já tem uma conta?</span>
-            <a href="tela_login.php">Entrar</a>
+            <a href="login.php">Entrar</a>
         </div>
     </main>
 </body>
