@@ -1,3 +1,10 @@
+<?php
+  session_start();
+  if (!isset($_SESSION["conectado"]) || $_SESSION["conectado"] !== true) {
+    header("Location: login.php");
+    exit;
+  }
+?>
 <!DOCTYPE html>
 <html lang="pt-BR">
 
@@ -17,17 +24,14 @@
   <style>
     body {
       font-family: 'Poppins', sans-serif;
-      background-color: #2c2c2c;
-      color: #f8f9fa;
+      background-color: #121212;
+      color: #e0e0e0;
       min-height: 100vh;
-      display: flex;
-      flex-direction: column;
+      margin: 0;
+      padding-bottom: 70px;
     }
 
     header nav .top {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
       padding: 1rem 1.5rem;
     }
 
@@ -35,7 +39,7 @@
       margin: 0;
       font-weight: 700;
       font-size: 1.75rem;
-      color: #dc3545;
+      color: #fff;
     }
 
     header nav .pfp img {
@@ -43,40 +47,44 @@
       height: 50px;
       object-fit: cover;
       border-radius: 50%;
-      border: 2px solid #dc3545;
+      border: 2px solid transparent;
+      transition: border-color 0.3s ease;
+    }
+
+    header nav .pfp img:hover {
+      border-color: #dc3545;
     }
 
     .searchbar {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      background-color: #3a3a3a;
+      background-color: #1e1e1e;
       margin: 0 1.5rem 1.5rem;
       padding: 0.75rem 1rem;
       border-radius: 0.5rem;
-      box-shadow: 0 0 10px rgba(220, 53, 69, 0.5);
+      box-shadow: none;
     }
 
     .searchbar .text-bar span {
       font-weight: 600;
       font-size: 1.1rem;
-      color: #dc3545;
+      color: #e0e0e0;
     }
 
     .searchbar .img-bar img {
       width: 24px;
       height: 24px;
-      filter: invert(38%) sepia(88%) saturate(749%) hue-rotate(340deg) brightness(92%) contrast(89%);
-      /* red-ish color */
+      filter: brightness(0) invert(1);
       cursor: pointer;
+      transition: filter 0.3s ease;
+    }
+
+    .searchbar .img-bar img:hover {
+      filter: brightness(0) invert(0.7) sepia(1) saturate(5) hue-rotate(-10deg);
     }
 
     main {
-      flex: 1;
-      padding: 0 1.5rem 2rem;
       max-width: 900px;
-      margin: 0 auto;
-      width: 100%;
+      margin: 0 auto 2rem;
+      padding: 0 1rem;
     }
 
     /* Últimas atividades */
@@ -90,43 +98,65 @@
 
     .card-atividade {
       display: flex;
-      background-color: #3a3a3a;
+      background-color: #1e1e1e;
       border-radius: 0.5rem;
       margin-bottom: 1rem;
-      box-shadow: 0 0 8px rgba(220, 53, 69, 0.4);
+      box-shadow: none;
       overflow: hidden;
+      transition: background-color 0.3s ease;
+      align-items: center; /* vertical center */
+      justify-content: center; /* horizontal center */
+      gap: 1rem; /* spacing between image and text */
+    }
+
+    /* On larger screens, limit max width of text and center content */
+    @media (min-width: 769px) {
+      .card-atividade {
+        justify-content: center;
+      }
+
+      .card-atividade .card-text {
+        max-width: 400px;
+        text-align: center;
+      }
+    }
+
+    .card-atividade:hover {
+      background-color: #dc3545;
     }
 
     .card-atividade .card-img img {
       width: 80px;
       height: 80px;
       object-fit: contain;
-      background-color: #2c2c2c;
+      background-color: transparent;
       padding: 0.5rem;
+      filter: brightness(0) invert(1);
     }
 
     .card-atividade .card-text {
       padding: 0.75rem 1rem;
-      color: #f8f9fa;
-      flex: 1;
+      color: #e0e0e0;
+      flex: none; /* prevent flex-grow */
     }
 
     .card-atividade .card-titulo a {
       font-weight: 700;
       font-size: 1.1rem;
-      color: #dc3545;
+      color: #fff;
       text-decoration: none;
+      transition: color 0.3s ease;
     }
 
     .card-atividade .card-titulo a:hover {
+      color: #fff;
       text-decoration: underline;
-      color: #a71d2a;
     }
 
     .card-atividade .card-endereco span {
       font-size: 0.9rem;
       display: block;
-      color: #ccc;
+      color: #b0b0b0;
     }
 
     /* Serviços */
@@ -148,20 +178,20 @@
     }
 
     .card-servico {
-      background-color: #3a3a3a;
+      background-color: #1e1e1e;
       border-radius: 0.5rem;
       flex: 1 1 calc(33% - 1rem);
       max-width: calc(33% - 1rem);
       display: flex;
       align-items: center;
       padding: 1rem;
-      box-shadow: 0 0 8px rgba(220, 53, 69, 0.4);
+      box-shadow: none;
       cursor: default;
       transition: background-color 0.3s ease;
     }
 
     .card-servico:hover {
-      background-color: #4a1a1f;
+      background-color: #dc3545;
     }
 
     .servico-img img {
@@ -173,19 +203,18 @@
     }
 
     .servico-text span {
-      color: #f8f9fa;
+      color: #e0e0e0;
       font-weight: 600;
       font-size: 1rem;
     }
 
-    /* Footer */
+    /* Rodapé */
     footer.rodape {
-      background-color: #1f1f1f;
+      background-color: #121212;
       padding: 0.75rem 0;
       display: flex;
       justify-content: space-around;
       align-items: center;
-      box-shadow: 0 -2px 8px rgba(220, 53, 69, 0.5);
       position: fixed;
       bottom: 0;
       width: 100%;
@@ -204,15 +233,17 @@
     }
 
     footer.rodape a:hover img {
-      filter: brightness(0) invert(0.6) sepia(1) saturate(5) hue-rotate(-10deg);
+      filter: brightness(0) invert(0.7) sepia(1) saturate(5) hue-rotate(-10deg);
     }
 
-    /* Responsivo */
+    /* Responsividade */
     @media (max-width: 768px) {
       .card-atividade {
         flex-direction: column;
         align-items: center;
         text-align: center;
+        justify-content: flex-start; /* reset justify-content for small screens */
+        gap: 0;
       }
 
       .card-atividade .card-img img {
@@ -223,6 +254,7 @@
 
       .card-atividade .card-text {
         padding: 0;
+        max-width: none;
       }
 
       .servicos-cards {
@@ -245,16 +277,18 @@
 <body>
   <header>
     <nav>
-      <div class="top">
+      <div class="top d-flex justify-content-between align-items-center">
         <div class="text-oi">
-          <h1>Olá, Lucas</h1>
+          <h1>Olá, 
+            <?php echo htmlspecialchars($_SESSION['nome']); ?> !
+          </h1>
         </div>
         <div class="pfp">
           <img src="../assets/img/pfp.jpg" alt="Foto de perfil do usuário Lucas" />
         </div>
       </div>
     </nav>
-    <div class="searchbar">
+    <div class="searchbar d-flex justify-content-between align-items-center mx-3">
       <div class="text-bar">
         <span>Para onde voce vai?</span>
       </div>
@@ -265,7 +299,7 @@
   </header>
 
   <main>
-    <section class="atividade">
+    <div class="atividade">
       <div class="ult-atividade">
         <span>Últimas atividades</span>
       </div>
@@ -297,14 +331,14 @@
           </div>
         </div>
       </div>
-    </section>
+    </div>
 
-    <section class="servicos">
+    <div class="servicos">
       <div class="servicos-titulo">
         <h3>Outros serviços</h3>
       </div>
-      <div class="servicos-cards">
-        <div class="card-servico" tabindex="0" role="region" aria-label="Alertas em tempo real">
+      <div class="servicos-cards d-flex flex-wrap justify-content-between gap-3">
+        <div class="card-servico d-flex align-items-center">
           <div class="servico-img">
             <img src="../assets/img/alerta.png" alt="Ícone de alerta" />
           </div>
@@ -312,7 +346,7 @@
             <span>Alertas em tempo real</span>
           </div>
         </div>
-        <div class="card-servico" tabindex="0" role="region" aria-label="Status do meu trem">
+        <div class="card-servico d-flex align-items-center">
           <div class="servico-img">
             <img src="../assets/img/trem.png" alt="Ícone de trem" />
           </div>
@@ -320,7 +354,7 @@
             <span>Status do meu trem</span>
           </div>
         </div>
-        <div class="card-servico" tabindex="0" role="region" aria-label="Horários de embarque">
+        <div class="card-servico d-flex align-items-center">
           <div class="servico-img">
             <img src="../assets/img/relogio.png" alt="Ícone de relógio" />
           </div>
@@ -329,20 +363,20 @@
           </div>
         </div>
       </div>
-    </section>
+    </div>
   </main>
 
   <footer class="rodape" role="contentinfo" aria-label="Menu de navegação inferior">
-    <a href="tela8.html" aria-label="Início">
+    <a href="home.php" aria-label="Início">
       <img src="../assets/img/casa.png" alt="Início" />
     </a>
-    <a href="tela6.html" aria-label="Buscar">
+    <a href="pesquisar.html" aria-label="Buscar">
       <img src="../assets/img/lupa.png" alt="Buscar" />
     </a>
-    <a href="tela11.html" aria-label="Chat">
+    <a href="chat.php" aria-label="Chat">
       <img src="../assets/img/chat.png" alt="Chat" />
     </a>
-    <a href="tela9.html" aria-label="Perfil">
+    <a href="perfil.php" aria-label="Perfil">
       <img src="../assets/img/perfil.png" alt="Perfil" />
     </a>
   </footer>
@@ -352,3 +386,4 @@
 </body>
 
 </html>
+
