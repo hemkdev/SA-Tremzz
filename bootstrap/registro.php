@@ -12,6 +12,12 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $senha = trim($_POST["senha"] ?? "");
         $confirmar_senha = trim($_POST["confirmar_senha"] ?? "");
 
+        // Validação de senha forte:
+        // mínimo 8 caracteres, ao menos 1 letra maiúscula, 1 minúscula, 1 número e 1 caractere especial
+        if (!preg_match('/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/', $senha)) {
+            $erro = "Senha fraca. Use pelo menos 8 caracteres, incluindo maiúscula, minúscula, número e caractere especial.";
+        }
+
         // Verifica se as senhas coincidem
         if ($senha !== $confirmar_senha) {
             $erro = "As senhas não coincidem.";
@@ -188,7 +194,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                         <input type="password" name="confirmar_senha" placeholder="Confirmar senha" required class="form-control" />
                     </div>
 
-                    <button type="submit" name="login" class="btn btn-login w-100">Login</button>
+                    <button type="submit" name="registrar-se" class="btn btn-login w-100">Login</button>
                 </fieldset>
             </form>
 
