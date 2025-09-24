@@ -236,6 +236,11 @@
       filter: brightness(0) invert(0.7) sepia(1) saturate(5) hue-rotate(-10deg);
     }
 
+    footer.rodape a.active img {
+      filter: brightness(0) invert(0.7) sepia(1) saturate(5) hue-rotate(-10deg);
+    }
+
+
     /* Responsividade */
     @media (max-width: 768px) {
       .card-atividade {
@@ -284,7 +289,7 @@
           </h1>
         </div>
         <div class="pfp">
-          <img src="../assets/img/pfp.jpg" alt="Foto de perfil do usuário Lucas" />
+          <img src="../assets/img/perfil.png" alt="Foto de perfil" />
         </div>
       </div>
     </nav>
@@ -367,7 +372,7 @@
   </main>
 
   <footer class="rodape" role="contentinfo" aria-label="Menu de navegação inferior">
-    <a href="home.php" aria-label="Início">
+    <a href="home.php" class="active" aria-label="Início">
       <img src="../assets/img/casa.png" alt="Início" />
     </a>
     <a href="pesquisar.html" aria-label="Buscar">

@@ -283,6 +283,11 @@
     footer.rodape a:hover img {
       filter: brightness(0) invert(0.7) sepia(1) saturate(5) hue-rotate(-10deg);
     }
+
+    footer.rodape a.active img {
+      filter: brightness(0) invert(0.7) sepia(1) saturate(5) hue-rotate(-10deg);
+    }
+
   </style>
 </head>
 
@@ -294,7 +299,7 @@
           <h1>Conversas</h1>
         </div>
         <div class="pfp">
-          <img src="../assets/img/pfp.jpg" alt="Foto de perfil do usuário Lucas" />
+          <img src="../assets/img/perfil.png" alt="Foto de perfil" />
         </div>
       </div>
     </nav>
@@ -377,7 +382,7 @@
     <a href="tela6.html" aria-label="Buscar">
       <img src="../assets/img/lupa.png" alt="Buscar" />
     </a>
-    <a href="chat.php" aria-label="Chat">
+    <a href="chat.php" class="active" aria-label="Chat">
       <img src="../assets/img/chat.png" alt="Chat" />
     </a>
     <a href="perfil.php" aria-label="Perfil">
