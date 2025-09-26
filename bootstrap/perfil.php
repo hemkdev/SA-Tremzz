@@ -1,10 +1,11 @@
 <?php
-  session_start();
-  if (!isset($_SESSION["conectado"]) || $_SESSION["conectado"] !== true) {
+session_start();
+if (!isset($_SESSION["conectado"]) || $_SESSION["conectado"] !== true) {
     header("Location: login.php");
     exit;
-  }
+}
 ?>
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 
@@ -21,31 +22,19 @@
     <link
         href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
         rel="stylesheet" />
+    <!-- Bootstrap Icons para ícones opcionais -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    
+    <!-- CSS mínimo para fundos exatos, hovers e filtros (essencial para fidelidade) -->
     <style>
         body {
             font-family: 'Poppins', sans-serif;
             background-color: #121212;
             color: #e0e0e0;
-            margin: 0;
             min-height: 100vh;
-            display: flex;
-            flex-direction: column;
             padding-bottom: 70px;
-            /* espaço para rodapé fixo */
         }
-
-        header nav .top {
-            padding: 1rem 1.5rem;
-        }
-
-        header nav .text-oi h1 {
-            margin: 0;
-            font-weight: 700;
-            font-size: 1.75rem;
-            color: #fff;
-        }
-
-        header nav .pfp img {
+        .pfp-img {
             width: 50px;
             height: 50px;
             object-fit: cover;
@@ -53,75 +42,29 @@
             border: 2px solid transparent;
             transition: border-color 0.3s ease;
         }
-
-        header nav .pfp img:hover {
+        .pfp-img:hover {
             border-color: #dc3545;
         }
-
-        main {
-            max-width: 900px;
-            margin: 0 auto 2rem;
-            padding: 0 1rem;
-            flex: 1;
-        }
-
-        /* Seção de perfil principal */
-        .perfil-header {
-            text-align: center;
-            margin-bottom: 2rem;
-            padding: 1rem;
-            background-color: #1e1e1e;
-            border-radius: 0.5rem;
-        }
-
         .perfil-foto {
             width: 120px;
             height: 120px;
             border-radius: 50%;
             object-fit: cover;
-            margin-bottom: 1rem;
             display: block;
-            margin-left: auto;
-            margin-right: auto;
+            margin: 0 auto 1rem;
         }
-
-        .perfil-nome {
-            font-weight: 700;
-            font-size: 1.5rem;
-            color: #fff;
-            margin-bottom: 0.5rem;
+        .footer-icon img {
+            width: 28px;
+            height: 28px;
+            filter: brightness(0) invert(1);
+            transition: filter 0.3s ease;
         }
-
-        .perfil-email {
-            font-size: 1rem;
-            color: #b0b0b0;
-            margin-bottom: 1rem;
+        .footer-icon:hover img, .footer-icon.active img {
+            filter: brightness(0) invert(0.7) sepia(1) saturate(5) hue-rotate(-10deg);
         }
-
-        .perfil-editar {
-            color: #dc3545;
-            text-decoration: none;
-            font-weight: 600;
-            transition: color 0.3s ease;
-        }
-
-        .perfil-editar:hover {
-            color: #a71d2a;
-        }
-
-        /* Cards de opções */
-        .opcoes-titulo {
-            color: #dc3545;
-            font-weight: 700;
-            margin-bottom: 1rem;
-            font-size: 1.25rem;
-        }
-
-        .opcoes-cards {
-            display: flex;
-            gap: 1rem;
-            flex-wrap: wrap;
-            justify-content: space-between;
+        /* CSS exato para cards de opção conforme fornecido */
+        #quadrado {
+            background-color: #1e1e1e;
         }
 
         .card-opcao {
@@ -139,12 +82,10 @@
             color: inherit;
             margin-bottom: 1rem;
         }
-
         .card-opcao:hover {
             background-color: #2a2a2a;
             color: #fff;
         }
-
         .opcao-img img {
             width: 40px;
             height: 40px;
@@ -152,129 +93,77 @@
             margin-right: 1rem;
             filter: brightness(0) invert(1);
         }
-
         .opcao-text h5 {
             color: #e0e0e0;
             font-weight: 600;
             font-size: 1rem;
             margin: 0 0 0.25rem 0;
         }
-
         .opcao-text p {
             color: #b0b0b0;
             font-size: 0.85rem;
             margin: 0;
         }
-
-        /* Rodapé */
-        footer.rodape {
-            background-color: #121212;
-            padding: 0.75rem 0;
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
-            position: fixed;
-            bottom: 0;
-            width: 100%;
-            max-width: 900px;
-            margin: 0 auto;
-            left: 0;
-            right: 0;
-            z-index: 1000;
-            box-shadow: 0 -2px 8px rgba(220, 53, 69, 0.3); /* Adicionado para consistência */
-        }
-
-        footer.rodape a img {
-            width: 28px;
-            height: 28px;
-            filter: brightness(0) invert(1);
-            transition: filter 0.3s ease;
-        }
-
-        footer.rodape a:hover img {
-            filter: brightness(0) invert(0.7) sepia(1) saturate(5) hue-rotate(-10deg);
-        }
-
-        footer.rodape a.active img {
-            filter: brightness(0) invert(0.7) sepia(1) saturate(5) hue-rotate(-10deg);
-        }
-
-        /* Responsividade */
+        /* Responsividade para mobile (mantendo alinhamento à esquerda, sem stack vertical) */
         @media (max-width: 768px) {
             .perfil-foto {
                 width: 100px;
                 height: 100px;
             }
-
-            .perfil-nome {
-                font-size: 1.3rem;
-            }
-
-            .opcoes-cards {
-                flex-direction: column;
-            }
-
             .card-opcao {
-                max-width: 100%;
-                flex-direction: column; /* Alterado: empilha ícone e texto verticalmente */
-                align-items: center; /* Centraliza horizontalmente no eixo principal (agora coluna) */
-                justify-content: center; /* Centraliza verticalmente */
-                text-align: center;
-                padding: 1.5rem 1rem; /* Aumentado padding para melhor espaçamento em mobile */
+                flex: 1 1 100% !important;
+                max-width: 100% !important;
+                padding: 1.25rem;
             }
-
             .opcao-img img {
-                margin-right: 0;
-                margin-bottom: 0.75rem; /* Aumentado para melhor separação do ícone e texto */
-                width: 48px; /* Aumentado tamanho do ícone em mobile para melhor visibilidade */
-                height: 48px;
+                width: 36px;
+                height: 36px;
+                margin-right: 0.75rem;
             }
-
-            .opcao-text {
-                width: 100%; /* Garante que o texto ocupe a largura total e centralize */
+            .opcao-text h5 {
+                font-size: 1.1rem;
             }
-
-            .opcao-text h5,
             .opcao-text p {
-                text-align: center;
-            }
-
-            footer.rodape {
-                max-width: 100%;
+                font-size: 0.9rem;
             }
         }
     </style>
 </head>
 
 <body>
-    <header>
-        <nav>
-            <div class="top d-flex justify-content-between align-items-center">
-                <div class="text-oi">
-                    <h1>Perfil</h1>
-                </div>
-                <div class="pfp">
-                    <img src="../assets/img/perfil.png" alt="Foto de perfil" />
+    <!-- Header -->
+    <header class="bg-transparent">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-transparent px-3 py-2">
+            <div class="container-fluid">
+                <div class="d-flex justify-content-between align-items-center w-100">
+                    <div class="text-oi">
+                        <h1 class="text-light fw-bold mb-0 fs-3">Perfil</h1>
+                    </div>
+                    <div class="pfp">
+                        <img src="../assets/img/perfil.png" alt="Foto de perfil" class="pfp-img" />
+                    </div>
                 </div>
             </div>
         </nav>
     </header>
 
-    <main>
-        <section class="perfil-header">
+    <main class="container px-3" style="max-width: 900px; margin-bottom: 2rem;">
+        <!-- Seção de perfil principal -->
+        <section class="perfil-header card rounded-3 text-center mb-4 p-4" id="quadrado">
             <img src="../assets/img/perfil.png" alt="Foto de perfil" class="perfil-foto" />
-            <div class="perfil-nome">
+            <div class="perfil-nome fw-bold fs-4 text-light mb-2">
                 <?php echo htmlspecialchars($_SESSION['nome']); ?>
             </div>
-            <div class="perfil-email">
+            <div class="perfil-email text-light fs-6 mb-3">
                 <?php echo htmlspecialchars($_SESSION['email']); ?>
             </div>
-            <a href="#" class="perfil-editar" tabindex="0">Editar Perfil</a>
+            <a href="#" class="perfil-editar text-danger fw-semibold text-decoration-none" tabindex="0">Editar Perfil</a>
         </section>
 
+        <!-- Opções -->
         <section class="opcoes">
-            <div class="opcoes-titulo">Opções</div>
-            <div class="opcoes-cards">
+            <div class="opcoes-titulo text-danger fw-bold fs-5 mb-3">Opções</div>
+            <div class="opcoes-cards d-flex flex-wrap justify-content-between gap-3">
                 <a href="#" class="card-opcao" tabindex="0" aria-label="Editar informações do perfil">
                     <div class="opcao-img">
                         <img src="../assets/img/perfil.png" alt="Ícone de perfil" />
@@ -295,7 +184,7 @@
                 </a>
                 <a href="#" class="card-opcao" tabindex="0" aria-label="Configurações de privacidade">
                     <div class="opcao-img">
-                        <img src="../assets/img/seguranca.png" alt="Ícone de segurança" /> 
+                        <img src="../assets/img/seguranca.png" alt="Ícone de segurança" />
                     </div>
                     <div class="opcao-text">
                         <h5>Privacidade e Segurança</h5>
@@ -333,19 +222,22 @@
         </section>
     </main>
 
-    <footer class="rodape" role="contentinfo" aria-label="Menu de navegação inferior">
-        <a href="home.php" aria-label="Início">
-            <img src="../assets/img/casa.png" alt="Início" />
-        </a>
-        <a href="buscar.php" aria-label="Buscar">
-            <img src="../assets/img/lupa.png" alt="Buscar" />
-        </a>
-        <a href="chat.php" aria-label="Chat">
-            <img src="../assets/img/chat.png" alt="Chat" />
-        </a>
-        <a href="tperfil.php" class="active" aria-label="Perfil">
-            <img src="../assets/img/perfil.png" alt="Perfil" />
-        </a>
+    <!-- Footer fixed bottom -->
+    <footer class="rodape position-fixed bottom-0 w-100 py-2 px-3" style="max-width: 900px; margin: 0 auto; left: 50%; transform: translateX(-50%); z-index: 1000;" role="contentinfo" aria-label="Menu de navegação inferior">
+        <div class="d-flex justify-content-around align-items-center">
+            <a href="home.php" class="footer-icon text-center text-decoration-none p-2" aria-label="Início">
+                <img src="../assets/img/casa.png" alt="Início" />
+            </a>
+            <a href="buscar.php" class="footer-icon text-center text-decoration-none p-2" aria-label="Buscar">
+                <img src="../assets/img/lupa.png" alt="Buscar" />
+            </a>
+            <a href="chat.php" class="footer-icon text-center text-decoration-none p-2" aria-label="Chat">
+                <img src="../assets/img/chat.png" alt="Chat" />
+            </a>
+            <a href="tperfil.php" class="footer-icon active text-center text-decoration-none p-2" aria-label="Perfil">
+                <img src="../assets/img/perfil.png" alt="Perfil" />
+            </a>
+        </div>
     </footer>
 
     <!-- Bootstrap JS (opcional) -->
@@ -353,3 +245,4 @@
 </body>
 
 </html>
+
