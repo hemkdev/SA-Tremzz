@@ -194,14 +194,13 @@ if (!isset($_SESSION["conectado"]) || $_SESSION["conectado"] !== true) {
             </a>
         </div>
     </main>
-
-    <!-- Footer fixed bottom -->
+    
     <footer class="rodape position-fixed bottom-0 w-100 py-2 px-3" style="max-width: 900px; margin: 0 auto; left: 50%; transform: translateX(-50%); z-index: 1000;" role="contentinfo" aria-label="Menu de navegação inferior">
         <div class="d-flex justify-content-around align-items-center">
             <a href="home.php" class="footer-icon text-center text-decoration-none p-2" aria-label="Início">
                 <img src="../assets/img/casa.png" alt="Início" />
             </a>
-            <a href="tela6.html" class="footer-icon text-center text-decoration-none p-2" aria-label="Buscar">
+            <a href="buscar.php" class="footer-icon text-center text-decoration-none p-2" aria-label="Buscar">
                 <img src="../assets/img/lupa.png" alt="Buscar" />
             </a>
             <a href="chat.php" class="footer-icon active text-center text-decoration-none p-2" aria-label="Chat">
