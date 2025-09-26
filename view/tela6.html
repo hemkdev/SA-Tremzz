@@ -1,68 +1,330 @@
+<?php
+session_start();
+if (!isset($_SESSION["conectado"]) || $_SESSION["conectado"] !== true) {
+    header("Location: login.php");
+    exit;
+}
+?>
+
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TREMzz - Localização</title>
-    <link rel="stylesheet" href="styles.css">
-    <link rel="stylesheet" href="../css/tela6.css">
-    <link rel="shortcut icon" href="../img/tremlogo.png">
-    <!-- fonte -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
-    <!-- fim fonte -->
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>TREMzz - Buscar</title>
+    <link rel="shortcut icon" href="../img/tremlogo.png" />
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <!-- Fonte Poppins -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+        rel="stylesheet" />
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <!-- Leaflet CSS para mapa (gratuito, sem API key) -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    
+    <!-- CSS mínimo para fundos exatos, hovers e filtros (essencial para fidelidade ao tema) -->
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #121212;
+            color: #e0e0e0;
+            min-height: 100vh;
+            padding-bottom: 70px;
+        }
+        .bg-custom {
+            background-color: #1e1e1e !important;
+        }
+        .bg-custom-hover:hover {
+            background-color: #dc3545 !important;
+            color: #fff !important;
+        }
+        .bg-custom-hover:hover .text-muted {
+            color: #f8f9fa !important;
+        }
+        .pfp-img {
+            width: 50px;
+            height: 50px;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 2px solid transparent;
+            transition: border-color 0.3s ease;
+        }
+        .pfp-img:hover {
+            border-color: #dc3545;
+        }
+        .search-icon {
+            width: 24px;
+            height: 24px;
+            filter: brightness(0) invert(1);
+            transition: filter 0.3s ease;
+            cursor: pointer;
+        }
+        .search-icon:hover {
+            filter: brightness(0) invert(0.7) sepia(1) saturate(5) hue-rotate(-10deg);
+        }
+        .endereco-img {
+            width: 40px;
+            height: 40px;
+            object-fit: contain;
+            filter: brightness(0) invert(1);
+            margin-right: 1rem;
+        }
+        .footer-icon img {
+            width: 28px;
+            height: 28px;
+            filter: brightness(0) invert(1);
+            transition: filter 0.3s ease;
+        }
+        .footer-icon:hover img, .footer-icon.active img {
+            filter: brightness(0) invert(0.7) sepia(1) saturate(5) hue-rotate(-10deg);
+        }
+        /* Customizações para tabs e mapa */
+        .nav-tabs .nav-link {
+            background-color: #1e1e1e;
+            color: #e0e0e0;
+            border: 1px solid #dc3545;
+            border-bottom: none;
+        }
+        .nav-tabs .nav-link.active {
+            background-color: #dc3545;
+            color: #fff;
+            border-color: #dc3545;
+        }
+        .nav-tabs .nav-link:hover {
+            background-color: #2a2a2a;
+            color: #fff;
+        }
+        .tab-pane {
+            background-color: #1e1e1e;
+            border: 1px solid #dc3545;
+            border-top: none;
+            padding: 1rem;
+            border-radius: 0 0 0.5rem 0.5rem;
+        }
+        #map {
+            height: 400px;
+            border-radius: 0.5rem;
+            background-color: #1e1e1e;
+        }
+        .map-search {
+            background-color: #1e1e1e;
+            border: 1px solid #dc3545;
+            color: #e0e0e0;
+        }
+        .map-search:focus {
+            border-color: #dc3545;
+            box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
+        }
+        .btn-map {
+            background-color: #dc3545;
+            border-color: #dc3545;
+        }
+        .btn-map:hover {
+            background-color: #c82333;
+            border-color: #bd2130;
+        }
+        /* Responsividade */
+        @media (max-width: 768px) {
+            .nav-tabs {
+                flex-direction: column;
+            }
+            .nav-tabs .nav-link {
+                border-radius: 0.5rem 0.5rem 0 0;
+                margin-bottom: 0.5rem;
+            }
+            .tab-pane {
+                border-radius: 0.5rem;
+            }
+            #map {
+                height: 300px;
+            }
+        }
+    </style>
 </head>
 
-<body>
-      
-    <div class="mapBox">
-        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3576.5756836664464!2d-48.84117912403811!3d-26.30785216820438!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94deb187e1aad16f%3A0xef9a7e18b1d0e8e9!2sEscola%20SESI%20de%20Refer%C3%AAncia%20Joinville!5e0!3m2!1spt-BR!2sbr!4v1747827852135!5m2!1spt-BR!2sbr" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-    </div>
-
-    <div class="container">
-
-        <h1>Selecione um endereço</h1>
-        
-        <div class="address-input">
-            <label for="address"> Endereço:</label>
-            <input type="text" id="address" name="address" placeholder="Selecione seu endereço">
-        </div>
-        
-        <div class="save-as-section">
-            <h2>Locais Salvos</h2>
-            <div class="location-options">
-                <button class="location-btn">Casa</button>
-                <button class="location-btn">Trabalho</button>
+<body class="text-light">
+    <!-- Header -->
+    <header class="bg-transparent">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-transparent px-3 py-2">
+            <div class="container-fluid">
+                <div class="d-flex justify-content-between align-items-center w-100">
+                    <div class="text-oi">
+                        <h1 class="text-danger fw-bold mb-0 fs-3">Buscar</h1>
+                    </div>
+                    <div class="pfp">
+                        <img src="../assets/img/perfil.png" alt="Foto de perfil" class="pfp-img" />
+                    </div>
+                </div>
+            </div>
+        </nav>
+        <!-- Searchbar global -->
+        <div class="searchbar bg-custom d-flex justify-content-between align-items-center mx-3 mb-3 p-3 rounded-3">
+            <div class="text-bar flex-grow-1 me-2">
+                <input type="text" class="form-control map-search fs-5" id="globalSearch" placeholder="Digite um endereço ou estação..." />
+            </div>
+            <div class="img-bar">
+                <img src="../assets/img/lupa.png" alt="Ícone de lupa para busca" class="search-icon" onclick="performGlobalSearch()" />
             </div>
         </div>
-        
-        <div class="others-section">
-            <h2>Outros endereços</h2>
-            <button class="location-btn">
-            <div class="butao">
-                <img src="../assets/img/adicionar.png"> 
-                <a href="..enderecos.html">Endereços salvos</a>
+    </header>
+
+    <main class="container px-3" style="max-width: 900px; margin-bottom: 2rem;">
+        <!-- Tabs para Endereços Salvos e Mapa -->
+        <ul class="nav nav-tabs mb-0" id="searchTabs" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="salvos-tab" data-bs-toggle="tab" data-bs-target="#salvos" type="button" role="tab" aria-controls="salvos" aria-selected="true">Endereços Salvos</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="mapa-tab" data-bs-toggle="tab" data-bs-target="#mapa" type="button" role="tab" aria-controls="mapa" aria-selected="false">Mapa</button>
+            </li>
+        </ul>
+        <div class="tab-content" id="searchTabsContent">
+            <!-- Aba Endereços Salvos -->
+            <div class="tab-pane fade show active" id="salvos" role="tabpanel" aria-labelledby="salvos-tab">
+                <div class="row g-3 mt-3">
+                    <div class="col-12">
+                        <a href="#" class="card bg-custom bg-custom-hover d-flex align-items-center rounded-3 p-3 text-decoration-none text-light" style="transition: background-color 0.3s ease;">
+                            <img src="../assets/img/local.png" alt="Ícone local" class="endereco-img flex-shrink-0" />
+                            <div class="flex-grow-1">
+                                <h5 class="fw-bold fs-6 mb-1 text-light">Estação da Luz</h5>
+                                <p class="text-muted small mb-1">Centro Histórico de São Paulo, SP</p>
+                                <small class="text-muted">Adicionado em 15/10/2023</small>
+                            </div>
+                            <button class="btn btn-outline-danger btn-sm ms-2" onclick="removeAddress(this)">Remover</button>
+                        </a>
+                    </div>
+                    <div class="col-12">
+                        <a href="#" class="card bg-custom bg-custom-hover d-flex align-items-center rounded-3 p-3 text-decoration-none text-light" style="transition: background-color 0.3s ease;">
+                            <img src="../assets/img/local.png" alt="Ícone local" class="endereco-img flex-shrink-0" />
+                            <div class="flex-grow-1">
+                                <h5 class="fw-bold fs-6 mb-1 text-light">Estação Japão</h5>
+                                <p class="text-muted small mb-1">Bairro da Liberdade, SP</p>
+                                <small class="text-muted">Adicionado em 10/10/2023</small>
+                            </div>
+                            <button class="btn btn-outline-danger btn-sm ms-2" onclick="removeAddress(this)">Remover</button>
+                        </a>
+                    </div>
+                    <div class="col-12">
+                        <a href="#" class="card bg-custom bg-custom-hover d-flex align-items-center rounded-3 p-3 text-decoration-none text-light" style="transition: background-color 0.3s ease;">
+                            <img src="../assets/img/local.png" alt="Ícone local" class="endereco-img flex-shrink-0" />
+                            <div class="flex-grow-1">
+                                <h5 class="fw-bold fs-6 mb-1 text-light">Estação Pinheiros</h5>
+                                <p class="text-muted small mb-1">Bairro Pinheiros, SP</p>
+                                <small class="text-muted">Adicionado em 05/10/2023</small>
+                            </div>
+                            <button class="btn btn-outline-danger btn-sm ms-2" onclick="removeAddress(this)">Remover</button>
+                        </a>
+                    </div>
+                </div>
+                <div class="text-center mt-3">
+                    <button class="btn btn-outline-danger" onclick="addAddress()">Adicionar Novo Endereço</button>
+                </div>
             </div>
-        </button>
+            <!-- Aba Mapa -->
+            <div class="tab-pane fade" id="mapa" role="tabpanel" aria-labelledby="mapa-tab">
+                <div class="mb-3">
+                    <div class="input-group">
+                        <input type="text" class="form-control map-search fs-6" id="mapSearch" placeholder="Digite um endereço para buscar no mapa..." />
+                        <button class="btn btn-map" type="button" onclick="searchOnMap()">Buscar</button>
+                    </div>
+                </div>
+                <div id="map"></div>
+            </div>
         </div>
-        
-        <button class="save-btn"> <a href="../html/tela7.html"> Mostrar Rota</a> </button>
-    </div>
-</body>
+    </main>
 
-<footer class="rodape">
-        <a href="tela8.html">
-            <img src="../assets/img/casa.png">
-
-        <a href="tela6.html">
-            <img src="../assets/img/lupa.png">
-
-        <a href="tela11.html">
-            <img src="../assets/img/chat.png">
-
-        <a href="tela9.html">
-            <img src="../assets/img/perfil.png">
+    <!-- Footer fixed bottom -->
+    <footer class="rodape bg-dark border-top border-danger position-fixed bottom-0 w-100 py-2 px-3" style="max-width: 900px; margin: 0 auto; left: 50%; transform: translateX(-50%); z-index: 1000;" role="contentinfo" aria-label="Menu de navegação inferior">
+        <div class="d-flex justify-content-around align-items-center">
+            <a href="home.php" class="footer-icon text-center text-decoration-none p-2" aria-label="Início">
+                <img src="../assets/img/casa.png" alt="Início" />
+            </a>
+            <a href="buscar.php" class="footer-icon active text-center text-decoration-none p-2" aria-label="Buscar">
+                <img src="../assets/img/lupa.png" alt="Buscar" />
+            </a>
+            <a href="chat.php" class="footer-icon text-center text-decoration-none p-2" aria-label="Chat">
+                <img src="../assets/img/chat.png" alt="Chat" />
+            </a>
+            <a href="perfil.php" class="footer-icon text-center text-decoration-none p-2" aria-label="Perfil">
+                <img src="../assets/img/perfil.png" alt="Perfil" />
+            </a>
+        </div>
     </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Leaflet JS para mapa -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <!-- JS para funcionalidades (busca global, mapa, endereços) -->
+    <script>
+        // Inicializar mapa (centrado em São Paulo)
+        let map;
+        function initMap() {
+            map = L.map('map').setView([-23.5505, -46.6333], 12); // Coordenadas de SP
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '© OpenStreetMap contributors'
+            }).addTo(map);
+            // Marker exemplo
+            L.marker([-23.5505, -46.6333]).addTo(map)
+                .bindPopup('Estação Central de São Paulo')
+                .openPopup();
+        }
+
+        // Busca no mapa (usando Nominatim para geocode gratuito)
+        function searchOnMap() {
+            const query = document.getElementById('mapSearch').value;
+            if (!query) return;
+            fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&limit=1`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.length > 0) {
+                        const lat = parseFloat(data[0].lat);
+                        const lon = parseFloat(data[0].lon);
+                        map.setView([lat, lon], 15);
+                        L.marker([lat, lon]).addTo(map)
+                            .bindPopup(data[0].display_name)
+                            .openPopup();
+                    } else {
+                        alert('Endereço não encontrado!');
+                    }
+                })
+                .catch(() => alert('Erro na busca. Tente novamente.'));
+        }
+
+        // Busca global (simples, pode integrar com mapa ou lista)
+        function performGlobalSearch() {
+            const query = document.getElementById('globalSearch').value;
+            if (query) {
+                alert(`Buscando por: ${query}`); // Placeholder: integrar com API real
+                // Ex: Abrir aba mapa e buscar
+                document.getElementById('mapa-tab').click();
+                document.getElementById('mapSearch').value = query;
+                searchOnMap();
+            }
+        }
+
+        // Funções para endereços salvos (placeholders)
+        function removeAddress(btn) {
+            if (confirm('Remover este endereço?')) {
+                btn.closest('.card').remove();
+            }
+        }
+        function addAddress() {
+            const newAddr = prompt('Digite o novo endereço:');
+            if (newAddr) {
+                // Adicionar card dinamicamente (placeholder)
+                alert(`Endereço "${newAddr}" adicionado!`); // Implementar DOM append real
+            }
+        }
+
+        // Inicializar mapa ao carregar
+        document.addEventListener('DOMContentLoaded', initMap);
+    </script>
+</body>
 
 </html>

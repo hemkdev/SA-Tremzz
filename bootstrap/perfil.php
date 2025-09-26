@@ -157,7 +157,6 @@ if (!isset($_SESSION["conectado"]) || $_SESSION["conectado"] !== true) {
             <div class="perfil-email text-light fs-6 mb-3">
                 <?php echo htmlspecialchars($_SESSION['email']); ?>
             </div>
-            <a href="#" class="perfil-editar text-danger fw-semibold text-decoration-none" tabindex="0">Editar Perfil</a>
         </section>
 
         <!-- Opções -->
