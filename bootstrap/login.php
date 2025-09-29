@@ -22,9 +22,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
             if (password_verify($senha, $senha_armazenada_rash)) {
 
+            $_SESSION['id'] = $dados['id'];
             $_SESSION['email'] = $dados['email'];
             $_SESSION['senha'] = $dados['senha'];
             $_SESSION['nome'] = $dados['nome'];
+            
             $_SESSION["conectado"] = true;
             header("location: home.php");
             exit;
