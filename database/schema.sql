@@ -11,3 +11,16 @@ CREATE TABLE usuarios (
     cargo ENUM('usuario', 'administrador', 'maquinista') NOT NULL DEFAULT 'usuario'
 );
 
+CREATE TABLE mensagens (
+    nome varchar(30) NOT NULL,
+    texto varchar(87) NOT NULL,
+    horario time NOT NULL,
+    dia date NOT NULL,
+    imagem ENUM('estação', 'bate-papo', 'usuario', 'trem')
+);
+
+CREATE TABLE atividades (
+    destino varchar(30),
+    rua varchar(50) NOT NULL,
+    cep varchar(30) NOT NULL
+)
