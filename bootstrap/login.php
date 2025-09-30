@@ -22,16 +22,26 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
             if (password_verify($senha, $senha_armazenada_rash)) {
 
-            $_SESSION['id'] = $dados['id'];
-            $_SESSION['email'] = $dados['email'];
-            $_SESSION['senha'] = $dados['senha'];
-            $_SESSION['nome'] = $dados['nome'];
-            
-            $_SESSION["conectado"] = true;
-            header("location: home.php");
-            exit;
+                $_SESSION['id'] = $dados['id'];
+                $_SESSION['email'] = $dados['email'];
+                $_SESSION['senha'] = $dados['senha'];
+                $_SESSION["cargo"] = $dados['cargo'];
+                $_SESSION['nome'] = $dados['nome'];
+                $_SESSION["cargo"] = $dados['cargo'];
+                $_SESSION["conectado"] = true;
+
+                if ($_SESSION["cargo"] === "administrador") {
+                    header("location: home.php?cargo=1");
+                    exit;
+                } else if ($_SESSION["cargo"] === "maquinista") {
+                    header("location: home.php?cargo=2");
+                    exit;
+                } else {
+                    header("location: home.php");
+                    exit;
+                }
             } else {
-               $erro = "Usuário ou senha inválidos"; 
+                $erro = "Usuário ou senha inválidos";
             }
         } else {
             $erro = "Usuário não encontrado";
@@ -63,7 +73,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     <!-- STYLE -->
     <style>
         .form-control::placeholder {
-            color: #ccb2b2ff !important; /* Mude esta cor conforme necessário */
+            color: #ccb2b2ff !important;
+            /* Mude esta cor conforme necessário */
             opacity: 1;
         }
     </style>
@@ -123,9 +134,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                             </form>
 
                             <?php
-                                if($erro) {
-                                    echo "<div class='alert alert-danger mt-3 mb-0'><i class='bi bi-exclamation-triangle-fill me-2'></i>$erro</div>";
-                                }
+                            if ($erro) {
+                                echo "<div class='alert alert-danger mt-3 mb-0'><i class='bi bi-exclamation-triangle-fill me-2'></i>$erro</div>";
+                            }
                             ?>
 
                             <div class="text-center mt-4">
