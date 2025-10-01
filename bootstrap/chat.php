@@ -16,6 +16,7 @@ $mensagens = $stmt->get_result();
 $mensagem = $mensagens->fetch_assoc();
 
 $imagem = $mensagem['imagem'];
+$horaFormatada = date('H:i', strtotime($mensagem['horario']));
 
 switch ($imagem) {
     case 'estação':
@@ -178,7 +179,7 @@ switch ($imagem) {
             <!-- Estação da Luz -->
             <a href="#" class="list-group-item list-group-item-action bg-custom bg-custom-hover d-flex align-items-center rounded-3 mb-3 p-3 text-decoration-none active border-0" tabindex="0" aria-current="true" aria-label="Chat com Estação da Luz, última mensagem: Trem atrasado, 2 mensagens não lidas" style="transition: background-color 0.2s ease;">
                 <div class="position-relative flex-shrink-0 me-3">
-                    <img src="../assets/img/<?php echo $arquivoImagem; ?>" alt="Avatar Estação da Luz" class="chat-icon" />
+                    <img src="../assets/img/<?php echo $arquivoImagem; ?>" alt="Avatar Estação da Luz" class="chat-icon" /> <!-- Foto da mensagem -->
                     <span class="unread-dot"></span>
                 </div>
                 <div class="flex-grow-1 min-width-0">
@@ -191,7 +192,7 @@ switch ($imagem) {
                 </div>
                 <div class="d-flex flex-column align-items-end ms-3 flex-shrink-0" style="min-width: 60px;">
                     <div class="chat-time text-light small mb-2" style="white-space: nowrap;">
-                        <?php echo date('H:i', strtotime($mensagem['horario'] ?? '00:00:00')); ?> <!-- Horário da mensagem -->
+                        <?php echo date($horaFormatada); ?> <!-- Horário da mensagem -->
                     </div>
                     <span class="badge bg-danger rounded-pill" aria-label="2 mensagens não lidas" style="font-size: 0.75rem; padding: 0.25rem 0.5rem; min-width: 24px; text-align: center;">1</span>
                 </div>
