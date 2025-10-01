@@ -12,15 +12,20 @@ CREATE TABLE usuarios (
 );
 
 CREATE TABLE mensagens (
-    nome varchar(30) NOT NULL,
-    texto varchar(87) NOT NULL,
-    horario time NOT NULL,
-    dia date NOT NULL,
-    imagem ENUM('estação', 'bate-papo', 'usuario', 'trem')
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    usuario_id INT NOT NULL,
+    texto VARCHAR(87) NOT NULL,
+    horario TIME NOT NULL,
+    dia DATE NOT NULL,
+    imagem ENUM('estação', 'bate-papo', 'usuario', 'trem'),
+    CONSTRAINT fk_usuario_mensagem FOREIGN KEY (usuario_id) REFERENCES usuarios(id)
 );
 
 CREATE TABLE atividades (
-    destino varchar(30),
-    rua varchar(50) NOT NULL,
-    cep varchar(30) NOT NULL
-)
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    usuario_id INT NOT NULL,
+    destino VARCHAR(30),
+    rua VARCHAR(50) NOT NULL,
+    cep VARCHAR(10) NOT NULL,
+    CONSTRAINT fk_usuario_atividade FOREIGN KEY (usuario_id) REFERENCES usuarios(id)
+);

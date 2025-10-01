@@ -31,10 +31,10 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 $_SESSION["conectado"] = true;
 
                 if ($_SESSION["cargo"] === "administrador") {
-                    header("location: home.php?cargo=1");
+                    header("location: adm/menu_adm.php");
                     exit;
                 } else if ($_SESSION["cargo"] === "maquinista") {
-                    header("location: home.php?cargo=2");
+                    header("location: maquinista/menu_adm.php");
                     exit;
                 } else {
                     header("location: home.php");

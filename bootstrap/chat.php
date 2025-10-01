@@ -1,11 +1,21 @@
 <?php
+require "../config/bd.php";
 session_start();
 if (!isset($_SESSION["conectado"]) || $_SESSION["conectado"] !== true) {
     header("Location: login.php");
     exit;
 }
-?>
 
+$id = $_SESSION['id'];
+
+ $stmt = $conn->prepare("SELECT * FROM mensagens WHERE usuario_id = ? ");
+        $stmt->bind_param("i", $id);
+        $stmt->execute();
+        $mensagens = $stmt->get_result();
+
+
+
+?>
 <!DOCTYPE html>
 <html lang="pt-BR">
 
@@ -141,7 +151,9 @@ if (!isset($_SESSION["conectado"]) || $_SESSION["conectado"] !== true) {
                 </div>
                 <div class="flex-grow-1 min-width-0">
                     <div class="chat-name fw-bold fs-6 text-light mb-1" style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">Estação da Luz</div>
-                    <div class="chat-last-message text-light small" style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">Trem atrasado</div>
+                    <div class="chat-last-message text-light small" style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+                       <?php echo htmlspecialchars($mensagem['texto']);   ?>
+                    </div>
                 </div>
                 <div class="d-flex flex-column align-items-end ms-3 flex-shrink-0" style="min-width: 60px;">
                     <div class="chat-time text-light small mb-2" style="white-space: nowrap;">10:45</div>
