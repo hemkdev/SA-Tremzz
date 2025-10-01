@@ -14,6 +14,7 @@ CREATE TABLE usuarios (
 CREATE TABLE mensagens (
     id INT AUTO_INCREMENT PRIMARY KEY,
     usuario_id INT NOT NULL,
+    nome VARCHAR(30) NOT NULL,
     texto VARCHAR(87) NOT NULL,
     horario TIME NOT NULL,
     dia DATE NOT NULL,

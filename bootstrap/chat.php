@@ -8,11 +8,32 @@ if (!isset($_SESSION["conectado"]) || $_SESSION["conectado"] !== true) {
 
 $id = $_SESSION['id'];
 
- $stmt = $conn->prepare("SELECT * FROM mensagens WHERE usuario_id = ? ");
-        $stmt->bind_param("i", $id);
-        $stmt->execute();
-        $mensagens = $stmt->get_result();
+$stmt = $conn->prepare("SELECT * FROM mensagens WHERE usuario_id = ? ");
+$stmt->bind_param("i", $id);
+$stmt->execute();
+$mensagens = $stmt->get_result();
 
+$mensagem = $mensagens->fetch_assoc();
+
+$imagem = $mensagem['imagem'];
+
+switch ($imagem) {
+    case 'estação':
+        $arquivoImagem = 'localizacao.png';
+        break;
+    case 'bate-papo':
+        $arquivoImagem = 'chat.png';
+        break;
+    case 'usuario':
+        $arquivoImagem = 'perfil.png';
+        break;
+    case 'trem':
+        $arquivoImagem = 'trem.png';
+        break;
+    default:
+        $arquivoImagem = 'padrao.png'; // arquivo padrão caso o valor não bata
+        break;
+}
 
 
 ?>
@@ -34,7 +55,7 @@ $id = $_SESSION['id'];
         rel="stylesheet" />
     <!-- Bootstrap Icons para ícones opcionais -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
-    
+
     <!-- CSS mínimo para fundos exatos, filtros de ícones e hovers essenciais (Bootstrap não suporta nativamente #121212 ou filter invert) -->
     <style>
         body {
@@ -44,9 +65,11 @@ $id = $_SESSION['id'];
             min-height: 100vh;
             padding-bottom: 70px;
         }
+
         .bg-custom {
             background-color: #1e1e1e !important;
         }
+
         .bg-custom-hover:hover {
             background-color: #2a2a2a !important;
             color: #fff !important;
@@ -61,6 +84,7 @@ $id = $_SESSION['id'];
             border: 2px solid transparent;
             transition: border-color 0.3s ease;
         }
+
         .search-icon {
             width: 24px;
             height: 24px;
@@ -68,9 +92,11 @@ $id = $_SESSION['id'];
             transition: filter 0.3s ease;
             cursor: pointer;
         }
+
         .search-icon:hover {
             filter: brightness(0) invert(0.7) sepia(1) saturate(5) hue-rotate(-10deg);
         }
+
         .pfp-img {
             width: 50px;
             height: 50px;
@@ -79,10 +105,12 @@ $id = $_SESSION['id'];
             border: 2px solid transparent;
             transition: border-color 0.3s ease;
         }
+
         .pfp-img:hover {
             transform: scale(1.2);
             transition: transform 0.5s ease;
         }
+
         .unread-dot {
             position: absolute;
             top: 12px;
@@ -94,15 +122,19 @@ $id = $_SESSION['id'];
             border: 2px solid #121212;
             pointer-events: none;
         }
+
         .footer-icon img {
             width: 28px;
             height: 28px;
             filter: brightness(0) invert(1);
             transition: filter 0.3s ease;
         }
-        .footer-icon:hover img, .footer-icon.active img {
+
+        .footer-icon:hover img,
+        .footer-icon.active img {
             filter: brightness(0) invert(0.7) sepia(1) saturate(5) hue-rotate(-10deg);
         }
+
         /* Responsividade mínima para mobile (Bootstrap cuida do resto) */
         @media (max-width: 768px) {
             .chat-icon {
@@ -146,25 +178,29 @@ $id = $_SESSION['id'];
             <!-- Estação da Luz -->
             <a href="#" class="list-group-item list-group-item-action bg-custom bg-custom-hover d-flex align-items-center rounded-3 mb-3 p-3 text-decoration-none active border-0" tabindex="0" aria-current="true" aria-label="Chat com Estação da Luz, última mensagem: Trem atrasado, 2 mensagens não lidas" style="transition: background-color 0.2s ease;">
                 <div class="position-relative flex-shrink-0 me-3">
-                    <img src="../assets/img/local.png" alt="Avatar Estação da Luz" class="chat-icon" />
+                    <img src="../assets/img/<?php echo $arquivoImagem; ?>" alt="Avatar Estação da Luz" class="chat-icon" />
                     <span class="unread-dot"></span>
                 </div>
                 <div class="flex-grow-1 min-width-0">
-                    <div class="chat-name fw-bold fs-6 text-light mb-1" style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">Estação da Luz</div>
+                    <div class="chat-name fw-bold fs-6 text-light mb-1" style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+                        <?php echo htmlspecialchars($mensagem['nome']);   ?> <!-- Nome de quem enviou a mensagem -->
+                    </div>
                     <div class="chat-last-message text-light small" style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
-                       <?php echo htmlspecialchars($mensagem['texto']);   ?>
+                        <?php echo htmlspecialchars($mensagem['texto']);   ?> <!-- Texto da mensagem -->
                     </div>
                 </div>
                 <div class="d-flex flex-column align-items-end ms-3 flex-shrink-0" style="min-width: 60px;">
-                    <div class="chat-time text-light small mb-2" style="white-space: nowrap;">10:45</div>
-                    <span class="badge bg-danger rounded-pill" aria-label="2 mensagens não lidas" style="font-size: 0.75rem; padding: 0.25rem 0.5rem; min-width: 24px; text-align: center;">2</span>
+                    <div class="chat-time text-light small mb-2" style="white-space: nowrap;">
+                        <?php echo date('H:i', strtotime($mensagem['horario'] ?? '00:00:00')); ?> <!-- Horário da mensagem -->
+                    </div>
+                    <span class="badge bg-danger rounded-pill" aria-label="2 mensagens não lidas" style="font-size: 0.75rem; padding: 0.25rem 0.5rem; min-width: 24px; text-align: center;">1</span>
                 </div>
             </a>
 
             <!-- Estação Japão -->
             <a href="#" class="list-group-item list-group-item-action bg-custom bg-custom-hover d-flex align-items-center rounded-3 mb-3 p-3 text-decoration-none border-0" tabindex="0" aria-label="Chat com Estação Japão, última mensagem: Tudo funcionando normalmente" style="transition: background-color 0.2s ease;">
                 <div class="flex-shrink-0 me-3">
-                    <img src="../assets/img/local.png" alt="Avatar Estação Japão" class="chat-icon" />
+                    <img src="../assets/img/localizacao.png" alt="Avatar Estação Japão" class="chat-icon" />
                 </div>
                 <div class="flex-grow-1 min-width-0">
                     <div class="chat-name fw-bold fs-6 text-light mb-1" style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">Estação Japão</div>
@@ -197,7 +233,7 @@ $id = $_SESSION['id'];
                 <div class="flex-grow-1 min-width-0">
                     <div class="chat-name fw-bold fs-6 text-light mb-1" style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">Status do Trem</div>
                     <div class="chat-last-message text-light small" style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
-                      <?php echo htmlspecialchars($_SESSION['nome']); ?>, seu trem está a caminho!
+                        <?php echo htmlspecialchars($_SESSION['nome']); ?>, seu trem está a caminho!
                     </div>
                 </div>
                 <div class="d-flex flex-column align-items-end ms-3 flex-shrink-0" style="min-width: 60px;">
@@ -206,7 +242,7 @@ $id = $_SESSION['id'];
             </a>
         </div>
     </main>
-    
+
     <footer class="rodape position-fixed bottom-0 w-100 py-2 px-3" style="max-width: 900px; margin: 0 auto; left: 50%; transform: translateX(-50%); z-index: 1000;" role="contentinfo" aria-label="Menu de navegação inferior">
         <div class="d-flex justify-content-around align-items-center">
             <a href="home.php" class="footer-icon text-center text-decoration-none p-2" aria-label="Início">
@@ -229,4 +265,3 @@ $id = $_SESSION['id'];
 </body>
 
 </html>
-
