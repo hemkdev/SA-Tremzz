@@ -208,7 +208,7 @@ if (!isset($_SESSION["conectado"]) || $_SESSION["conectado"] !== true) {
                         <p>Proteja sua conta</p>
                     </div>
                 </a>
-                <a href="#" class="card-opcao" tabindex="0" aria-label="Sobre o aplicativo TREMzz">
+                <a href="sobre.php" class="card-opcao" tabindex="0" aria-label="Sobre o aplicativo TREMzz">
                     <div class="opcao-img">
                         <img src="../assets/img/info.png" alt="Ícone de informação" />
                     </div>

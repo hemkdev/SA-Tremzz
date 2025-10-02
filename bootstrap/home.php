@@ -164,7 +164,7 @@ if (!isset($_SESSION["conectado"]) || $_SESSION["conectado"] !== true) {
             </div>
             <div class="card-atividade card card-hover d-flex align-items-center rounded-3 mb-3 p-3 overflow-hidden">
                 <div class="card-img flex-shrink-0">
-                    <img src="../assets/img/local.png" alt="Ícone local" class="activity-img" />
+                    <img src="../assets/img/localizacao.png" alt="Ícone local" class="activity-img" />
                 </div>
                 <div class="card-text ms-3 flex-grow-1">
                     <div class="card-titulo">

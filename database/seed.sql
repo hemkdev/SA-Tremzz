@@ -6,4 +6,4 @@ INSERT INTO usuarios (id, nome, email, telefone, senha, cargo) VALUES
 
 INSERT INTO mensagens (usuario_id, nome, texto, horario, dia, imagem) VALUES 
 (0, 'Sistema', 'As mensagens estão funcionando!', '08:28:00', '2025-10-01', 'bate-papo');
-(0, 'Rogério maquinista', 'To chegando!', '06:30:00', '2025-09-30', 'usuario');
+(1, 'Rogério maquinista', 'To chegando!', '06:30:00', '2025-09-30', 'usuario');
