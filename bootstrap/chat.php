@@ -107,7 +107,9 @@ $mensagens = $stmt->get_result();
 
         .footer-icon:hover img,
         .footer-icon.active img {
-            filter: brightness(0) invert(0.7) sepia(1) saturate(5) hue-rotate(-10deg);
+            filter: brightness(0) invert(1)          
+            drop-shadow(0 0 15px rgba(255, 193, 7, 0.8))
+            sepia(1) saturate(5) hue-rotate(-10deg);
         }
 
         /* Responsividade mínima para mobile (Bootstrap cuida do resto) */

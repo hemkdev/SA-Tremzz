@@ -31,9 +31,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 $_SESSION["conectado"] = true;
 
                 if ($_SESSION["cargo"] === "administrador") {
+                    $_SESSION['admin'] = true;
                     header("location: adm/menu_adm.php");
                     exit;
                 } else if ($_SESSION["cargo"] === "maquinista") {
+                    $_SESSION['maquinista'] = true;
                     header("location: maquinista/menu_adm.php");
                     exit;
                 } else {

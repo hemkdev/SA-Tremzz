@@ -22,12 +22,11 @@ $stmt->bind_param("i", $admin_id);
 $stmt->execute();
 $result = $stmt->get_result();
 
-// Processamento simples no PHP: Agrupa por usuario_id, pegando apenas a primeira (mais recente) de cada
-$usuarios_vistos = []; // Para rastrear usuários já processados
+
+$usuarios_vistos = []; 
 while ($row = $result->fetch_assoc()) {
     $usuario_id = $row['usuario_id'];
     if (!isset($usuarios_vistos[$usuario_id])) {
-        // Esta é a mensagem mais recente para este usuário (devido à ordenação DESC)
         $conversas[] = $row;
         $usuarios_vistos[$usuario_id] = true;
     }
@@ -106,7 +105,6 @@ $conn->close();
         }
 
         .pfp-img:hover {
-            border-color: #dc3545;
             transform: scale(1.05);
             transition: all 0.3s ease;
         }
@@ -132,7 +130,9 @@ $conn->close();
 
         .footer-icon:hover img,
         .footer-icon.active img {
-            filter: brightness(0) invert(0.7) sepia(1) saturate(5) hue-rotate(-10deg);
+            filter: brightness(0) invert(1)          
+            drop-shadow(0 0 15px rgba(255, 193, 7, 0.8))
+            sepia(1) saturate(5) hue-rotate(-10deg);
         }
 
         /* Responsividade mínima para mobile (Bootstrap cuida do resto) */
@@ -242,7 +242,7 @@ if (!empty($conversas)) {
 
     <footer class="rodape position-fixed bottom-0 w-100 py-2 px-3" style="max-width: 900px; margin: 0 auto; left: 50%; transform: translateX(-50%); z-index: 1000;" role="contentinfo" aria-label="Menu de navegação inferior">
         <div class="d-flex justify-content-around align-items-center">
-            <a href="home.php" class="footer-icon text-center text-decoration-none p-2" aria-label="Início">
+            <a href="menu_adm.php" class="footer-icon text-center text-decoration-none p-2" aria-label="Início">
                 <img src="../../assets/img/casa.png" alt="Início" />
             </a>
             <a href="buscar.php" class="footer-icon text-center text-decoration-none p-2" aria-label="Buscar">
@@ -251,7 +251,7 @@ if (!empty($conversas)) {
             <a href="chat.php" class="footer-icon active text-center text-decoration-none p-2" aria-label="Chat">
                 <img src="../../assets/img/chat.png" alt="Chat" />
             </a>
-            <a href="perfil.php" class="footer-icon text-center text-decoration-none p-2" aria-label="Perfil">
+            <a href="../perfil.php" class="footer-icon text-center text-decoration-none p-2" aria-label="Perfil">
                 <img src="../../assets/img/perfil.png" alt="Perfil" />
             </a>
         </div>
