@@ -5,37 +5,11 @@ if (!isset($_SESSION["conectado"]) || $_SESSION["conectado"] !== true) {
     header("Location: login.php");
     exit;
 }
-
 $id = $_SESSION['id'];
-
-$stmt = $conn->prepare("SELECT * FROM mensagens WHERE usuario_id = ? ");
+$stmt = $conn->prepare("SELECT * FROM mensagens WHERE usuario_id = ? ORDER BY dia DESC, horario DESC");
 $stmt->bind_param("i", $id);
 $stmt->execute();
 $mensagens = $stmt->get_result();
-
-$mensagem = $mensagens->fetch_assoc();
-
-$imagem = $mensagem['imagem'];
-$horaFormatada = date('H:i', strtotime($mensagem['horario']));
-
-switch ($imagem) {
-    case 'estação':
-        $arquivoImagem = 'localizacao.png';
-        break;
-    case 'bate-papo':
-        $arquivoImagem = 'chat.png';
-        break;
-    case 'usuario':
-        $arquivoImagem = 'perfil.png';
-        break;
-    case 'trem':
-        $arquivoImagem = 'trem.png';
-        break;
-    default:
-        $arquivoImagem = 'padrao.png'; // arquivo padrão caso o valor não bata
-        break;
-}
-
 
 ?>
 <!DOCTYPE html>
@@ -176,71 +150,57 @@ switch ($imagem) {
     <main class="container px-3" style="max-width: 900px; margin-bottom: 2rem; overflow-y: auto;">
         <div class="list-group list-group-flush">
 
-            <!-- Estação da Luz -->
-            <a href="#" class="list-group-item list-group-item-action bg-custom bg-custom-hover d-flex align-items-center rounded-3 mb-3 p-3 text-decoration-none active border-0" tabindex="0" aria-current="true" aria-label="Chat com Estação da Luz, última mensagem: Trem atrasado, 2 mensagens não lidas" style="transition: background-color 0.2s ease;">
-                <div class="position-relative flex-shrink-0 me-3">
-                    <img src="../assets/img/<?php echo $arquivoImagem; ?>" alt="Avatar Estação da Luz" class="chat-icon" /> <!-- Foto da mensagem -->
-                    <span class="unread-dot"></span>
-                </div>
-                <div class="flex-grow-1 min-width-0">
-                    <div class="chat-name fw-bold fs-6 text-light mb-1" style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
-                        <?php echo htmlspecialchars($mensagem['nome']);   ?> <!-- Nome de quem enviou a mensagem -->
-                    </div>
-                    <div class="chat-last-message text-light small" style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
-                        <?php echo htmlspecialchars($mensagem['texto']);   ?> <!-- Texto da mensagem -->
-                    </div>
-                </div>
-                <div class="d-flex flex-column align-items-end ms-3 flex-shrink-0" style="min-width: 60px;">
-                    <div class="chat-time text-light small mb-2" style="white-space: nowrap;">
-                        <?php echo date($horaFormatada); ?> <!-- Horário da mensagem -->
-                    </div>
-                    <span class="badge bg-danger rounded-pill" aria-label="2 mensagens não lidas" style="font-size: 0.75rem; padding: 0.25rem 0.5rem; min-width: 24px; text-align: center;">1</span>
-                </div>
-            </a>
+            <?php
+            if ($mensagens->num_rows > 0) {
+                while ($mensagem = $mensagens->fetch_assoc()) {
+                    switch ($mensagem['imagem']) {
+                        case 'estação':
+                            $arquivoImagem = 'localizacao.png';
+                            break;
+                        case 'bate-papo':
+                            $arquivoImagem = 'chat.png';
+                            break;
+                        case 'usuario':
+                            $arquivoImagem = 'perfil.png';
+                            break;
+                        case 'trem':
+                            $arquivoImagem = 'trem.png';
+                            break;
+                        default:
+                            $arquivoImagem = 'perfil.png'; // arquivo padrão
+                            break;
+                    }
 
-            <!-- Estação Japão -->
-            <a href="#" class="list-group-item list-group-item-action bg-custom bg-custom-hover d-flex align-items-center rounded-3 mb-3 p-3 text-decoration-none border-0" tabindex="0" aria-label="Chat com Estação Japão, última mensagem: Tudo funcionando normalmente" style="transition: background-color 0.2s ease;">
-                <div class="flex-shrink-0 me-3">
-                    <img src="../assets/img/localizacao.png" alt="Avatar Estação Japão" class="chat-icon" />
-                </div>
-                <div class="flex-grow-1 min-width-0">
-                    <div class="chat-name fw-bold fs-6 text-light mb-1" style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">Estação Japão</div>
-                    <div class="chat-last-message text-light small" style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">Tudo funcionando normalmente</div>
-                </div>
-                <div class="d-flex flex-column align-items-end ms-3 flex-shrink-0" style="min-width: 60px;">
-                    <div class="chat-time text-light small" style="white-space: nowrap;">09:30</div>
-                </div>
-            </a>
-
-            <!-- Chat com Suporte -->
-            <a href="#" class="list-group-item list-group-item-action bg-custom bg-custom-hover d-flex align-items-center rounded-3 mb-3 p-3 text-decoration-none border-0" tabindex="0" aria-label="Chat com Suporte, última mensagem: Como posso ajudar?" style="transition: background-color 0.2s ease;">
-                <div class="flex-shrink-0 me-3">
-                    <img src="../assets/img/chat.png" alt="Avatar Suporte" class="chat-icon" />
-                </div>
-                <div class="flex-grow-1 min-width-0">
-                    <div class="chat-name fw-bold fs-6 text-light mb-1" style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">Suporte</div>
-                    <div class="chat-last-message text-light small" style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">Como posso ajudar?</div>
-                </div>
-                <div class="d-flex flex-column align-items-end ms-3 flex-shrink-0" style="min-width: 60px;">
-                    <div class="chat-time text-light small" style="white-space: nowrap;">Ontem</div>
-                </div>
-            </a>
-
-            <!-- Chat com Status do Trem -->
-            <a href="#" class="list-group-item list-group-item-action bg-custom bg-custom-hover d-flex align-items-center rounded-3 mb-3 p-3 text-decoration-none border-0" tabindex="0" aria-label="Chat com Status do Trem, última mensagem: Seu trem está a caminho" style="transition: background-color 0.2s ease;">
-                <div class="flex-shrink-0 me-3">
-                    <img src="../assets/img/trem.png" alt="Avatar Status do Trem" class="chat-icon" />
-                </div>
-                <div class="flex-grow-1 min-width-0">
-                    <div class="chat-name fw-bold fs-6 text-light mb-1" style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">Status do Trem</div>
-                    <div class="chat-last-message text-light small" style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
-                        <?php echo htmlspecialchars($_SESSION['nome']); ?>, seu trem está a caminho!
-                    </div>
-                </div>
-                <div class="d-flex flex-column align-items-end ms-3 flex-shrink-0" style="min-width: 60px;">
-                    <div class="chat-time text-light small" style="white-space: nowrap;">Seg</div>
-                </div>
-            </a>
+                    // Formatar horário para HH:MM
+                    $horaFormatada = date('H:i', strtotime($mensagem['horario']));
+            ?>
+                    <a href="#" class="list-group-item list-group-item-action bg-custom bg-custom-hover d-flex align-items-center rounded-3 mb-3 p-3 text-decoration-none border-0" tabindex="0" aria-current="true" aria-label="Chat com <?php echo htmlspecialchars($mensagem['nome']); ?>, última mensagem: <?php echo htmlspecialchars($mensagem['texto']); ?>" style="transition: background-color 0.2s ease;">
+                        <div class="position-relative flex-shrink-0 me-3">
+                            <img src="../assets/img/<?php echo $arquivoImagem; ?>" alt="Avatar <?php echo htmlspecialchars($mensagem['nome']); ?>" class="chat-icon" />
+                            <span class="unread-dot"></span>
+                        </div>
+                        <div class="flex-grow-1 min-width-0">
+                            <div class="chat-name fw-bold fs-6 text-light mb-1" style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+                                <?php echo htmlspecialchars($mensagem['nome']); ?> <!-- Nome de quem enviou a mensagem -->
+                            </div>
+                            <div class="chat-last-message text-light small" style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+                                <?php echo htmlspecialchars($mensagem['texto']); ?> <!-- Texto da mensagem -->
+                            </div>
+                        </div>
+                        <div class="d-flex flex-column align-items-end ms-3 flex-shrink-0" style="min-width: 60px;">
+                            <div class="chat-time text-light small mb-2" style="white-space: nowrap;">
+                                <?php echo $horaFormatada; ?> <!-- Horário da mensagem -->
+                            </div>
+                            <span class="badge bg-danger rounded-pill" aria-label="1 mensagem não lida" style="font-size: 0.75rem; padding: 0.25rem 0.5rem; min-width: 24px; text-align: center;">1</span>
+                        </div>
+                    </a>
+            <?php
+                }
+            } else {
+                // Caso não tenha mensagens
+                echo '<p class="text-light text-center mt-4">Nenhuma mensagem encontrada.</p>';
+            }
+            ?>
         </div>
     </main>
 
