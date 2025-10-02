@@ -118,6 +118,13 @@ if (!isset($_SESSION["conectado"]) || $_SESSION["conectado"] !== true) {
             sepia(1) saturate(5) hue-rotate(-10deg);
         }
 
+        .rodape {
+            background-color: #121212;
+            border: none;
+            box-shadow: none;
+            z-index: 1000;
+        }
+
         /* Responsividade para mobile (mantendo alinhamento à esquerda, sem stack vertical) */
         @media (max-width: 768px) {
             .perfil-foto {

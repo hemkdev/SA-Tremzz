@@ -182,6 +182,12 @@ if (isset($conn)) {
             drop-shadow(0 0 15px rgba(255, 193, 7, 0.8))
             sepia(1) saturate(5) hue-rotate(-10deg);
         }
+        .rodape {
+            background-color: #121212;
+            border: none;
+            box-shadow: none;
+            z-index: 1000;
+        }
         /* Responsividade mínima para mobile */
         @media (max-width: 768px) {
             .perfil-foto {
