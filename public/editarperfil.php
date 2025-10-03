@@ -247,7 +247,12 @@ if (isset($conn)) {
                 <!-- Nome -->
                 <div class="mb-3">
                     <label for="nome" class="form-label fw-bold fs-4 text-light mb-2">Nome Completo</label>
-                    <input type="text" class="form-control form-control-custom fs-5 text-center" id="nome" name="nome" value="<?php echo htmlspecialchars($_SESSION['nome'] ?? ''); ?>" placeholder="Digite seu nome" required />
+                    <div class="input-group">
+                        <input type="text" class="form-control form-control-custom fs-5 text-center" id="nome" name="nome" value="<?php echo htmlspecialchars($_SESSION['nome'] ?? ''); ?>" placeholder="Digite seu nome" required readonly />
+                        <button type="button" class="btn btn-outline-secondary" id="editarNomeBtn" tabindex="-1" style="border-radius: 0 0.375rem 0.375rem 0;">
+                            <i class="bi bi-pencil"></i>
+                        </button>
+                    </div>
                 </div>
 
                 
@@ -259,6 +264,17 @@ if (isset($conn)) {
                 </div>
             </form>
         </section>
+
+            <script>
+                    const nomeInput = document.getElementById('nome');
+                    const editarNomeBtn = document.getElementById('editarNomeBtn');
+                    editarNomeBtn.addEventListener('click', function () {
+                        nomeInput.readOnly = false;
+                        nomeInput.focus();
+                        editarNomeBtn.disabled = true;
+                    });
+                </script>
+
 
         <!-- Suporte a GET sucesso (para redirect) -->
         <?php if (isset($_GET['sucesso'])): ?>
