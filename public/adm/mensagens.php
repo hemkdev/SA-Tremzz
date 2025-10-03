@@ -10,8 +10,7 @@ if (!isset($_SESSION["conectado"]) || $_SESSION["conectado"] !== true || ($_SESS
 
 // Query simples: Busca todas as mensagens de usuários (excluindo o admin), ordenadas por data/hora mais recente
 $conversas = [];
-$stmt = $conn->prepare("
-    SELECT m.*, u.nome as usuario_nome 
+$stmt = $conn->prepare("SELECT m.*, u.nome as usuario_nome 
     FROM mensagens m 
     INNER JOIN usuarios u ON m.usuario_id = u.id 
     WHERE m.usuario_id != ? 
