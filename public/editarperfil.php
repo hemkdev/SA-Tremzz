@@ -11,12 +11,6 @@ if (!isset($_SESSION["conectado"]) || $_SESSION["conectado"] !== true) {
     exit;
 }
 
-if (!isset($_SESSION['id'])) {
-    $_SESSION['erro'] = "ID de usuário não encontrado na sessão.";
-    header("Location: perfil.php");
-    exit;
-}
-
 $id = $_SESSION['id']; // Define $id corretamente
 $editado = false;
 $sucesso = false;
@@ -28,62 +22,26 @@ unset($_SESSION['erro'], $_SESSION['sucesso']); // Limpa para próxima vez
 
 if (isset($_POST['editar'])) {
     $nome = trim($_POST["nome"] ?? "");
-    $email = trim($_POST["email"] ?? "");
-    $senha = trim($_POST["senha"] ?? "");
 
-    // Validação básica (senha opcional)
-    if (empty($nome) || empty($email)) {
-        $_SESSION['erro'] = "Nome e email são obrigatórios.";
-    } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        $_SESSION['erro'] = "Email inválido.";
-    } elseif (!empty($senha) && strlen($senha) < 6) {
-        $_SESSION['erro'] = "Senha deve ter pelo menos 6 caracteres.";
+    $stmt = $conn->prepare("UPDATE usuarios SET nome = ? WHERE id = ?");
+    if (!$stmt) {
+        $_SESSION['erro'] = "Erro ao preparar query: " . $conn->error;
     } else {
-        // Senha: Se vazia, busca atual do BD
-        $senha_hash = '';
-        if (empty($senha)) {
-            $stmt_atual = $conn->prepare("SELECT senha FROM usuarios WHERE id = ?");
-            if ($stmt_atual) {
-                $stmt_atual->bind_param("i", $id);
-                $stmt_atual->execute();
-                $result = $stmt_atual->get_result();
-                if ($row = $result->fetch_assoc()) {
-                    $senha_hash = $row['senha']; // Mantém a senha atual
-                } else {
-                    $_SESSION['erro'] = "Usuário não encontrado no BD.";
-                }
-                $stmt_atual->close();
+        $stmt->bind_param("si", $nome, $id); // Agora $id existe
+        if ($stmt->execute()) {
+            if ($stmt->affected_rows > 0) {
+                $_SESSION['nome'] = $nome; // Atualiza sessão
+                $_SESSION['sucesso'] = "Perfil atualizado com sucesso!";
+                $sucesso = true;
+                header("Location: perfil.php?sucesso=1"); // Redirect com param
+                exit;
             } else {
-                $_SESSION['erro'] = "Erro ao buscar senha atual: " . $conn->error;
+                $_SESSION['erro'] = "Nenhuma alteração foi feita (valores iguais aos atuais).";
             }
         } else {
-            $senha_hash = password_hash($senha, PASSWORD_DEFAULT); // Hash novo
+            $_SESSION['erro'] = "Erro ao executar: " . $stmt->error;
         }
-
-        if (empty($_SESSION['erro'])) { // Só prossegue se sem erro
-            // Prepared statement com placeholders corretos
-            $stmt = $conn->prepare("UPDATE usuarios SET nome = ?, email = ?, senha = ? WHERE id = ?");
-            if (!$stmt) {
-                $_SESSION['erro'] = "Erro ao preparar query: " . $conn->error;
-            } else {
-                $stmt->bind_param("sssi", $nome, $email, $senha_hash, $id); // Agora $id existe
-                if ($stmt->execute()) {
-                    if ($stmt->affected_rows > 0) {
-                        $_SESSION['nome'] = $nome; // Atualiza sessão
-                        $_SESSION['email'] = $email;
-                        $_SESSION['sucesso'] = "Perfil atualizado com sucesso!";
-                        $sucesso = true;
-                        header("Location: perfil.php?sucesso=1"); // Redirect com param
-                        exit;
-                    } else {
-                        $_SESSION['erro'] = "Nenhuma alteração foi feita (valores iguais aos atuais).";
-                    }
-                } else {
-                    $_SESSION['erro'] = "Erro ao executar: " . $stmt->error;
-                }
-                $stmt->close();
-            }
-        }
+        $stmt->close();
     }
 }
 
@@ -110,7 +68,7 @@ if (isset($conn)) {
         rel="stylesheet" />
     <!-- Bootstrap Icons para ícones opcionais -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
-    
+
     <!-- CSS mínimo para fundos exatos, hovers e filtros (essencial para fidelidade ao tema) -->
     <style>
         body {
@@ -120,13 +78,16 @@ if (isset($conn)) {
             min-height: 100vh;
             padding-bottom: 70px;
         }
+
         .bg-custom {
             background-color: #1e1e1e !important;
         }
+
         .bg-custom-hover:hover {
             background-color: #2a2a2a !important;
             color: #fff !important;
         }
+
         .pfp-img {
             width: 50px;
             height: 50px;
@@ -135,6 +96,7 @@ if (isset($conn)) {
             border: 2px solid transparent;
             transition: border-color 0.3s ease;
         }
+
         .perfil-foto {
             width: 120px;
             height: 120px;
@@ -145,49 +107,57 @@ if (isset($conn)) {
             border: 2px solid transparent;
             transition: border-color 0.3s ease;
         }
+
         .foto-container {
             position: relative;
             display: inline-block;
             cursor: pointer;
         }
+
         .foto-container .badge {
             opacity: 0;
             transition: opacity 0.3s ease;
             transform: translate(-50%, -50%);
         }
+
         .foto-container:hover .badge {
             opacity: 1;
         }
+
         .form-control-custom {
             background-color: #2a2a2a !important;
             color: #e0e0e0 !important;
             border: #121212;
         }
+
         .form-control-custom:focus {
             background-color: #2a2a2a !important;
             color: #e0e0e0 !important;
         }
+
         .form-control-custom::placeholder {
             color: #b0b0b0 !important;
         }
+
         .footer-icon img {
             width: 28px;
             height: 28px;
             filter: brightness(0) invert(1);
             transition: filter 0.3s ease;
         }
+
         .footer-icon:hover img,
         .footer-icon.active img {
-            filter: brightness(0) invert(1)          
-            drop-shadow(0 0 15px rgba(255, 193, 7, 0.8))
-            sepia(1) saturate(5) hue-rotate(-10deg);
+            filter: brightness(0) invert(1) drop-shadow(0 0 15px rgba(255, 193, 7, 0.8)) sepia(1) saturate(5) hue-rotate(-10deg);
         }
+
         .rodape {
             background-color: #121212;
             border: none;
             box-shadow: none;
             z-index: 1000;
         }
+
         /* Responsividade mínima para mobile */
         @media (max-width: 768px) {
             .perfil-foto {
@@ -223,16 +193,10 @@ if (isset($conn)) {
             </div>
         <?php endif; ?>
 
-        <!-- Alert de Sucesso (se processado na mesma página) -->
-        <?php if (!empty($sucesso_msg)): ?>
-            <div class="alert alert-success text-center rounded-3" role="alert">
-                <?php echo htmlspecialchars($sucesso_msg); ?>
-            </div>
-        <?php endif; ?>
-
         <!-- Seção de edição principal -->
         <section class="perfil-header card bg-custom rounded-3 text-center mb-4 p-4">
             <form id="editProfileForm" method="POST" action="" enctype="multipart/form-data">
+
                 <!-- Foto de perfil -->
                 <div class="mb-3">
                     <label for="fotoPerfil" class="foto-container">
@@ -248,14 +212,12 @@ if (isset($conn)) {
                 <div class="mb-3">
                     <label for="nome" class="form-label fw-bold fs-4 text-light mb-2">Nome Completo</label>
                     <div class="input-group">
-                        <input type="text" class="form-control form-control-custom fs-5 text-center" id="nome" name="nome" value="<?php echo htmlspecialchars($_SESSION['nome'] ?? ''); ?>" placeholder="Digite seu nome" required readonly />
-                        <button type="button" class="btn btn-outline-secondary" id="editarNomeBtn" tabindex="-1" style="border-radius: 0 0.375rem 0.375rem 0;">
-                            <i class="bi bi-pencil"></i>
+                        <input type="text" class="form-control form-control-custom fs-5 text-center" id="nome" name="nome" value="<?php echo htmlspecialchars($_SESSION['nome'] ?? ''); ?>" placeholder="Digite seu nome" required />
                         </button>
                     </div>
                 </div>
 
-                
+
 
                 <!-- Botões de ação -->
                 <div class="d-flex justify-content-center gap-3">
@@ -264,17 +226,6 @@ if (isset($conn)) {
                 </div>
             </form>
         </section>
-
-            <script>
-                    const nomeInput = document.getElementById('nome');
-                    const editarNomeBtn = document.getElementById('editarNomeBtn');
-                    editarNomeBtn.addEventListener('click', function () {
-                        nomeInput.readOnly = false;
-                        nomeInput.focus();
-                        editarNomeBtn.disabled = true;
-                    });
-                </script>
-
 
         <!-- Suporte a GET sucesso (para redirect) -->
         <?php if (isset($_GET['sucesso'])): ?>

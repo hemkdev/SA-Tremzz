@@ -6,9 +6,10 @@ CREATE TABLE usuarios (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nome VARCHAR(100) NOT NULL,
     email VARCHAR(100) NOT NULL,
-    telefone VARCHAR(15) NOT NULL,
+    telefone VARCHAR(15),
     senha VARCHAR(255) NOT NULL,
     cargo ENUM('usuario', 'administrador', 'maquinista') NOT NULL DEFAULT 'usuario'
+    foto_perfil('foto1.jpg','foto2.jpg','foto3.jpg')
 );
 
 CREATE TABLE mensagens (
