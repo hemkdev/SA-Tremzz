@@ -30,3 +30,8 @@ CREATE TABLE atividades (
     cep VARCHAR(10) NOT NULL,
     CONSTRAINT fk_usuario_atividade FOREIGN KEY (usuario_id) REFERENCES usuarios(id)
 );
+
+CREATE TABLE linhas (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    
+)

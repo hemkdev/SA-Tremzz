@@ -32,11 +32,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
                 if ($_SESSION["cargo"] === "administrador") {
                     $_SESSION['admin'] = true;
-                    header("location: adm/menu_adm.php");
+                    header("location: adm/home.php");
                     exit;
                 } else if ($_SESSION["cargo"] === "maquinista") {
                     $_SESSION['maquinista'] = true;
-                    header("location: maquinista/menu_adm.php");
+                    header("location: maquinista/home.php");
                     exit;
                 } else {
                     header("location: home.php");
