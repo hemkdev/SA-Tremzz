@@ -4,7 +4,10 @@ if (!isset($_SESSION["conectado"]) || $_SESSION["conectado"] !== true) {
     header("Location: login.php");
     exit;
 }
-
+if (!isset($_SESSION["admin"]) || $_SESSION["admin"] !== true) {
+    header("Location: ../home.php");
+    exit;
+}
 ?>
 
 <!DOCTYPE html>
@@ -14,7 +17,7 @@ if (!isset($_SESSION["conectado"]) || $_SESSION["conectado"] !== true) {
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>TREMzz - Perfil</title>
-    <link rel="shortcut icon" href="../img/tremlogo.png" />
+    <link rel="shortcut icon" href="../assets/img/tremlogo.png" />
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
     <!-- Fonte Poppins -->
@@ -216,7 +219,7 @@ if (!isset($_SESSION["conectado"]) || $_SESSION["conectado"] !== true) {
                         <p>Proteja sua conta</p>
                     </div>
                 </a>
-                <a href="sobre.php" class="card-opcao" tabindex="0" aria-label="Sobre o aplicativo TREMzz">
+                <a href="../sobre.php" class="card-opcao" tabindex="0" aria-label="Sobre o aplicativo TREMzz">
                     <div class="opcao-img">
                         <img src="../../assets/img/info.png" alt="Ícone de informação" />
                     </div>
@@ -234,7 +237,7 @@ if (!isset($_SESSION["conectado"]) || $_SESSION["conectado"] !== true) {
                         <p>Envie mensagens  </p>
                     </div>
                 </a>
-                <a name="logout" href="logout.php" class="card-opcao" tabindex="0" aria-label="Sair da conta" >
+                <a name="logout" href="../logout.php" class="card-opcao" tabindex="0" aria-label="Sair da conta" >
                     <div class="opcao-img">
                         <img src="../../assets/img/sair.png" alt="Ícone de saída" />
                     </div>
@@ -253,7 +256,7 @@ if (!isset($_SESSION["conectado"]) || $_SESSION["conectado"] !== true) {
                 <img src="../../assets/img/casa.png" alt="Início" />
             </a>
             <a href="gerenciamento.php" class="footer-icon text-center text-decoration-none p-2" aria-label="Buscar">
-                <img src="../../assets/img/lupa.png" alt="Gerenciamento" />
+                <img src="../../assets/img/gerenciamento.png" alt="Gerenciamento" />
             </a>
             <a href="chat.php" class="footer-icon text-center text-decoration-none p-2" aria-label="Chat">
                 <img src="../../assets/img/chat.png" alt="Chat" />

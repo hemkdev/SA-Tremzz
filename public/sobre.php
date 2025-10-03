@@ -1,6 +1,34 @@
 <?php
 session_start();
+// Verificação básica de login
 if (!isset($_SESSION["conectado"]) || $_SESSION["conectado"] !== true) {
+    header("Location: login.php");
+    exit;
+}
+// Inicialize variáveis com defaults (para evitar undefined)
+$home = 'home.php';
+$arquivo = 'buscar.php';
+$icone = 'lupa.png';
+$chat = 'chat.php';
+$perfil = 'perfil.php';
+// Lógica corrigida para roles (sem exit; aqui, só define variáveis)
+if (isset($_SESSION["admin"]) && $_SESSION["admin"] === true) {
+    $home = 'adm/home.php';
+    $arquivo = 'adm/gerenciamento.php';
+    $icone = 'gerenciamento.png';
+    $chat = 'adm/chat.php';
+    $perfil = 'adm/perfil.php';
+} elseif (isset($_SESSION["maquinista"]) && $_SESSION["maquinista"] === true) {
+    // Defina variáveis para maquinista (ajuste os caminhos conforme sua estrutura)
+    $home = 'maq/home.php';  // Exemplo; substitua pelos reais
+    $arquivo = 'maq/gerenciamento.php';
+    $icone = 'maq_icone.png';
+    $chat = 'maq/chat.php';
+    $perfil = 'maq/perfil.php';
+}
+
+// Se role inválida, redirecione (opcional, para segurança)
+if (!isset($_SESSION["admin"]) && !isset($_SESSION["maquinista"]) && !isset($_SESSION["conectado"])) {
     header("Location: login.php");
     exit;
 }
@@ -13,7 +41,7 @@ if (!isset($_SESSION["conectado"]) || $_SESSION["conectado"] !== true) {
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>TREMzz - Sobre Nós</title>
-    <link rel="shortcut icon" href="../img/tremlogo.png" />
+    <link rel="shortcut icon" href="../assets/img/tremlogo.png" />
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
     <!-- Fonte Poppins -->
@@ -115,17 +143,17 @@ if (!isset($_SESSION["conectado"]) || $_SESSION["conectado"] !== true) {
     <!-- Footer (mantido idêntico ao dashboard) -->
     <footer class="rodape position-fixed bottom-0 w-100 py-2 px-3" style="max-width: 900px; margin: 0 auto; left: 50%; transform: translateX(-50%);" role="contentinfo" aria-label="Menu de navegação inferior">
         <div class="d-flex justify-content-around align-items-center">
-            <a href="home.php" class="footer-icon text-center text-decoration-none p-2" aria-label="Início">
-                <img src="../assets/img/casa.png" alt="Início" />
+            <a href="<?php echo htmlspecialchars($home); ?>" class="footer-icon text-center text-decoration-none p-2" aria-label="Início">
+                <img src="../assets/img/casa.png" alt="Ícone Início" />
             </a>
-            <a href="buscar.php" class="footer-icon text-center text-decoration-none p-2" aria-label="Buscar">
-                <img src="../assets/img/lupa.png" alt="Buscar" />
+            <a href="<?php echo htmlspecialchars($arquivo); ?>" class="footer-icon text-center text-decoration-none p-2" aria-label="Buscar">
+                <img src="../assets/img/<?php echo htmlspecialchars($icone); ?>" alt="Ícone Buscar" />  <!-- Padronizei o caminho para ../ -->
             </a>
-            <a href="chat.php" class="footer-icon text-center text-decoration-none p-2" aria-label="Chat">
-                <img src="../assets/img/chat.png" alt="Chat" />
+            <a href="<?php echo htmlspecialchars($chat); ?>" class="footer-icon text-center text-decoration-none p-2" aria-label="Chat">
+                <img src="../assets/img/chat.png" alt="Ícone Chat" />
             </a>
-            <a href="perfil.php" class="footer-icon text-center text-decoration-none p-2" aria-label="Perfil">
-                <img src="../assets/img/perfil.png" alt="Perfil" />
+            <a href="<?php echo htmlspecialchars($perfil); ?>" class="footer-icon text-center text-decoration-none p-2" aria-label="Perfil">
+                <img src="../assets/img/perfil.png" alt="Ícone Perfil" />
             </a>
         </div>
     </footer>
