@@ -22,42 +22,14 @@ O projeto SA-Tremzz segue uma estrutura organizada, facilitando o desenvolviment
 SA-Tremzz/
 ├── assets/           # Ativos como imagens, ícones, etc.
 ├── config/           # Arquivos de configuração (ex: conexão com banco de dados)
-│   └── bd.php
-├── css/              # Folhas de estilo CSS
 ├── database/         # Scripts SQL para o banco de dados
 │   └── schema.sql
+│   └── seed.sql
 ├── js/               # Arquivos JavaScript para interatividade
 ├── public/           # Arquivos públicos acessíveis via web
+│   └── index.html
 └── view/             # Arquivos HTML/PHP das interfaces de usuário
-    ├── enderecos.html
-    ├── mapa.html
-    ├── menuadm.html
-    ├── tela10.html
-    ├── tela11.html
-    ├── tela12.html
-    ├── tela13.html
-    ├── tela14.html
-    ├── tela2.html
-    ├── tela3.html
-    ├── tela6.html
-    ├── tela7.html
-    ├── tela8.html
-    ├── tela9.html
-    ├── tela_login.php
-    └── tela_registro.php
 ```
-
-## Configuração e Instalação
-
-Para configurar e executar o projeto SA-Tremzz localmente, siga os passos abaixo:
-
-### Pré-requisitos
-
-Certifique-se de ter os seguintes softwares instalados em seu ambiente:
-
-*   **Servidor Web**: Apache, Nginx ou similar.
-*   **PHP**: Versão 7.x ou superior.
-*   **Banco de Dados**: MySQL/MariaDB.
 
 ## Contribuição
 
