@@ -43,8 +43,8 @@ Contribuições são bem-vindas! Se você deseja contribuir para o projeto, por 
 
 ## Licença
 
-Este projeto está licenciado sob a licença MIT. Veja o arquivo `LICENSE` (se existir) para mais detalhes.
+Este projeto está licenciado sob a licença MIT. Veja o arquivo `LICENSE` para mais detalhes.
 
 ## Contato
 
-Para dúvidas ou sugestões, entre em contato com o desenvolvedor original através do GitHub.
+Para dúvidas ou sugestões, entre em contato comigo através do GitHub.
