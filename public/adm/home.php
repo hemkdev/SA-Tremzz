@@ -289,8 +289,8 @@ $mensagens_hoje = 320;
                             <td><span class="badge bg-info">Ativa</span></td>
                         </tr>
                         <tr>
-                            <td>Ana Costa</td>
-                            <td>Atualizou perfil</td>
+                            <td>Enzo Ronchi</td>
+                            <td>Estorou o anel</td>
                             <td>2023-10-15 11:10</td>
                             <td><span class="badge bg-success">Concluída</span></td>
                         </tr>
@@ -302,16 +302,16 @@ $mensagens_hoje = 320;
 
     <footer class="rodape position-fixed bottom-0 w-100 py-2 px-3" role="contentinfo" aria-label="Menu de navegação inferior">
         <div class="container d-flex justify-content-around align-items-center" style="max-width: 900px;">
-            <a href="home.php" class="footer-icon text-center text-decoration-none p-2" aria-label="Início">
+            <a href="home.php" class="footer-icon active text-center text-decoration-none p-2" aria-label="Início">
                 <img src="../../assets/img/casa.png" alt="Início" />
             </a>
-            <a href="buscar.php" class="footer-icon text-center text-decoration-none p-2" aria-label="Buscar">
-                <img src="../../assets/img/lupa.png" alt="Buscar" />
+            <a href="gerenciamento.php" class="footer-icon text-center text-decoration-none p-2" aria-label="Buscar">
+                <img src="../../assets/img/lupa.png" alt="Gerenciamento" />
             </a>
-            <a href="mensagens.php" class="footer-icon text-center text-decoration-none p-2" aria-label="Chat">
+            <a href="chat.php" class="footer-icon text-center text-decoration-none p-2" aria-label="Chat">
                 <img src="../../assets/img/chat.png" alt="Chat" />
             </a>
-            <a href="../perfil.php" class="footer-icon active text-center text-decoration-none p-2" aria-label="Perfil">
+            <a href="perfil.php" class="footer-icon text-center text-decoration-none p-2" aria-label="Perfil">
                 <img src="../../assets/img/perfil.png" alt="Perfil" />
             </a>
         </div>
@@ -321,71 +321,7 @@ $mensagens_hoje = 320;
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
     <!-- Script para Gráficos com Chart.js (dados fictícios) -->
-    <script>
-        // Gráfico de Usuários
-        const ctxUsuarios = document.getElementById('usuariosChart').getContext('2d');
-        new Chart(ctxUsuarios, {
-            type: 'line',
-            data: {
-                labels: ['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom'],
-                datasets: [{
-                    label: 'Novos Usuários',
-                    data: [20, 35, 28, 45, 60, 55, 70],
-                    borderColor: '#dc3545',
-                    backgroundColor: 'rgba(220, 53, 69, 0.1)',
-                    tension: 0.4
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                scales: {
-                    y: {
-                        beginAtZero: true
-                    }
-                },
-                plugins: {
-                    legend: {
-                        labels: {
-                            color: '#e0e0e0'
-                        }
-                    }
-                }
-            }
-        });
-
-        // Gráfico de Mensagens
-        const ctxMensagens = document.getElementById('mensagensChart').getContext('2d');
-        new Chart(ctxMensagens, {
-            type: 'bar',
-            data: {
-                labels: ['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom'],
-                datasets: [{
-                    label: 'Mensagens Enviadas',
-                    data: [100, 150, 120, 180, 200, 160, 220],
-                    backgroundColor: '#dc3545',
-                    borderColor: '#dc3545',
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                scales: {
-                    y: {
-                        beginAtZero: true
-                    }
-                },
-                plugins: {
-                    legend: {
-                        labels: {
-                            color: '#e0e0e0'
-                        }
-                    }
-                }
-            }
-        });
-    </script>
+    <script src="../../js/graficos_adm.js"> </script>
 </body>
 
 </html>
