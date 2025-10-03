@@ -124,7 +124,7 @@ if (!isset($_SESSION["admin"]) && !isset($_SESSION["maquinista"]) && !isset($_SE
             <!-- Espaço para Foto (por cima, ocupando largura total e quase todo o espaço do col) -->
             <div class="col-12">
                 <div class="foto-placeholder">
-                    <img src="../assets/img/osguri.jpg" class="img-fluid rounded w-100" alt="Sobre Nós" style="height: 300px; object-fit: cover;"
+                    <img src="../assets/img/equipe0.jpg" class="img-fluid rounded w-100" alt="Sobre Nós" style="height: 300px; object-fit: cover;">
                     
                 </div>
             </div>
@@ -132,9 +132,8 @@ if (!isset($_SESSION["admin"]) && !isset($_SESSION["maquinista"]) && !isset($_SE
             <!-- Espaço para Texto (abaixo, mesma largura da foto) -->
             <div class="col-12">
                 <div class="texto-sobre">
-                    <p class="mb-3">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-                    <p class="mb-3">Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-                    <p class="mb-0">Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>
+                    <p class="mb-3">O TREMzz é um aplicativo moderno e fácil de usar, desenvolvido para quem utiliza o transporte ferroviário no dia a dia. Com ele, você pode comparar horários de viagens, verificar trens disponíveis em tempo real e receber notificações imediatas sobre atrasos, acidentes ou mudanças na malha ferroviária. Tudo isso em uma interface simples e prática, trazendo mais segurança, organização e comodidade para seus trajetos.</p>
+                    <p class="mb-0">TREMzz – Conectando você ao seu destino</p>
                 </div>
             </div>
         </div>

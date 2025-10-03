@@ -99,7 +99,7 @@ if (isset($conn)) {
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>TREMzz - Editar Perfil</title>
-    <link rel="shortcut icon" href="../assets/img/tremlogo.png" />
+    <link rel="shortcut icon" href="../img/tremlogo.png" />
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
     <!-- Fonte Poppins -->
@@ -205,7 +205,7 @@ if (isset($conn)) {
             <div class="container-fluid">
                 <div class="d-flex justify-content-between align-items-center w-100">
                     <div class="text-oi">
-                        <h1 class="text-light fw-bold mb-0 fs-3">Editar Perfil</h1>
+                        <h1 class="text-light fw-bold mb-0 fs-3">Privacidade e Segurança</h1>
                     </div>
                     <div class="pfp">
                         <img src="../assets/img/perfil.png" alt="Foto de perfil" class="pfp-img" />
@@ -233,29 +233,42 @@ if (isset($conn)) {
         <!-- Seção de edição principal -->
         <section class="perfil-header card bg-custom rounded-3 text-center mb-4 p-4">
             <form id="editProfileForm" method="POST" action="" enctype="multipart/form-data">
-                <!-- Foto de perfil -->
+    
+
+                <!-- Email -->
                 <div class="mb-3">
-                    <label for="fotoPerfil" class="foto-container">
-                        <img src="<?php echo htmlspecialchars($_SESSION['foto'] ?? '../assets/img/perfil.png'); ?>" alt="Foto de perfil" id="previewFoto" class="perfil-foto" />
-                        <span class="position-absolute top-0 start-50 translate-middle badge rounded-pill bg-danger">
-                            <i class="bi bi-camera-fill"></i> Alterar
-                        </span>
-                    </label>
-                    <input type="file" class="form-control form-control-custom mt-2 d-none" id="fotoPerfil" name="foto" accept="image/*" onchange="previewImage(this)" />
+                    <label for="email" class="form-label fw-bold fs-6 text-light mb-2">Email</label>
+                    <input type="email" class="form-control form-control-custom fs-6 text-center" id="email" name="email" value="<?php echo htmlspecialchars($_SESSION['email'] ?? ''); ?>" placeholder="Digite seu email" required />
                 </div>
 
-                <!-- Nome -->
+                <!-- Telefone -->
                 <div class="mb-3">
-                    <label for="nome" class="form-label fw-bold fs-4 text-light mb-2">Nome Completo</label>
+                    <label for="telefone" class="form-label fw-bold fs-6 text-light mb-2">Telefone</label>
+                    <input type="telefone" class="form-control form-control-custom fs-6 text-center" id="telefone" name="telefone" value="<?php echo htmlspecialchars($_SESSION['telefone'] ?? ''); ?>" placeholder="Adicionar Telefone" required />
+                </div>
+
+                      <!-- Senha -->
+                <div class="mb-3 position-relative">
+                    <label for="senha" class="form-label fw-bold fs-6 text-light mb-2">Mudar Senha</label>
                     <div class="input-group">
-                        <input type="text" class="form-control form-control-custom fs-5 text-center" id="nome" name="nome" value="<?php echo htmlspecialchars($_SESSION['nome'] ?? ''); ?>" placeholder="Digite seu nome" required readonly />
-                        <button type="button" class="btn btn-outline-secondary" id="editarNomeBtn" tabindex="-1" style="border-radius: 0 0.375rem 0.375rem 0;">
-                            <i class="bi bi-pencil"></i>
+                        <input type="password" class="form-control form-control-custom fs-6 text-center" id="senha" name="senha" value="" placeholder="Adicionar Nova Senha" required />
+                        <button type="button" class="btn btn-outline-secondary" id="toggleSenha" tabindex="-1" style="border-radius: 0 0.375rem 0.375rem 0;">
+                            <i class="bi bi-eye" id="iconSenha"></i>
                         </button>
                     </div>
                 </div>
 
-                
+                <!-- Autenticação de Dois Fatores -->
+                <div class="mb-3">
+                    <label class="form-label fw-bold fs-6 text-light mb-2">Autenticação de Dois Fatores</label>
+                    <div class="form-check form-switch d-flex justify-content-center">
+                        <input class="form-check-input" type="checkbox" id="doisFatores" name="doisFatores" <?php echo !empty($_SESSION['doisFatores']) ? 'checked' : ''; ?>>
+                        <label class="form-check-label ms-2" for="doisFatores" style="color: #e0e0e0;">
+                            Ativar autenticação via código SMS
+                        </label>
+                    </div>
+                    <small class="text-secondary">Receba um código por SMS ou Email ao fazer login.</small>
+                </div>
 
                 <!-- Botões de ação -->
                 <div class="d-flex justify-content-center gap-3">
@@ -265,16 +278,22 @@ if (isset($conn)) {
             </form>
         </section>
 
-            <script>
-                    const nomeInput = document.getElementById('nome');
-                    const editarNomeBtn = document.getElementById('editarNomeBtn');
-                    editarNomeBtn.addEventListener('click', function () {
-                        nomeInput.readOnly = false;
-                        nomeInput.focus();
-                        editarNomeBtn.disabled = true;
+        <script>
+                    const senhaInput = document.getElementById('senha');
+                    const toggleSenha = document.getElementById('toggleSenha');
+                    const iconSenha = document.getElementById('iconSenha');
+                    toggleSenha.addEventListener('click', function () {
+                        if (senhaInput.type === 'password') {
+                            senhaInput.type = 'text';
+                            iconSenha.classList.remove('bi-eye');
+                            iconSenha.classList.add('bi-eye-slash');
+                        } else {
+                            senhaInput.type = 'password';
+                            iconSenha.classList.remove('bi-eye-slash');
+                            iconSenha.classList.add('bi-eye');
+                        }
                     });
                 </script>
-
 
         <!-- Suporte a GET sucesso (para redirect) -->
         <?php if (isset($_GET['sucesso'])): ?>

@@ -207,7 +207,7 @@ if (!isset($_SESSION["conectado"]) || $_SESSION["conectado"] !== true) {
                         <p>Gerencie alertas e avisos</p>
                     </div>
                 </a>
-                <a href="#" class="card-opcao" tabindex="0" aria-label="Configurações de privacidade">
+                <a href="privacidade.php" class="card-opcao" tabindex="0" aria-label="Configurações de privacidade">
                     <div class="opcao-img">
                         <img src="../assets/img/seguranca.png" alt="Ícone de segurança" />
                     </div>

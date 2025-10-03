@@ -24,6 +24,8 @@ if (!isset($_SESSION["conectado"]) || $_SESSION["conectado"] !== true) {
         rel="stylesheet" />
     <!-- Bootstrap Icons para ícones opcionais -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     
     <!-- CSS mínimo para cores de fundo, hovers e filtros (essencial para fidelidade) -->
     <style>
@@ -89,7 +91,7 @@ if (!isset($_SESSION["conectado"]) || $_SESSION["conectado"] !== true) {
         }
         #map {
             height: 500px;
-            background-color: #1e1e1e;
+            background-color: #f8f9fa; /* Fundo claro para o mapa durante loading */
             border-radius: 0.5rem;
             margin-top: 1rem;
         }
@@ -107,6 +109,19 @@ if (!isset($_SESSION["conectado"]) || $_SESSION["conectado"] !== true) {
         }
         .search-input::placeholder {
             color: #888;
+        }
+        .map-error {
+            display: none;
+            text-align: center;
+            padding: 2rem;
+            color: #dc3545;
+        }
+        .leaflet-popup-content {
+            font-family: 'Poppins', sans-serif;
+            color: #333;
+        }
+        .loading {
+            opacity: 0.7;
         }
         @media (max-width: 768px) {
             #map {
@@ -133,8 +148,13 @@ if (!isset($_SESSION["conectado"]) || $_SESSION["conectado"] !== true) {
         </nav>
         <!-- Searchbar com input para pesquisa -->
         <div class="searchbar d-flex justify-content-between align-items-center mx-3 mb-3 p-3">
-            <div class="flex-grow-1 me-3">
+            <div class="flex-grow-1 me-3 position-relative">
                 <input type="text" id="searchInput" class="form-control search-input fs-5" placeholder="Digite o destino (ex: Estação da Luz, São Paulo)" />
+                <div id="loadingSpinner" class="position-absolute end-0 top-50 translate-middle-y me-2" style="display: none;">
+                    <div class="spinner-border spinner-border-sm text-danger" role="status">
+                        <span class="visually-hidden">Carregando...</span>
+                    </div>
+                </div>
             </div>
             <div class="img-bar">
                 <img src="../assets/img/lupa.png" alt="Ícone de lupa para busca" class="search-icon" id="searchBtn" />
@@ -147,8 +167,12 @@ if (!isset($_SESSION["conectado"]) || $_SESSION["conectado"] !== true) {
         <div class="busca-titulo mb-3">
             <h3 class="text-danger fw-bold fs-4">Encontre estações e rotas</h3>
         </div>
-        <!-- Mapa Google Maps -->
+        <!-- Mapa Leaflet -->
         <div id="map"></div>
+        <!-- Fallback para erro -->
+        <div id="mapError" class="map-error alert alert-danger">
+            Erro ao carregar o mapa. Verifique a conexão com a internet.
+        </div>
     </main>
 
     <footer class="rodape position-fixed bottom-0 w-100 py-2 px-3" style="max-width: 900px; margin: 0 auto; left: 50%; transform: translateX(-50%); z-index: 1000;" role="contentinfo" aria-label="Menu de navegação inferior">
@@ -170,98 +194,90 @@ if (!isset($_SESSION["conectado"]) || $_SESSION["conectado"] !== true) {
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    
-    <!-- Google Maps JavaScript API (substitua 'SUA_CHAVE_API' pela sua chave real do Google Maps) -->
-    <script async defer src="https://maps.googleapis.com/maps/api/js?key=SUA_CHAVE_API&libraries=places&callback=initMap"></script>
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     
     <script>
-        let map;
-        let geocoder;
-        let marker;
+        // Inicializar o mapa quando a página carregar
+        document.addEventListener('DOMContentLoaded', function() {
+            try {
+                console.log('Inicializando mapa Leaflet...'); // Debug
 
-        function initMap() {
-            // Centralizar no centro de São Paulo como padrão
-            map = new google.maps.Map(document.getElementById('map'), {
-                zoom: 12,
-                center: { lat: -23.5505, lng: -46.6333 }, // São Paulo, SP
-                styles: [
-                    {
-                        featureType: 'all',
-                        elementType: 'geometry',
-                        stylers: [{ color: '#1e1e1e' }]
-                    },
-                    {
-                        featureType: 'all',
-                        elementType: 'labels.text.fill',
-                        stylers: [{ color: '#e0e0e0' }]
-                    },
-                    {
-                        featureType: 'all',
-                        elementType: 'labels.text.stroke',
-                        stylers: [{ color: '#121212' }]
-                    },
-                    {
-                        featureType: 'poi',
-                        elementType: 'geometry',
-                        stylers: [{ color: '#2a2a2a' }]
-                    },
-                    {
-                        featureType: 'road',
-                        elementType: 'geometry',
-                        stylers: [{ color: '#333333' }]
-                    },
-                    {
-                        featureType: 'water',
-                        elementType: 'geometry',
-                        stylers: [{ color: '#1e1e1e' }]
-                    }
-                ]
-            });
+                // Criar mapa centralizado em São Paulo
+                const map = L.map('map').setView([-23.5505, -46.6333], 11); // Lat/Lng de SP, zoom para ver a cidade
 
-            geocoder = new google.maps.Geocoder();
+                // Tiles claro (CartoDB Positron - tema claro, clean e funcional)
+                L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+                    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+                    subdomains: 'abcd',
+                    maxZoom: 19
+                }).addTo(map);
 
-            // Event listener para o botão de busca
-            document.getElementById('searchBtn').addEventListener('click', performSearch);
-            document.getElementById('searchInput').addEventListener('keypress', function(e) {
-                if (e.key === 'Enter') {
-                    performSearch();
+                let currentMarker; // Para remover marker anterior
+
+                // Função de busca custom (usa Nominatim via fetch - gratuita)
+                function performSearch() {
+                    const input = document.getElementById('searchInput').value.trim();
+                    if (!input) return;
+
+                    // Mostrar loading
+                    document.getElementById('searchInput').classList.add('loading');
+                    document.getElementById('loadingSpinner').style.display = 'block';
+
+                    // URL Nominatim (foco em SP, Brasil)
+                    const query = encodeURIComponent(input + ', São Paulo, SP');
+                    fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${query}&limit=1&countrycodes=br&addressdetails=1`)
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data && data.length > 0) {
+                                const result = data[0];
+                                const lat = parseFloat(result.lat);
+                                const lng = parseFloat(result.lon);
+                                const placeName = result.display_name;
+
+                                // Centralizar mapa com animação
+                                map.flyTo([lat, lng], 15);
+
+                                // Remover marker anterior
+                                if (currentMarker) {
+                                    map.removeLayer(currentMarker);
+                                }
+
+                                // Adicionar novo marker com popup
+                                currentMarker = L.marker([lat, lng]).addTo(map)
+                                    .bindPopup(`<b>${input}</b><br>${placeName}`)
+                                    .openPopup();
+                            } else {
+                                alert('Local não encontrado. Tente outro termo (ex: Estação da Luz).');
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Erro na busca:', error);
+                            alert('Erro na busca. Verifique a conexão.');
+                        })
+                        .finally(() => {
+                            // Esconder loading
+                            document.getElementById('searchInput').classList.remove('loading');
+                            document.getElementById('loadingSpinner').style.display = 'none';
+                        });
                 }
-            });
-        }
 
-        function performSearch() {
-            const input = document.getElementById('searchInput').value;
-            if (!input) return;
-
-            geocoder.geocode({ address: input + ', São Paulo, SP' }, function(results, status) {
-                if (status === 'OK') {
-                    map.setCenter(results[0].geometry.location);
-                    map.setZoom(15);
-
-                    // Remove marker anterior
-                    if (marker) {
-                        marker.setMap(null);
+                // Event listeners
+                document.getElementById('searchBtn').addEventListener('click', performSearch);
+                document.getElementById('searchInput').addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        performSearch();
                     }
+                });
 
-                    // Adiciona novo marker
-                    marker = new google.maps.Marker({
-                        map: map,
-                        position: results[0].geometry.location,
-                        title: input
-                    });
+                console.log('Mapa Leaflet carregado com sucesso! Teste a busca.'); // Debug
 
-                    // Info window opcional
-                    const infoWindow = new google.maps.InfoWindow({
-                        content: `<div style="color: #e0e0e0;"><strong>${input}</strong></div>`
-                    });
-                    marker.addListener('click', () => {
-                        infoWindow.open(map, marker);
-                    });
-                } else {
-                    alert('Geocodificação falhou: ' + status);
-                }
-            });
-        }
+            } catch (error) {
+                console.error('Erro ao inicializar mapa:', error);
+                document.getElementById('map').style.display = 'none';
+                document.getElementById('mapError').style.display = 'block';
+            }
+        });
     </script>
 </body>
 
