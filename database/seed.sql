@@ -5,5 +5,5 @@ INSERT INTO usuarios (id, nome, email, telefone, senha, cargo) VALUES
 ('1', 'teste', 'teste@gmail.com', '(47) 12345-6789', '$2y$10$DKeblHu.0Jbk9pnBBhCcPOaWn.ZCilkXBTlW3xIf3Si9vXsEfTmUe', 'usuario') -- senha: senha
 
 INSERT INTO mensagens (usuario_id, nome, texto, horario, dia, imagem) VALUES 
-(0, 'Sistema', 'As mensagens estão funcionando!', '08:28:00', '2025-10-01', 'bate-papo');
+(0, 'Sistema', 'As mensagens estão funcionando!', '08:28:00', '2025-10-01', 'bate-papo'),
 (1, 'Rogério maquinista', 'To chegando!', '06:30:00', '2025-09-30', 'usuario');
