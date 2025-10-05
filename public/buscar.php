@@ -197,7 +197,7 @@ if (!isset($_SESSION["conectado"]) || $_SESSION["conectado"] !== true) {
     <!-- Leaflet JS -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     
-    <script src="../js/mapa.js"> </script>
+    <script src="../js/APIs/mapa.js"> </script>
 </body>
 
 </html>
