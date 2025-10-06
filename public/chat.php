@@ -5,8 +5,10 @@ if (!isset($_SESSION["conectado"]) || $_SESSION["conectado"] !== true) {
     header("Location: login.php");
     exit;
 }
+
 $id = $_SESSION['id'];
-$stmt = $conn->prepare("SELECT * FROM mensagens WHERE usuario_id = ? ORDER BY dia DESC, horario DESC");
+
+$stmt = $conn->prepare("SELECT * FROM mensagens WHERE usuario_id = ? ORDER BY data_hora_envio DESC"); // Ordena por data e horário
 $stmt->bind_param("i", $id);
 $stmt->execute();
 $mensagens = $stmt->get_result();
@@ -107,10 +109,9 @@ $mensagens = $stmt->get_result();
 
         .footer-icon:hover img,
         .footer-icon.active img {
-            filter: brightness(0) invert(1)          
-            drop-shadow(0 0 15px rgba(255, 193, 7, 0.8))
-            sepia(1) saturate(5) hue-rotate(-10deg);
+            filter: brightness(0) invert(1) drop-shadow(0 0 15px rgba(255, 193, 7, 0.8)) sepia(1) saturate(5) hue-rotate(-10deg);
         }
+
         .rodape {
             background-color: #121212;
             border: none;
@@ -179,8 +180,18 @@ $mensagens = $stmt->get_result();
                             break;
                     }
 
-                    // Formatar horário para HH:MM
-                    $horaFormatada = date('H:i', strtotime($mensagem['horario']));
+                    // Lógica de formatação 
+                    $dataHoraEnvio = $mensagem['data_hora_envio']; 
+                    $dataAtual = date('Y-m-d'); 
+                    $dataDaMensagem = date('Y-m-d', strtotime($dataHoraEnvio)); // Extrai só a data da mensagem
+
+                    if ($dataDaMensagem === $dataAtual) {
+                        // Mensagem de hoje
+                        $tempoFormatado = date('H:i', strtotime($dataHoraEnvio));
+                    } else {
+                        // Mensagem de outro dia
+                        $tempoFormatado = date('d/m', strtotime($dataHoraEnvio));
+                    }
             ?>
                     <a href="#" class="list-group-item list-group-item-action bg-custom bg-custom-hover d-flex align-items-center rounded-3 mb-3 p-3 text-decoration-none border-0" tabindex="0" aria-current="true" aria-label="Chat com <?php echo htmlspecialchars($mensagem['nome']); ?>, última mensagem: <?php echo htmlspecialchars($mensagem['texto']); ?>" style="transition: background-color 0.2s ease;">
                         <div class="position-relative flex-shrink-0 me-3">
@@ -197,7 +208,7 @@ $mensagens = $stmt->get_result();
                         </div>
                         <div class="d-flex flex-column align-items-end ms-3 flex-shrink-0" style="min-width: 60px;">
                             <div class="chat-time text-light small mb-2" style="white-space: nowrap;">
-                                <?php echo $horaFormatada; ?> <!-- Horário da mensagem -->
+                                <?php echo $tempoFormatado; ?> <!-- Tempo formatado: hora ou data -->
                             </div>
                             <span class="badge bg-danger rounded-pill" aria-label="1 mensagem não lida" style="font-size: 0.75rem; padding: 0.25rem 0.5rem; min-width: 24px; text-align: center;">1</span>
                         </div>
@@ -209,6 +220,7 @@ $mensagens = $stmt->get_result();
                 echo '<p class="text-light text-center mt-4">Nenhuma mensagem encontrada.</p>';
             }
             ?>
+
         </div>
     </main>
 

@@ -192,7 +192,7 @@ if (!isset($_SESSION["admin"]) || $_SESSION["admin"] !== true) {
         <section class="opcoes">
             <div class="opcoes-titulo text-danger fw-bold fs-5 mb-3">Opções</div>
             <div class="opcoes-cards d-flex flex-wrap justify-content-between gap-3">
-                <a href="gerenciamento_usuarios.php" class="card-opcao" tabindex="0" aria-label="Editar informações do perfil">
+                <a href="usuarios.php" class="card-opcao" tabindex="0" aria-label="Editar informações do perfil">
                     <div class="opcao-img">
                         <img src="../../assets/img/perfil.png" alt="Ícone de perfil" />
                     </div>

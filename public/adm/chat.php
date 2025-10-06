@@ -1,6 +1,7 @@
 <?php
 require "../../config/bd.php";
 session_start();
+date_default_timezone_set('America/Sao_Paulo'); // Opcional: Define fuso horário (ajuste se necessário)
 
 // Verificação de login e cargo (apenas admin)
 if (!isset($_SESSION["conectado"]) || $_SESSION["conectado"] !== true || ($_SESSION['cargo'] ?? '') !== 'administrador') {
@@ -8,21 +9,20 @@ if (!isset($_SESSION["conectado"]) || $_SESSION["conectado"] !== true || ($_SESS
     exit;
 }
 
-// Query simples: Busca todas as mensagens de usuários (excluindo o admin), ordenadas por data/hora mais recente
+// Busca todas as mensagens de usuários (excluindo o admin), ordenadas por mais recente
 $conversas = [];
 $stmt = $conn->prepare("SELECT m.*, u.nome as usuario_nome 
     FROM mensagens m 
     INNER JOIN usuarios u ON m.usuario_id = u.id 
     WHERE m.usuario_id != ? 
-    ORDER BY m.dia DESC, m.horario DESC
+    ORDER BY m.data_hora_envio DESC
 ");
-$admin_id = $_SESSION['id'] ?? 0; // ID do admin para filtro
+$admin_id = $_SESSION['id'] ?? 1; // ID do admin para filtro
 $stmt->bind_param("i", $admin_id);
 $stmt->execute();
 $result = $stmt->get_result();
 
-
-$usuarios_vistos = []; 
+$usuarios_vistos = [];
 while ($row = $result->fetch_assoc()) {
     $usuario_id = $row['usuario_id'];
     if (!isset($usuarios_vistos[$usuario_id])) {
@@ -34,6 +34,7 @@ $stmt->close();
 
 $conn->close();
 ?>
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 
@@ -129,10 +130,9 @@ $conn->close();
 
         .footer-icon:hover img,
         .footer-icon.active img {
-            filter: brightness(0) invert(1)          
-            drop-shadow(0 0 15px rgba(255, 193, 7, 0.8))
-            sepia(1) saturate(5) hue-rotate(-10deg);
+            filter: brightness(0) invert(1) drop-shadow(0 0 15px rgba(255, 193, 7, 0.8)) sepia(1) saturate(5) hue-rotate(-10deg);
         }
+
         .rodape {
             background-color: #121212;
             border: none;
@@ -181,66 +181,77 @@ $conn->close();
         <div class="list-group list-group-flush">
 
             <?php
-if (!empty($conversas)) {
-    foreach ($conversas as $conversa) {
-        switch ($conversa['imagem']) {
-            case 'estação':
-                $arquivoImagem = 'localizacao.png';
-                break;
-            case 'bate-papo':
-                $arquivoImagem = 'chat.png';
-                break;
-            case 'usuario':
-                $arquivoImagem = 'perfil.png';
-                break;
-            case 'trem':
-                $arquivoImagem = 'trem.png';
-                break;
-            default:
-                $arquivoImagem = 'perfil.png'; // arquivo padrão
-                break;
-        }
+            if (!empty($conversas)) {
+                foreach ($conversas as $conversa) {
+                    switch ($conversa['imagem']) {
+                        case 'estação':
+                            $arquivoImagem = 'localizacao.png';
+                            break;
+                        case 'bate-papo':
+                            $arquivoImagem = 'chat.png';
+                            break;
+                        case 'usuario':
+                            $arquivoImagem = 'perfil.png';
+                            break;
+                        case 'trem':
+                            $arquivoImagem = 'trem.png';
+                            break;
+                        default:
+                            $arquivoImagem = 'perfil.png'; // arquivo padrão
+                            break;
+                    }
 
-        // Formatar horário para HH:MM
-        $horaFormatada = date('H:i', strtotime($conversa['horario']));
-        
-        // Prefixo para remetente (quem mandou a última mensagem)
-        $remetente = htmlspecialchars($conversa['nome']); // Nome de quem enviou (ex: "Admin" ou "João")
-        $texto_com_prefixo = $remetente . ': ' . htmlspecialchars($conversa['texto']); // Ex: "Admin: Olá!"
-?>
-        <a href="admin_chat_detalhe.php?id=<?php echo $conversa['usuario_id']; ?>" class="list-group-item list-group-item-action bg-custom bg-custom-hover d-flex align-items-center rounded-3 mb-3 p-3 text-decoration-none border-0" tabindex="0" aria-current="true" aria-label="Chat com <?php echo htmlspecialchars($conversa['usuario_nome']); ?>, última mensagem de <?php echo $remetente; ?>: <?php echo htmlspecialchars($conversa['texto']); ?>" style="transition: background-color 0.2s ease;">
-            <div class="position-relative flex-shrink-0 me-3">
-                <img src="../../assets/img/<?php echo $arquivoImagem; ?>" alt="Avatar <?php echo htmlspecialchars($conversa['usuario_nome']); ?>" class="chat-icon" />
-                <span class="unread-dot"></span>
-            </div>
-            <div class="flex-grow-1 min-width-0">
-      <!-- Nome do Destinatário -->
-      <div class="chat-name fw-bold fs-6 text-light mb-1" style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
-          <?php echo htmlspecialchars($conversa['usuario_nome']); ?>
-      </div>
-      <!-- Linha para Remetente -->
-      <div class="remetente small text-light mb-1" style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
-          De: <span class="fw-semibold text-danger"><?php echo htmlspecialchars($conversa['nome']); ?></span>
-      </div>
-      <!-- Mensagem -->
-      <div class="chat-last-message text-light small" style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
-          <?php echo htmlspecialchars($conversa['texto']); ?>
-      </div>
-  </div>
-            <div class="d-flex flex-column align-items-end ms-3 flex-shrink-0" style="min-width: 60px;">
-                <div class="chat-time text-light small mb-2" style="white-space: nowrap;">
-                    <?php echo $horaFormatada; ?> <!-- Horário da mensagem -->
-                </div>
-                <span class="badge bg-danger rounded-pill" aria-label="1 mensagem não lida" style="font-size: 0.75rem; padding: 0.25rem 0.5rem; min-width: 24px; text-align: center;">1</span>
-            </div>
-        </a>
-<?php
-    }
-} else {
-    // Caso não tenha conversas
-    echo '<p class="text-light text-center mt-4">Nenhuma conversa encontrada.</p>';
-}
-?>
+                    // Lógica de formatação para data_hora_envio (DATETIME) - Igual ao arquivo anterior
+                    $dataHoraEnvio = $conversa['data_hora_envio']; // Ex.: '2023-10-15 14:30:00'
+                    $dataAtual = date('Y-m-d'); // Data de hoje: '2023-10-15'
+                    $dataDaMensagem = date('Y-m-d', strtotime($dataHoraEnvio)); // Extrai só a data da mensagem
+
+                    if ($dataDaMensagem === $dataAtual) {
+                        // Mensagem de hoje: Mostra apenas horário (HH:MM)
+                        $tempoFormatado = date('H:i', strtotime($dataHoraEnvio));
+                    } else {
+                        // Mensagem de outro dia: Mostra apenas dia e mês (DD/MM)
+                        $tempoFormatado = date('d/m', strtotime($dataHoraEnvio));  // Ex.: "15/10"
+                    }
+
+                    // Prefixo para remetente (quem mandou a última mensagem)
+                    $remetente = htmlspecialchars($conversa['nome']); // Nome de quem enviou (ex: "Admin" ou "João")
+                    $texto_com_prefixo = $remetente . ': ' . htmlspecialchars($conversa['texto']); // Ex: "Admin: Olá!"
+            ?>
+                    <a href="admin_chat_detalhe.php?id=<?php echo $conversa['usuario_id']; ?>" class="list-group-item list-group-item-action bg-custom bg-custom-hover d-flex align-items-center rounded-3 mb-3 p-3 text-decoration-none border-0" tabindex="0" aria-current="true" aria-label="Chat com <?php echo htmlspecialchars($conversa['usuario_nome']); ?>, última mensagem de <?php echo $remetente; ?>: <?php echo htmlspecialchars($conversa['texto']); ?>" style="transition: background-color 0.2s ease;">
+                        <div class="position-relative flex-shrink-0 me-3">
+                            <img src="../../assets/img/<?php echo $arquivoImagem; ?>" alt="Avatar <?php echo htmlspecialchars($conversa['usuario_nome']); ?>" class="chat-icon" />
+                            <span class="unread-dot"></span>
+                        </div>
+                        <div class="flex-grow-1 min-width-0">
+                            <!-- Nome do Destinatário -->
+                            <div class="chat-name fw-bold fs-6 text-light mb-1" style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+                                <?php echo htmlspecialchars($conversa['usuario_nome']); ?>
+                            </div>
+                            <!-- Linha para Remetente -->
+                            <div class="remetente small text-light mb-1" style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+                                De: <span class="fw-semibold text-danger"><?php echo htmlspecialchars($conversa['nome']); ?></span>
+                            </div>
+                            <!-- Mensagem -->
+                            <div class="chat-last-message text-light small" style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+                                <?php echo htmlspecialchars($conversa['texto']); ?>
+                            </div>
+                        </div>
+                        <div class="d-flex flex-column align-items-end ms-3 flex-shrink-0" style="min-width: 60px;">
+                            <div class="chat-time text-light small mb-2" style="white-space: nowrap;">
+                                <?php echo $tempoFormatado; ?> <!-- Tempo formatado: hora ou dia/mês -->
+                            </div>
+                            <span class="badge bg-danger rounded-pill" aria-label="1 mensagem não lida" style="font-size: 0.75rem; padding: 0.25rem 0.5rem; min-width: 24px; text-align: center;">1</span>
+                        </div>
+                    </a>
+            <?php
+                }
+            } else {
+                // Caso não tenha conversas
+                echo '<p class="text-light text-center mt-4">Nenhuma conversa encontrada.</p>';
+            }
+            ?>
+
 
         </div>
     </main>
