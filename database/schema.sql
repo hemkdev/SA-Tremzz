@@ -19,7 +19,7 @@ CREATE TABLE mensagens (
     texto VARCHAR(87) NOT NULL,
     imagem ENUM('estação', 'bate-papo', 'usuario', 'trem'),
     data_hora_envio DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP;
-    CONSTRAINT fk_usuario_mensagem FOREIGN KEY (usuario_id) REFERENCES usuarios(id)
+    CONSTRAINT fk_usuario_mensagem FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE
 );
 
 CREATE TABLE atividades (
@@ -28,7 +28,7 @@ CREATE TABLE atividades (
     destino VARCHAR(30),
     rua VARCHAR(50) NOT NULL,
     cep VARCHAR(10) NOT NULL,
-    CONSTRAINT fk_usuario_atividade FOREIGN KEY (usuario_id) REFERENCES usuarios(id)
+    CONSTRAINT fk_usuario_atividade FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE
 );
 
 CREATE TABLE linhas (
@@ -43,8 +43,8 @@ CREATE TABLE rotas (
     nome VARCHAR(100) NOT NULL,
     sentido ENUM('ida', 'volta') NOT NULL,
     maquinista_supervisor_id INT,
-    CONSTRAINT fk_linha_rota FOREIGN KEY (linha_id) REFERENCES linhas(id),
-    CONSTRAINT fk_maquinista_rota FOREIGN KEY (maquinista_supervisor_id) REFERENCES usuarios(id)
+    CONSTRAINT fk_linha_rota FOREIGN KEY (linha_id) REFERENCES linhas(id) ON DELETE CASCADE,
+    CONSTRAINT fk_maquinista_rota FOREIGN KEY (maquinista_supervisor_id) REFERENCES usuarios(id) ON DELETE CASCADE
 );
 
 CREATE TABLE trens (
@@ -54,7 +54,7 @@ CREATE TABLE trens (
     modelo VARCHAR(100),
     capacidade INT,
     status ENUM('operacional', 'manutencao', 'parado') NOT NULL DEFAULT 'operacional',
-    CONSTRAINT fk_maquinista_trem FOREIGN KEY (maquinista_responsavel_id) REFERENCES usuarios(id)
+    CONSTRAINT fk_maquinista_trem FOREIGN KEY (maquinista_responsavel_id) REFERENCES usuarios(id) ON DELETE CASCADE
 );
 
 CREATE TABLE itinerarios (
@@ -65,9 +65,9 @@ CREATE TABLE itinerarios (
     horario_partida TIME NOT NULL,
     horario_chegada TIME NOT NULL,
     dia_semana VARCHAR(20) NOT NULL,
-    CONSTRAINT fk_trem_itinerario FOREIGN KEY (trem_id) REFERENCES trens(id),
-    CONSTRAINT fk_rota_itinerario FOREIGN KEY (rota_id) REFERENCES rotas(id),
-    CONSTRAINT fk_maquinista_itinerario FOREIGN KEY (maquinista_id) REFERENCES usuarios(id)
+    CONSTRAINT fk_trem_itinerario FOREIGN KEY (trem_id) REFERENCES trens(id) ON DELETE CASCADE,
+    CONSTRAINT fk_rota_itinerario FOREIGN KEY (rota_id) REFERENCES rotas(id) ON DELETE CASCADE,
+    CONSTRAINT fk_maquinista_itinerario FOREIGN KEY (maquinista_id) REFERENCES usuarios(id) ON DELETE CASCADE
 );
 
 CREATE TABLE sensores (
@@ -78,5 +78,5 @@ CREATE TABLE sensores (
     valor DECIMAL(10, 2) NOT NULL,
     unidade VARCHAR(20),
     timestamp DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    CONSTRAINT fk_trem_sensor FOREIGN KEY (trem_id) REFERENCES trens(id)
+    CONSTRAINT fk_trem_sensor FOREIGN KEY (trem_id) REFERENCES trens(id) ON DELETE CASCADE
 );

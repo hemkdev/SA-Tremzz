@@ -15,65 +15,46 @@ require "../../config/bd.php";
 // ID do admin atual para excluir da lista
 $admin_id = $_SESSION['id'] ?? 0;
 
-// Query para estatísticas (baseadas nas colunas disponíveis)
-$total_usuarios = 0;
-$maquinistas = 0;
-$outros_usuarios = 0;
-$telefones_cadastrados = 0;
+// Total usuários
+$stmt_total = $conn->prepare("SELECT COUNT(*) as total FROM usuarios WHERE id != ?");
+$stmt_total->bind_param("i", $admin_id);
+$stmt_total->execute();
+$total_usuarios = $stmt_total->get_result()->fetch_assoc()['total'];
 
-try {
-    // Total usuários
-    $stmt_total = $conn->prepare("SELECT COUNT(*) as total FROM usuarios WHERE id != ?");
-    $stmt_total->bind_param("i", $admin_id);
-    $stmt_total->execute();
-    $total_usuarios = $stmt_total->get_result()->fetch_assoc()['total'];
+// Maquinistas
+$stmt_maquinistas = $conn->prepare("SELECT COUNT(*) as total FROM usuarios WHERE cargo = 'Maquinista' AND id != ?");
+$stmt_maquinistas->bind_param("i", $admin_id);
+$stmt_maquinistas->execute();
+$maquinistas = $stmt_maquinistas->get_result()->fetch_assoc()['total'];
 
-    // Maquinistas
-    $stmt_maquinistas = $conn->prepare("SELECT COUNT(*) as total FROM usuarios WHERE cargo = 'Maquinista' AND id != ?");
-    $stmt_maquinistas->bind_param("i", $admin_id);
-    $stmt_maquinistas->execute();
-    $maquinistas = $stmt_maquinistas->get_result()->fetch_assoc()['total'];
+// Outros usuários
+$outros_usuarios = $total_usuarios - $maquinistas;
 
-    // Outros usuários
-    $outros_usuarios = $total_usuarios - $maquinistas;
+// Telefones cadastrados (não vazios)
+$stmt_telefones = $conn->prepare("SELECT COUNT(*) as total FROM usuarios WHERE telefone IS NOT NULL AND telefone != '' AND id != ?");
+$stmt_telefones->bind_param("i", $admin_id);
+$stmt_telefones->execute();
+$telefones_cadastrados = $stmt_telefones->get_result()->fetch_assoc()['total'];
 
-    // Telefones cadastrados (não vazios)
-    $stmt_telefones = $conn->prepare("SELECT COUNT(*) as total FROM usuarios WHERE telefone IS NOT NULL AND telefone != '' AND id != ?");
-    $stmt_telefones->bind_param("i", $admin_id);
-    $stmt_telefones->execute();
-    $telefones_cadastrados = $stmt_telefones->get_result()->fetch_assoc()['total'];
+// Query para lista de usuários (com busca se $_GET['busca'] existir)
+$busca = $_GET['busca'] ?? '';
+$where_clause = "WHERE u.id != ? AND (u.nome LIKE ? OR u.email LIKE ? OR u.telefone LIKE ?)";
+$params = [$admin_id, "%$busca%", "%$busca%", "%$busca%"];
+$types = "isss";
 
-    // Query para lista de usuários (com busca se $_GET['busca'] existir)
-    $busca = $_GET['busca'] ?? '';
-    $where_clause = "WHERE u.id != ? AND (u.nome LIKE ? OR u.email LIKE ? OR u.telefone LIKE ?)";
-    $params = [$admin_id, "%$busca%", "%$busca%", "%$busca%"];
-    $types = "isss";
-
-    $stmt_usuarios = $conn->prepare("SELECT u.id, u.nome, u.email, u.telefone, u.cargo 
+$stmt_usuarios = $conn->prepare("SELECT u.id, u.nome, u.email, u.telefone, u.cargo 
                                      FROM usuarios u $where_clause 
                                      ORDER BY u.id DESC 
                                      LIMIT 20"); // Paginação simples: 20 por página
-    $stmt_usuarios->bind_param($types, ...$params);
-    $stmt_usuarios->execute();
-    $usuarios = $stmt_usuarios->get_result()->fetch_all(MYSQLI_ASSOC);
+$stmt_usuarios->bind_param($types, ...$params);
+$stmt_usuarios->execute();
+$usuarios = $stmt_usuarios->get_result()->fetch_all(MYSQLI_ASSOC);
 
-    $stmt_total->close();
-    $stmt_maquinistas->close();
-    $stmt_telefones->close();
-    $stmt_usuarios->close();
-} catch (Exception $e) {
-    // Fallback fictício se BD falhar
-    $total_usuarios = 1250;
-    $maquinistas = 150;
-    $outros_usuarios = 1100;
-    $telefones_cadastrados = 1200;
-    $usuarios = [  // Dados fictícios para teste (incluindo telefone)
-        ['id' => 1, 'nome' => 'João Silva', 'email' => 'joao@email.com', 'telefone' => '47 99999-1234', 'cargo' => 'Usuário'],
-        ['id' => 2, 'nome' => 'Maria Oliveira', 'email' => 'maria@email.com', 'telefone' => '47 99999-5678', 'cargo' => 'Maquinista'],
-        ['id' => 3, 'nome' => 'Pedro Santos', 'email' => 'pedro@email.com', 'telefone' => '47 99999-9012', 'cargo' => 'Usuário'],
-        // Adicione mais para teste
-    ];
-}
+$stmt_total->close();
+$stmt_maquinistas->close();
+$stmt_telefones->close();
+$stmt_usuarios->close();
+
 
 $conn->close();
 ?>
@@ -240,7 +221,7 @@ $conn->close();
             <div class="container-fluid">
                 <div class="d-flex justify-content-between align-items-center w-100">
                     <div class="text-oi">
-                        <h1 class="text-light fw-bold mb-0 fs-3">Olá, <?php echo htmlspecialchars($_SESSION['nome']); ?> !</h1>
+                        <h1 class="text-light fw-bold mb-0 fs-3"> Gerenciamento de usuários </h1>
                     </div>
                     <div class="pfp">
                         <img src="../../assets/img/perfil.png" alt="Foto de perfil" class="pfp-img" />
@@ -254,7 +235,7 @@ $conn->close();
         <!-- Estatísticas de Usuários -->
         <div class="stats mb-5">
             <div class="stats-titulo mb-3">
-                <h3 class="text-danger fw-bold fs-4">Gerenciamento de Usuários</h3>
+                <h3 class="text-danger fw-bold fs-4"> Dados de usuários </h3>
             </div>
 
             <div class="stats-grid d-flex flex-wrap justify-content-between gap-3">
@@ -286,7 +267,7 @@ $conn->close();
                         <i class="bi bi-person-badge"></i>
                     </div>
                     <div class="stat-text w-100">
-                        <div class="stat-label text-light small">Outros Usuários</div>
+                        <div class="stat-label text-light small">Usuários</div>
                         <div class="stat-number"><?php echo number_format($outros_usuarios); ?></div>
                     </div>
                 </div>
@@ -335,14 +316,17 @@ $conn->close();
                                     <td><?php echo htmlspecialchars($usuario['email']); ?></td>
                                     <td><?php echo htmlspecialchars($usuario['cargo']); ?></td>
                                     <td><?php echo htmlspecialchars($usuario['telefone'] ?? 'Não cadastrado'); ?></td>
+                                    
                                     <td>
                                         <button class="btn btn-sm btn-warning me-1" onclick="editarUsuario(<?php echo $usuario['id']; ?>, '<?php echo htmlspecialchars(addslashes($usuario['nome'])); ?>', '<?php echo htmlspecialchars(addslashes($usuario['email'])); ?>', '<?php echo htmlspecialchars(addslashes($usuario['telefone'] ?? '')); ?>', '<?php echo htmlspecialchars(addslashes($usuario['cargo'])); ?>')">
                                             <i class="bi bi-pencil"></i> Editar
                                         </button>
-                                        <form method="POST" action="delete_usuario.php" style="display: inline;" onsubmit="return confirm('Deletar este usuário? Ação irreversível!');">
+
+                                        <form method="POST" action="delete.php?id=<?php echo $usuario['id']; ?>" style="display: inline;" onsubmit="return confirm('Deletar este usuário? Ação irreversível!');">
                                             <input type="hidden" name="id" value="<?php echo $usuario['id']; ?>">
                                             <button type="submit" class="btn btn-sm btn-danger"><i class="bi bi-trash"></i> Deletar</button>
                                         </form>
+
                                     </td>
                                 </tr>
                             <?php endforeach; ?>
@@ -354,14 +338,17 @@ $conn->close();
                     </tbody>
                 </table>
             </div>
-            <!-- Paginação simples (exemplo; integre com BD para páginas reais) -->
+
+            <!-- Paginação simples 
             <nav aria-label="Paginação de usuários">
                 <ul class="pagination justify-content-center">
-                    <li class="page-item"><a class="page-link bg-secondary text-light" href="#">Anterior</a></li>
-                    <li class="page-item active"><a class="page-link bg-danger text-light" href="#">1</a></li>
-                    <li class="page-item"><a class="page-link bg-secondary text-light" href="#">Próximo</a></li>
+                    <li class="page-item"><a class="page-link bg-secondary text-light border-0" href="#">Anterior</a></li>
+                    <li class="page-item"><a class="page-link bg-danger text-light border-0" href="#">1</a></li>
+                    <li class="page-item"><a class="page-link bg-secondary text-light border-0" href="#">Próximo</a></li>
                 </ul>
             </nav>
+            -->
+
         </div>
     </main>
 
@@ -414,7 +401,7 @@ $conn->close();
                 <img src="../../assets/img/casa.png" alt="Início" />
             </a>
             <a href="gerenciamento.php" class="footer-icon text-center text-decoration-none p-2" aria-label="Gerenciamento">
-                <img src="../../assets/img/lupa.png" alt="Gerenciamento" />
+                <img src="../../assets/img/gerenciamento.png" alt="Gerenciamento" />
             </a>
             <a href="chat.php" class="footer-icon text-center text-decoration-none p-2" aria-label="Chat">
                 <img src="../../assets/img/chat.png" alt="Chat" />
