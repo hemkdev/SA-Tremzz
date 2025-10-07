@@ -361,7 +361,7 @@ $conn->close();
                     <h5 class="modal-title text-danger" id="editarModalLabel">Editar Usuário</h5>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fechar"></button>
                 </div>
-                <form id="editarForm" method="POST" action="update_usuario.php">
+                <form id="editarForm" method="POST" action="edit.php">
                     <div class="modal-body">
                         <input type="hidden" id="editarId" name="id" value="">
                         <div class="mb-3">
@@ -387,7 +387,7 @@ $conn->close();
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                        <button type="submit" class="btn btn-danger">Salvar Alterações</button>
+                        <button type="submit" class="btn btn-danger" name="editar">Salvar Alterações</button>
                     </div>
                 </form>
             </div>

@@ -2,7 +2,7 @@
 
 $servidor = "localhost";
 $usuario = "root";
-$senha = "root";
+$senha = "";
 $dbname = "tremzz_db";
 
 $conn = new mysqli($servidor, $usuario, $senha, $dbname);
@@ -24,7 +24,7 @@ $conn->set_charset("utf8");
 // Buscar -> Vizualização de rotas
 
 // ADM
-// Perfil -> Página de gerenciamento de usuários
+// Perfil -> Página de gerenciamento de usuários -- 
 // Perfil -> Página de gerenciamento de notificações
 // Gerenciamento -> CRUD para gerenciamento de sensores
 // Gerenciamento -> CRUD para gerenciamento de itinerários

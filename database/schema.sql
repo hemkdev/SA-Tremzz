@@ -18,7 +18,7 @@ CREATE TABLE mensagens (
     nome VARCHAR(30) NOT NULL,
     texto VARCHAR(87) NOT NULL,
     imagem ENUM('estação', 'bate-papo', 'usuario', 'trem'),
-    data_hora_envio DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP;
+    data_hora_envio DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT fk_usuario_mensagem FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE
 );
 
