@@ -322,7 +322,7 @@ $conn->close();
                                             <i class="bi bi-pencil"></i> Editar
                                         </button>
 
-                                        <form method="POST" action="delete.php?id=<?php echo $usuario['id']; ?>" style="display: inline;" onsubmit="return confirm('Deletar este usuário? Ação irreversível!');">
+                                        <form method="POST" action="model/delete_user.php?id=<?php echo $usuario['id']; ?>" style="display: inline;" onsubmit="return confirm('Deletar este usuário? Ação irreversível!');">
                                             <input type="hidden" name="id" value="<?php echo $usuario['id']; ?>">
                                             <button type="submit" class="btn btn-sm btn-danger"><i class="bi bi-trash"></i> Deletar</button>
                                         </form>
@@ -361,7 +361,7 @@ $conn->close();
                     <h5 class="modal-title text-danger" id="editarModalLabel">Editar Usuário</h5>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fechar"></button>
                 </div>
-                <form id="editarForm" method="POST" action="edit.php">
+                <form id="editarForm" method="POST" action="model/edit_user.php">
                     <div class="modal-body">
                         <input type="hidden" id="editarId" name="id" value="">
                         <div class="mb-3">

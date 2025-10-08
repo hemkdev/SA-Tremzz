@@ -1,5 +1,5 @@
 <?php
-require_once("../../config/bd.php");
+require_once("../../../config/bd.php");
 
 if (isset($_POST['editar'])) {
 
@@ -12,7 +12,7 @@ if (isset($_POST['editar'])) {
     $result = mysqli_query($conn, "UPDATE usuarios SET nome = '$nome', email = '$email', telefone = '$telefone', cargo = '$cargo' WHERE id = $id ");
 
         $editado = true;
-        header("Location: usuarios.php");
+        header("Location: ../usuarios.php");
 }
 
 ?>
