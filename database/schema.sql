@@ -80,3 +80,6 @@ CREATE TABLE sensores (
     timestamp DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT fk_trem_sensor FOREIGN KEY (trem_id) REFERENCES trens(id) ON DELETE CASCADE
 );
+
+ALTER TABLE usuarios ADD COLUMN foto VARCHAR(255) DEFAULT '../assets/img/perfil.png' NULL;
+UPDATE usuarios SET foto = '../assets/img/perfil.png' WHERE foto IS NULL OR foto = '';

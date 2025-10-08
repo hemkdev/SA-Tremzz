@@ -5,6 +5,21 @@ require "../config/bd.php";
 $_SESSION['erro'] = "";
 $_SESSION['sucesso'] = "";
 
+// Debug temporário (acesso via ?debug=1 na URL - comente após testar)
+if (isset($_GET['debug'])) {
+    echo "<pre>Debug Sessão: " . print_r($_SESSION, true) . "</pre>";
+    if (isset($conn)) {
+        $stmt_debug = $conn->prepare("SELECT id, nome, foto FROM usuarios WHERE id = ?");
+        $stmt_debug->bind_param("i", $_SESSION['id']);
+        $stmt_debug->execute();
+        $result = $stmt_debug->get_result();
+        $user = $result->fetch_assoc();
+        echo "<pre>Debug BD: " . print_r($user, true) . "</pre>";
+        $stmt_debug->close();
+    }
+    exit;
+}
+
 // Verificação de login
 if (!isset($_SESSION["conectado"]) || $_SESSION["conectado"] !== true) {
     header("Location: login.php");
@@ -22,26 +37,88 @@ unset($_SESSION['erro'], $_SESSION['sucesso']); // Limpa para próxima vez
 
 if (isset($_POST['editar'])) {
     $nome = trim($_POST["nome"] ?? "");
+    $alteracao_feita = false;
+    $erros = [];
 
-    $stmt = $conn->prepare("UPDATE usuarios SET nome = ? WHERE id = ?");
-    if (!$stmt) {
-        $_SESSION['erro'] = "Erro ao preparar query: " . $conn->error;
+    // Processar edição de nome
+    $stmt_nome = $conn->prepare("UPDATE usuarios SET nome = ? WHERE id = ?");
+    if (!$stmt_nome) {
+        $erros[] = "Erro ao preparar query para nome: " . $conn->error;
     } else {
-        $stmt->bind_param("si", $nome, $id); // Agora $id existe
-        if ($stmt->execute()) {
-            if ($stmt->affected_rows > 0) {
+        $stmt_nome->bind_param("si", $nome, $id);
+        if ($stmt_nome->execute()) {
+            if ($stmt_nome->affected_rows > 0) {
                 $_SESSION['nome'] = $nome; // Atualiza sessão
-                $_SESSION['sucesso'] = "Perfil atualizado com sucesso!";
-                $sucesso = true;
-                header("Location: perfil.php?sucesso=1"); // Redirect com param
-                exit;
-            } else {
-                $_SESSION['erro'] = "Nenhuma alteração foi feita (valores iguais aos atuais).";
+                $alteracao_feita = true;
             }
         } else {
-            $_SESSION['erro'] = "Erro ao executar: " . $stmt->error;
+            $erros[] = "Erro ao executar atualização de nome: " . $stmt_nome->error;
         }
-        $stmt->close();
+        $stmt_nome->close();
+    }
+
+    // Processar upload de foto (se enviada)
+    $foto_atual = $_SESSION['foto'] ?? '../assets/img/perfil.png';
+    if (isset($_FILES['foto']) && $_FILES['foto']['error'] === UPLOAD_ERR_OK) {
+        $upload_dir = '../assets/img/usuarios/';
+        if (!is_dir($upload_dir)) {
+            mkdir($upload_dir, 0777, true);
+        }
+
+        $file_name = $_FILES['foto']['name'];
+        $file_tmp = $_FILES['foto']['tmp_name'];
+        $file_size = $_FILES['foto']['size'];
+        $file_extension = strtolower(pathinfo($file_name, PATHINFO_EXTENSION));
+
+        // Validações
+        $allowed_extensions = ['jpg', 'jpeg', 'png', 'gif'];
+        $max_size = 5 * 1024 * 1024; // 5MB
+
+        if (!in_array($file_extension, $allowed_extensions)) {
+            $erros[] = "Tipo de arquivo não permitido. Use JPG, JPEG, PNG ou GIF.";
+        } elseif ($file_size > $max_size) {
+            $erros[] = "Arquivo muito grande. Máximo 5MB.";
+        } else {
+            // Gerar nome único para o arquivo
+            $new_filename = 'usuario_' . $id . '_' . time() . '.' . $file_extension;
+            $upload_path = $upload_dir . $new_filename;
+
+            if (move_uploaded_file($file_tmp, $upload_path)) {
+                // Deletar foto antiga se não for a padrão
+                if ($foto_atual !== '../assets/img/perfil.png' && file_exists($foto_atual)) {
+                    unlink($foto_atual);
+                }
+
+                // Atualizar banco de dados
+                $stmt_foto = $conn->prepare("UPDATE usuarios SET foto = ? WHERE id = ?");
+                if (!$stmt_foto) {
+                    $erros[] = "Erro ao preparar query para foto: " . $conn->error;
+                } else {
+                    $stmt_foto->bind_param("si", $upload_path, $id); // "s" para string (caminho), "i" para int (id)
+                    if ($stmt_foto->execute() && $stmt_foto->affected_rows > 0) {
+                        $_SESSION['foto'] = $upload_path; // Atualiza sessão
+                        $alteracao_feita = true;
+                    } else {
+                        $erros[] = "Erro ao atualizar foto no banco de dados: " . $stmt_foto->error;
+                    }
+                    $stmt_foto->close();
+                }
+            } else {
+                $erros[] = "Erro ao mover o arquivo para o servidor.";
+            }
+        }
+    }
+
+    // Definir mensagens baseadas nos resultados
+    if (!empty($erros)) {
+        $_SESSION['erro'] = implode(' ', $erros);
+    } elseif ($alteracao_feita) {
+        $_SESSION['sucesso'] = "Perfil atualizado com sucesso!";
+        $sucesso = true;
+        header("Location: perfil.php?sucesso=1"); // Redirect com param
+        exit;
+    } else {
+        $_SESSION['erro'] = "Nenhuma alteração foi feita (valores iguais aos atuais).";
     }
 }
 
@@ -205,6 +282,7 @@ if (isset($conn)) {
                             <i class="bi bi-camera-fill"></i> Alterar
                         </span>
                     </label>
+                    <small class="text-white d-block text-center mt-2">Apenas imagens (JPG, PNG, GIF). Máximo 5MB.</small>
                     <input type="file" class="form-control form-control-custom mt-2 d-none" id="fotoPerfil" name="foto" accept="image/*" onchange="previewImage(this)" />
                 </div>
 
@@ -213,11 +291,8 @@ if (isset($conn)) {
                     <label for="nome" class="form-label fw-bold fs-4 text-light mb-2">Nome Completo</label>
                     <div class="input-group">
                         <input type="text" class="form-control form-control-custom fs-5 text-center" id="nome" name="nome" value="<?php echo htmlspecialchars($_SESSION['nome'] ?? ''); ?>" placeholder="Digite seu nome" required />
-                        </button>
                     </div>
                 </div>
-
-
 
                 <!-- Botões de ação -->
                 <div class="d-flex justify-content-center gap-3">
@@ -253,6 +328,20 @@ if (isset($conn)) {
         </div>
     </footer>
 
+    <!-- Script para preview da imagem -->
+    <script>
+        function previewImage(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('previewFoto').src = e.target.result;
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+    </script>
+
 </body>
 
 </html>
+<?php
