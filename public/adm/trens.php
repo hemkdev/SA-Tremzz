@@ -9,7 +9,7 @@ require "../../config/bd.php";
 // Listar trens
 $stmt = $conn->prepare("SELECT * FROM trens ORDER BY data_cadastro DESC");
 $stmt->execute();
-$trens = $stmt->fetchAll(PDO::FETCH_ASSOC);
+$trens = $stmt->get_result()->fetch_assoc();
 
 // Adicionar/Editar (POST)
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
