@@ -28,6 +28,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 $_SESSION["cargo"] = $dados['cargo'];
                 $_SESSION['nome'] = $dados['nome'];
                 $_SESSION["cargo"] = $dados['cargo'];
+                $_SESSION["foto"] = $dados['foto'];
                 $_SESSION["conectado"] = true;
 
                 if ($_SESSION["cargo"] === "administrador") {

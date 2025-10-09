@@ -255,7 +255,7 @@ if (isset($conn)) {
                         <h1 class="text-light fw-bold mb-0 fs-3">Editar Perfil</h1>
                     </div>
                     <div class="pfp">
-                        <img src="../assets/img/perfil.png" alt="Foto de perfil" class="pfp-img" />
+                        <img src="<?php echo htmlspecialchars($_SESSION['foto'] ?? '../assets/img/perfil.png'); ?>" alt="Foto de perfil" class="pfp-img" />
                     </div>
                 </div>
             </div>
@@ -322,7 +322,7 @@ if (isset($conn)) {
             <a href="chat.php" class="footer-icon text-center text-decoration-none p-2" aria-label="Chat">
                 <img src="../assets/img/chat.png" alt="Chat" />
             </a>
-            <a href="perfil.php" class="footer-icon active text-center text-decoration-none p-2" aria-label="Perfil">
+            <a href="perfil.php" class="footer-icon text-center text-decoration-none p-2" aria-label="Perfil">
                 <img src="../assets/img/perfil.png" alt="Perfil" />
             </a>
         </div>
@@ -344,4 +344,3 @@ if (isset($conn)) {
 </body>
 
 </html>
-<?php

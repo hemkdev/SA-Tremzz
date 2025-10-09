@@ -140,7 +140,7 @@ $mensagens = $stmt->get_result();
                         <h1 class="text-light fw-bold mb-0 fs-3">Conversas</h1>
                     </div>
                     <div class="pfp">
-                        <img src="../assets/img/perfil.png" alt="Foto de perfil" class="pfp-img" />
+                        <img src="<?php echo htmlspecialchars($_SESSION['foto'] ?? '../assets/img/perfil.png'); ?>" alt="Foto de perfil" class="pfp-img" />
                     </div>
                 </div>
             </div>

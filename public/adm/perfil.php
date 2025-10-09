@@ -168,7 +168,7 @@ if (!isset($_SESSION["admin"]) || $_SESSION["admin"] !== true) {
                         <h1 class="text-light fw-bold mb-0 fs-3">Perfil</h1>
                     </div>
                     <div class="pfp">
-                        <img src="../../assets/img/perfil.png" alt="Foto de perfil" class="pfp-img" />
+                        <img src="<?php echo htmlspecialchars($_SESSION["foto"] ?? '../../assets/img/perfil.png'); ?>" alt="Foto de perfil" class="pfp-img" />
                     </div>
                 </div>
             </div>
@@ -179,7 +179,7 @@ if (!isset($_SESSION["admin"]) || $_SESSION["admin"] !== true) {
 
         <!-- Seção de perfil principal -->
         <section class="perfil-header card rounded-3 text-center mb-4 p-4" id="quadrado">
-            <img src="../../assets/img/perfil.png" alt="Foto de perfil" class="perfil-foto" />
+            <img src="<?php echo htmlspecialchars($_SESSION['foto'] ?? '../../assets/img/perfil.png'); ?>" alt="Foto de perfil" class="perfil-foto" />
             <div class="perfil-nome fw-bold fs-4 text-light mb-2">
                 <?php echo htmlspecialchars($_SESSION['nome']); ?>
             </div>

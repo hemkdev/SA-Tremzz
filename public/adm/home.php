@@ -170,7 +170,7 @@ $mensagens_hoje = 320;
                         <h1 class="text-light fw-bold mb-0 fs-3">Olá, <?php echo htmlspecialchars($_SESSION['nome']); ?> !</h1>
                     </div>
                     <div class="pfp">
-                        <img src="../../assets/img/perfil.png" alt="Foto de perfil" class="pfp-img" />
+                        <img src="<?php echo htmlspecialchars($_SESSION["foto"] ?? '../../assets/img/perfil.png'); ?>" alt="Foto de perfil" class="pfp-img" />
                     </div>
                 </div>
             </div>
@@ -306,7 +306,7 @@ $mensagens_hoje = 320;
                 <img src="../../assets/img/casa.png" alt="Início" />
             </a>
             <a href="gerenciamento.php" class="footer-icon text-center text-decoration-none p-2" aria-label="Buscar">
-                <img src="../../assets/img/lupa.png" alt="Gerenciamento" />
+                <img src="../../assets/img/gerenciamento.png" alt="Gerenciamento" />
             </a>
             <a href="chat.php" class="footer-icon text-center text-decoration-none p-2" aria-label="Chat">
                 <img src="../../assets/img/chat.png" alt="Chat" />
