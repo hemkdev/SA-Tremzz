@@ -24,14 +24,13 @@ $conn->set_charset("utf8");
 // Buscar -> Vizualização de rotas
 
 // ADM
-// Perfil -> Página de gerenciamento de usuários -- 
+// Perfil -> Página de gerenciamento de usuários -- Editar cargo no modal
 // Perfil -> Página de gerenciamento de notificações
 // Gerenciamento -> CRUD para manutenção de trens
 // Gerenciamento -> CRUD para gerenciamento de sensores --
 // Gerenciamento -> CRUD para gerenciamento de itinerários
 // Gerenciamento -> CRUD para gerenciamento de linhas
 // Gerenciamento -> CRUD para gerenciamento de trens
-// Gerenciamento -> CRUD para gerenciamento de rotas
 
 // MAQUINISTA
 // Todas as páginas
