@@ -9,3 +9,4 @@ $id = $_GET['id'];
 $result = mysqli_query($conn, "DELETE FROM usuarios WHERE id = $id");
 
 header("Location: ../usuarios.php");
+?>

@@ -60,7 +60,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>TREMzz - Login</title>
-    <link rel="shortcut icon" href="../assets/img/tremlogo.png" />
+    <link rel="shortcut icon" href="../assets/img/tremzz_logo.png" />
 
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
@@ -86,7 +86,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 <body style="font-family: 'Poppins', sans-serif;" class="bg-dark text-light min-vh-100">
     <header class="text-center my-5">
         <h1 class="display-3 text-danger fw-bold text-uppercase lh-1">TREMzz</h1>
-        <img src="../assets/img/tremlogo.png">
     </header>
 
     <div class="container my-5">

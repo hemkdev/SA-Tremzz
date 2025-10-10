@@ -5,20 +5,6 @@ require "../config/bd.php";
 $_SESSION['erro'] = "";
 $_SESSION['sucesso'] = "";
 
-// Debug temporário (acesso via ?debug=1 na URL - comente após testar)
-if (isset($_GET['debug'])) {
-    echo "<pre>Debug Sessão: " . print_r($_SESSION, true) . "</pre>";
-    if (isset($conn)) {
-        $stmt_debug = $conn->prepare("SELECT id, nome, foto FROM usuarios WHERE id = ?");
-        $stmt_debug->bind_param("i", $_SESSION['id']);
-        $stmt_debug->execute();
-        $result = $stmt_debug->get_result();
-        $user = $result->fetch_assoc();
-        echo "<pre>Debug BD: " . print_r($user, true) . "</pre>";
-        $stmt_debug->close();
-    }
-    exit;
-}
 
 // Verificação de login
 if (!isset($_SESSION["conectado"]) || $_SESSION["conectado"] !== true) {
@@ -134,7 +120,7 @@ if (isset($conn)) {
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>TREMzz - Editar Perfil</title>
-    <link rel="shortcut icon" href="../assets/img/tremlogo.png" />
+    <link rel="shortcut icon" href="../assets/img/tremzz_logo.png" />
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
     <!-- Fonte Poppins -->
