@@ -359,7 +359,6 @@ $conn->close();
         </div>
     </main>
 
-    <!-- Modal para Editar Sensor -->
     <!-- Modal para Adicionar/Editar Sensor -->
     <div class="modal fade" id="editarModal" tabindex="-1" aria-labelledby="editarModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">

@@ -36,23 +36,17 @@ CREATE TABLE estacoes (
     descricao VARCHAR(255)
 );
 
-CREATE TABLE linhas (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    nome VARCHAR(50) NOT NULL
-);
-
 CREATE TABLE itinerarios (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    linha_id INT NOT NULL,
     nome VARCHAR(100) NOT NULL,  
-    descricao TEXT,
-    FOREIGN KEY (linha_id) REFERENCES Linhas(id) ON DELETE CASCADE
+    descricao TEXT
 );
 
 CREATE TABLE Trens (
     id INT PRIMARY KEY AUTO_INCREMENT,
     modelo VARCHAR (50) NOT NULL,
-    tipo_carga VARCHAR(50) NOT NULL
+    tipo_carga VARCHAR(50) NOT NULL,
+    status ENUM('Disponível', 'Em rota', 'Em manutenção')
 );
 
 CREATE TABLE Rotas (
