@@ -9,7 +9,7 @@ CREATE TABLE usuarios (
     telefone VARCHAR(15),
     senha VARCHAR(255) NOT NULL,
     cargo ENUM('usuario', 'administrador', 'maquinista') NOT NULL DEFAULT 'usuario',
-    foto_perfil ENUM('foto1.jpg','foto2.jpg','foto3.jpg')
+    foto VARCHAR(255) DEFAULT '../assets/img/perfil.png' NOT NULL
 );
 
 CREATE TABLE mensagens (
@@ -17,65 +17,60 @@ CREATE TABLE mensagens (
     usuario_id INT NOT NULL,
     nome VARCHAR(30) NOT NULL,
     texto VARCHAR(87) NOT NULL,
-    imagem ENUM('estação', 'bate-papo', 'usuario', 'trem'),
-    data_hora_envio DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    imagem ENUM('estação', 'bate-papo', 'usuario', 'trem') NOT NULL,
+    data_hora_envio DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL,
     CONSTRAINT fk_usuario_mensagem FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE
 );
 
 CREATE TABLE sensores (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    localizacao ENUM('Estação 1', 'Estação 2', 'Estação 3', 'Estação principal'),
+    localizacao ENUM('Estação 1', 'Estação 2', 'Estação 3', 'Estação principal') NOT NULL,
     tipo ENUM('LDR', 'Ultrassônico', 'DHT11') NOT NULL, -- Luminosidade, distância e temperatura/umidade
-    data_hora_adicao DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+    status ENUM('ativado', 'desativado') NOT NULL,
+    data_hora_adicao DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL
 );
 
-CREATE TABLE atividades (
+CREATE TABLE estacoes (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    usuario_id INT NOT NULL,
-    destino VARCHAR(30),
-    rua VARCHAR(50) NOT NULL,
-    cep VARCHAR(10) NOT NULL,
-    CONSTRAINT fk_usuario_atividade FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE
+    nome ENUM('Estação 1', 'Estação 2', 'Estação 3', 'Estação principal') NOT NULL,
+    descricao VARCHAR(255)
 );
 
 CREATE TABLE linhas (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    nome VARCHAR(100) NOT NULL UNIQUE,
-    cor VARCHAR(50)
-);
-
-CREATE TABLE rotas (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    linha_id INT NOT NULL,
-    nome VARCHAR(100) NOT NULL,
-    sentido ENUM('ida', 'volta') NOT NULL,
-    maquinista_supervisor_id INT,
-    CONSTRAINT fk_linha_rota FOREIGN KEY (linha_id) REFERENCES linhas(id) ON DELETE CASCADE,
-    CONSTRAINT fk_maquinista_rota FOREIGN KEY (maquinista_supervisor_id) REFERENCES usuarios(id) ON DELETE CASCADE
-);
-
-CREATE TABLE trens (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    numero_identificacao VARCHAR(50) NOT NULL UNIQUE,
-    maquinista_responsavel_id INT,
-    modelo VARCHAR(100),
-    capacidade INT,
-    status ENUM('operacional', 'manutencao', 'parado') NOT NULL DEFAULT 'operacional',
-    CONSTRAINT fk_maquinista_trem FOREIGN KEY (maquinista_responsavel_id) REFERENCES usuarios(id) ON DELETE CASCADE
+    nome VARCHAR(50) NOT NULL
 );
 
 CREATE TABLE itinerarios (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    trem_id INT NOT NULL,
-    rota_id INT NOT NULL,
-    maquinista_id INT NOT NULL,
-    horario_partida TIME NOT NULL,
-    horario_chegada TIME NOT NULL,
-    dia_semana VARCHAR(20) NOT NULL,
-    CONSTRAINT fk_trem_itinerario FOREIGN KEY (trem_id) REFERENCES trens(id) ON DELETE CASCADE,
-    CONSTRAINT fk_rota_itinerario FOREIGN KEY (rota_id) REFERENCES rotas(id) ON DELETE CASCADE,
-    CONSTRAINT fk_maquinista_itinerario FOREIGN KEY (maquinista_id) REFERENCES usuarios(id) ON DELETE CASCADE
+    linha_id INT NOT NULL,
+    nome VARCHAR(100) NOT NULL,  
+    descricao TEXT,
+    FOREIGN KEY (linha_id) REFERENCES Linhas(id) ON DELETE CASCADE
 );
 
-ALTER TABLE usuarios ADD COLUMN foto_perfil VARCHAR(255) DEFAULT '../assets/img/perfil.png' NULL;
-UPDATE usuarios SET foto = '../assets/img/perfil.png' WHERE foto IS NULL OR foto = '';
+CREATE TABLE Trens (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    modelo VARCHAR (50) NOT NULL,
+    tipo_carga VARCHAR(50) NOT NULL
+);
+
+CREATE TABLE Rotas (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    itinerario_id INT NOT NULL,
+    maquinista_id INT NOT NULL,
+    trem_id INT NOT NULL,
+    estacao_origem_id INT NOT NULL,
+    estacao_destino_id INT NOT NULL,
+    via_estacao_id INT, 
+    duracao_estimada INT, 
+    FOREIGN KEY (itinerario_id) REFERENCES Itinerarios(id) ON DELETE CASCADE,
+    FOREIGN KEY (maquinista_id) REFERENCES usuarios(id) ON DELETE CASCADE,
+    FOREIGN KEY (trem_id) REFERENCES Trens(id) ON DELETE CASCADE,
+    FOREIGN KEY (estacao_origem_id) REFERENCES Estacoes(id) ON DELETE RESTRICT,
+    FOREIGN KEY (estacao_destino_id) REFERENCES Estacoes(id) ON DELETE RESTRICT,
+    FOREIGN KEY (via_estacao_id) REFERENCES Estacoes(id) ON DELETE RESTRICT
+);
+
+
+

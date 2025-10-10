@@ -191,16 +191,6 @@ if (!isset($_SESSION["admin"]) || $_SESSION["admin"] !== true) {
                     </div>
                 </a>
 
-                <a href="rotas.php" class="card-gerenciamento" tabindex="0" aria-label="Gerenciar rotas">
-                    <div class="gerenciamento-icon">
-                        <i class="bi bi-geo-alt"></i> <!-- Ícone para rotas -->
-                    </div>
-                    <div class="gerenciamento-text">
-                        <h5>Rotas</h5>
-                        <p>Definir e visualizar rotas</p>
-                    </div>
-                </a>
-
                 <a href="itinerarios.php" class="card-gerenciamento" tabindex="0" aria-label="Gerenciar itinerários">
                     <div class="gerenciamento-icon">
                         <i class="bi bi-map"></i> <!-- Ícone para itinerários -->
@@ -221,15 +211,6 @@ if (!isset($_SESSION["admin"]) || $_SESSION["admin"] !== true) {
                     </div>
                 </a>
 
-                <a href="manutencao.php" class="card-gerenciamento" tabindex="0" aria-label="Gerenciar manutenção">
-                    <div class="gerenciamento-icon">
-                        <i class="bi bi-tools"></i> <!-- Ícone para manutenção -->
-                    </div>
-                    <div class="gerenciamento-text">
-                        <h5>Manutenção</h5>
-                        <p>Agendar e rastrear manutenções</p>
-                    </div>
-                </a>
             </div>
         </section>
     </main>
