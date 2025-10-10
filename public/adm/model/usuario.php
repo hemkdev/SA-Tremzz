@@ -13,6 +13,18 @@ if (isset($_POST['editar'])) {
 
         $editado = true;
         header("Location: ../usuarios.php");
+
+} else if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['deletar'])) {
+
+    $id = $_GET['id'];
+
+    $result = mysqli_query($conn, "DELETE FROM usuarios WHERE id = $id");
+
+    header("Location: ../usuarios.php");
+} else {
+    // Se não for POST válido, redirecione para evitar acesso direto
+    header("Location: ../usuarios.php");
+    exit;
 }
 
 ?>
