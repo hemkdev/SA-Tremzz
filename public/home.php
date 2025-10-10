@@ -104,6 +104,21 @@ if (!isset($_SESSION["conectado"]) || $_SESSION["conectado"] !== true) {
             box-shadow: none;
             z-index: 1000;
         }
+        /* Estilo para links nos cards de serviço (torna o card inteiro clicável) */
+        .servico-link {
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+        .servico-link:hover .card-servico {
+            background-color: #dc3545 !important;
+            color: #fff !important;
+            transform: translateY(-2px); /* Efeito sutil de elevação no hover */
+            transition: all 0.3s ease;
+        }
+        .servico-link:hover .servico-text {
+            color: #fff !important;
+        }
         @media (max-width: 768px) {
             .card-atividade {
                 flex-direction: column !important;
@@ -207,30 +222,41 @@ if (!isset($_SESSION["conectado"]) || $_SESSION["conectado"] !== true) {
                 <h3 class="text-danger fw-bold fs-4">Outros serviços</h3>
             </div>
             <div class="servicos-cards d-flex flex-wrap justify-content-between gap-3">
-                <div class="card-servico card card-hover d-flex align-items-center rounded-3 flex-fill p-3">
-                    <div class="servico-img flex-shrink-0">
-                        <img src="../assets/img/alerta.png" alt="Ícone de alerta" class="service-img" />
+                <!-- Alertas em tempo real -->
+                <a href="alertastrem.php" class="servico-link">
+                    <div class="card-servico card card-hover d-flex align-items-center rounded-3 flex-fill p-3">
+                        <div class="servico-img flex-shrink-0">
+                            <img src="../assets/img/alerta.png" alt="Ícone de alerta" class="service-img" />
+                        </div>
+                        <div class="servico-text ms-3">
+                            <span class="text-light fw-semibold fs-6">Alertas em tempo real</span>
+                        </div>
                     </div>
-                    <div class="servico-text ms-3">
-                        <span class="text-light fw-semibold fs-6">Alertas em tempo real</span>
+                </a>
+                
+                <!-- Status do meu trem -->
+                <a href="status_trem.php" class="servico-link">
+                    <div class="card-servico card card-hover d-flex align-items-center rounded-3 flex-fill p-3">
+                        <div class="servico-img flex-shrink-0">
+                            <img src="../assets/img/trem.png" alt="Ícone de trem" class="service-img" />
+                        </div>
+                        <div class="servico-text ms-3">
+                            <span class="text-light fw-semibold fs-6">Status do meu trem</span>
+                        </div>
                     </div>
-                </div>
-                <div class="card-servico card card-hover d-flex align-items-center rounded-3 flex-fill p-3">
-                    <div class="servico-img flex-shrink-0">
-                        <img src="../assets/img/trem.png" alt="Ícone de trem" class="service-img" />
+                </a>
+                
+                <!-- Horários de Embarque -->
+                <a href="horarios.php" class="servico-link">
+                    <div class="card-servico card card-hover d-flex align-items-center rounded-3 flex-fill p-3">
+                        <div class="servico-img flex-shrink-0">
+                            <img src="../assets/img/relogio.png" alt="Ícone de relógio" class="service-img" />
+                        </div>
+                        <div class="servico-text ms-3">
+                            <span class="text-light fw-semibold fs-6">Horários de embarque</span>
+                        </div>
                     </div>
-                    <div class="servico-text ms-3">
-                        <span class="text-light fw-semibold fs-6">Status do meu trem</span>
-                    </div>
-                </div>
-                <div class="card-servico card card-hover d-flex align-items-center rounded-3 flex-fill p-3">
-                    <div class="servico-img flex-shrink-0">
-                        <img src="../assets/img/relogio.png" alt="Ícone de relógio" class="service-img" />
-                    </div>
-                    <div class="servico-text ms-3">
-                        <span class="text-light fw-semibold fs-6">Horários de embarque</span>
-                    </div>
-                </div>
+                </a>
             </div>
         </div>
     </main>
@@ -257,4 +283,3 @@ if (!isset($_SESSION["conectado"]) || $_SESSION["conectado"] !== true) {
 </body>
 
 </html>
-
