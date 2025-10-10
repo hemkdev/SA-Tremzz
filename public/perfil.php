@@ -225,7 +225,7 @@ if (!isset($_SESSION["conectado"]) || $_SESSION["conectado"] !== true) {
                         <p>Versão e informações</p>
                     </div>
                 </a>
-                <a href="#" class="card-opcao" tabindex="0" aria-label="Ajuda e suporte">
+                <a href="ajuda-suporte.php" class="card-opcao" tabindex="0" aria-label="Ajuda e suporte">
                     <div class="opcao-img">
                         <img src="../assets/img/chat.png" alt="Ícone de chat" />
                     </div>
