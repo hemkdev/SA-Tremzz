@@ -22,6 +22,13 @@ CREATE TABLE mensagens (
     CONSTRAINT fk_usuario_mensagem FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE
 );
 
+CREATE TABLE sensores (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    localizacao ENUM('Estação 1', 'Estação 2', 'Estação 3', 'Estação principal'),
+    tipo ENUM('LDR', 'Ultrassônico', 'DHT11') NOT NULL, -- Luminosidade, distância e temperatura/umidade
+    data_hora_adicao DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
 CREATE TABLE atividades (
     id INT AUTO_INCREMENT PRIMARY KEY,
     usuario_id INT NOT NULL,
@@ -68,17 +75,6 @@ CREATE TABLE itinerarios (
     CONSTRAINT fk_trem_itinerario FOREIGN KEY (trem_id) REFERENCES trens(id) ON DELETE CASCADE,
     CONSTRAINT fk_rota_itinerario FOREIGN KEY (rota_id) REFERENCES rotas(id) ON DELETE CASCADE,
     CONSTRAINT fk_maquinista_itinerario FOREIGN KEY (maquinista_id) REFERENCES usuarios(id) ON DELETE CASCADE
-);
-
-CREATE TABLE sensores (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    trem_id INT,
-    localizacao VARCHAR(100) NOT NULL,
-    tipo ENUM('temperatura', 'velocidade', 'pressao', 'vibracao', 'outros') NOT NULL,
-    valor DECIMAL(10, 2) NOT NULL,
-    unidade VARCHAR(20),
-    timestamp DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    CONSTRAINT fk_trem_sensor FOREIGN KEY (trem_id) REFERENCES trens(id) ON DELETE CASCADE
 );
 
 ALTER TABLE usuarios ADD COLUMN foto_perfil VARCHAR(255) DEFAULT '../assets/img/perfil.png' NULL;
