@@ -1,18 +1,18 @@
-# SA-Tremzz: Sistema de Gerenciamento de Transportes Ferroviários
+# Tremzz: Sistema de Gerenciamento de Transportes Ferroviários
 
 ## Visão Geral
 
-O SA-Tremzz é uma aplicação web desenvolvida para otimizar e gerenciar operações de transportes ferroviários. O sistema visa proporcionar uma interface intuitiva para usuários e administradores, facilitando o controle de informações essenciais relacionadas a rotas, usuários e, potencialmente, outros aspectos da logística ferroviária.
+O Tremzz é uma aplicação web desenvolvida para otimizar e gerenciar operações de transportes ferroviários. O sistema visa proporcionar uma interface intuitiva para usuários e administradores, facilitando o controle de informações essenciais relacionadas a rotas, usuários e, potencialmente, outros aspectos da logística ferroviária.
 
 ## Funcionalidades Principais
 
 Com base na estrutura do projeto, as seguintes funcionalidades podem ser inferidas:
 
-*   **Autenticação de Usuários**: Telas de login (`tela_login.php`) e registro (`tela_registro.php`) indicam um sistema de autenticação robusto para gerenciar o acesso de usuários.
-*   **Gerenciamento de Usuários**: A tabela `usuarios` no `schema.sql` sugere a capacidade de armazenar e gerenciar informações de usuários, incluindo nome, email, telefone e senha.
-*   **Visualização de Rotas/Mapas**: A presença de `mapa.html` e `enderecos.html` sugere funcionalidades para visualização de rotas, talvez com a possibilidade de gerenciar endereços ou pontos de interesse.
-*   **Interface Administrativa**: `menuadm.html` indica uma área restrita para administradores, com opções de gerenciamento específicas.
-*   **Diversas Telas de Interação**: Múltiplas telas (`tela10.html` a `tela14.html`, `tela2.html`, `tela3.html`, `tela6.html` a `tela9.html`) sugerem uma aplicação com diversas funcionalidades e fluxos de trabalho para diferentes tipos de usuários ou operações.
+*   **Autenticação de Usuários**:
+*   **Gerenciamento de Usuários**:
+*   **Visualização de Rotas/Mapas**: 
+*   **Interface Administrativa**: 
+*   **Diversas Telas de Interação**: 
 
 ## Estrutura do Projeto
 
@@ -21,7 +21,7 @@ O projeto SA-Tremzz segue uma estrutura organizada, facilitando o desenvolviment
 ```
 SA-Tremzz/
 ├── assets/           # Ativos como imagens, ícones, etc.
-├── config/           # Arquivos de configuração (ex: conexão com banco de dados)
+├── config/           # Conexão com banco de dados
 ├── database/         # Scripts SQL para o banco de dados
 │   └── schema.sql
 │   └── seed.sql
