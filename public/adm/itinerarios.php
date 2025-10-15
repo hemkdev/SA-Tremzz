@@ -12,48 +12,43 @@ if (!isset($_SESSION["admin"]) || $_SESSION["admin"] !== true) {
 
 require "../../config/bd.php";
 
-// Total trens
-$stmt_total = $conn->prepare("SELECT COUNT(*) as total FROM Trens");
+// Total itinerarios
+$stmt_total = $conn->prepare("SELECT COUNT(*) as total FROM itinerarios");
 $stmt_total->execute();
-$total_trens = $stmt_total->get_result()->fetch_assoc()['total'];
+$total_itinerarios = $stmt_total->get_result()->fetch_assoc()['total'];
 
-// Trens disponíveis (status 'Disponível')
-$stmt_disponiveis = $conn->prepare("SELECT COUNT(*) as total FROM Trens WHERE status = 'Disponível'");
-$stmt_disponiveis->execute();
-$trens_disponiveis = $stmt_disponiveis->get_result()->fetch_assoc()['total'];
+// Itinerarios por nome (exemplo: contagem de itinerarios com nomes específicos, ou simplesmente total por critério)
+$stmt_por_nome = $conn->prepare("SELECT COUNT(*) as total FROM itinerarios WHERE nome LIKE '%Rota%'");  // Exemplo: ajuste com base em critérios reais
+$stmt_por_nome->execute();
+$itinerarios_por_nome = $stmt_por_nome->get_result()->fetch_assoc()['total'];
 
-// Trens em rota (status 'Em rota')
-$stmt_em_rota = $conn->prepare("SELECT COUNT(*) as total FROM Trens WHERE status = 'Em rota'");
-$stmt_em_rota->execute();
-$trens_em_rota = $stmt_em_rota->get_result()->fetch_assoc()['total'];
+// Outra estatística: Itinerarios com descrição (exemplo: não vazia)
+$stmt_com_descricao = $conn->prepare("SELECT COUNT(*) as total FROM itinerarios WHERE descricao IS NOT NULL AND descricao != ''");
+$stmt_com_descricao->execute();
+$itinerarios_com_descricao = $stmt_com_descricao->get_result()->fetch_assoc()['total'];
 
-// Trens em manutenção (status 'Em manutenção')
-$stmt_manutencao = $conn->prepare("SELECT COUNT(*) as total FROM Trens WHERE status = 'Em manutenção'");
-$stmt_manutencao->execute();
-$trens_manutencao = $stmt_manutencao->get_result()->fetch_assoc()['total'];
 
-// Query para lista de trens (com busca se $_GET['busca'] existir)
+// Query para lista de itinerarios (com busca se $_GET['busca'] existir)
 $busca = $_GET['busca'] ?? '';
-$where_clause = !empty($busca) ? "WHERE (t.modelo LIKE ? OR t.tipo_carga LIKE ?)" : "";
+$where_clause = !empty($busca) ? "WHERE (i.nome LIKE ? OR i.descricao LIKE ?)" : "";
 $params = empty($busca) ? [] : ["%$busca%", "%$busca%"];
 $types = empty($busca) ? "" : "ss";
 
-$stmt_trens = $conn->prepare("SELECT t.id, t.modelo, t.tipo_carga, t.status 
-                                   FROM Trens t 
+$stmt_itinerarios = $conn->prepare("SELECT i.id, i.nome, i.descricao 
+                                   FROM itinerarios i 
                                    $where_clause 
-                                   ORDER BY t.id DESC 
+                                   ORDER BY i.id DESC 
                                    LIMIT 20"); // Paginação simples: 20 por página
 if (!empty($busca)) {
-    $stmt_trens->bind_param($types, ...$params);
+    $stmt_itinerarios->bind_param($types, ...$params);
 }
-$stmt_trens->execute();
-$trens = $stmt_trens->get_result()->fetch_all(MYSQLI_ASSOC);
+$stmt_itinerarios->execute();
+$itinerarios = $stmt_itinerarios->get_result()->fetch_all(MYSQLI_ASSOC);
 
 $stmt_total->close();
-$stmt_disponiveis->close();
-$stmt_em_rota->close();
-$stmt_manutencao->close();
-$stmt_trens->close();
+$stmt_por_nome->close();
+$stmt_com_descricao->close();
+$stmt_itinerarios->close();
 
 $conn->close();
 ?>
@@ -64,7 +59,7 @@ $conn->close();
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>TREMzz - Gerenciamento de Trens</title>
+    <title>TREMzz - Gerenciamento de Itinerários</title>
     <link rel="shortcut icon" href="../assets/img/tremzz_logo.png" />
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
@@ -219,7 +214,7 @@ $conn->close();
             <div class="container-fluid">
                 <div class="d-flex justify-content-between align-items-center w-100">
                     <div class="text-oi">
-                        <h1 class="text-light fw-bold mb-0 fs-3">Gerenciamento de Trens</h1>
+                        <h1 class="text-light fw-bold mb-0 fs-3">Gerenciamento de Itinerários</h1>
                     </div>
                     <div class="pfp">
                         <img src="<?php echo htmlspecialchars($_SESSION['foto'] ?? '../../assets/img/perfil.png'); ?>" alt="Foto de perfil" class="pfp-img" />
@@ -239,105 +234,44 @@ $conn->close();
                                                             unset($_SESSION['erro']); ?></div>
         <?php endif; ?>
 
-        <!-- Estatísticas de Trens -->
-        <div class="stats mb-5">
-            <div class="stats-titulo mb-3">
-                <h3 class="text-danger fw-bold fs-4">Dados de Trens</h3>
-            </div>
-
-            <div class="stats-grid d-flex flex-wrap justify-content-between gap-3">
-                <!-- Card 1: Total de Trens -->
-                <div class="card card-hover d-flex flex-column align-items-center text-center rounded-3 flex-fill p-3">
-                    <div class="stat-icon mb-2">
-                        <i class="bi bi-train-freight-front"></i>
-                    </div>
-                    <div class="stat-text w-100">
-                        <div class="stat-label text-light small">Total de Trens</div>
-                        <div class="stat-number"><?php echo number_format($total_trens); ?></div>
-                    </div>
-                </div>
-
-                <!-- Card 2: Trens Disponíveis -->
-                <div class="card card-hover d-flex flex-column align-items-center text-center rounded-3 flex-fill p-3">
-                    <div class="stat-icon mb-2">
-                        <i class="bi bi-check-circle-fill"></i>
-                    </div>
-                    <div class="stat-text w-100">
-                        <div class="stat-label text-light small">Disponíveis</div>
-                        <div class="stat-number"><?php echo number_format($trens_disponiveis); ?></div>
-                    </div>
-                </div>
-
-                <!-- Card 3: Trens Em Rota -->
-                <div class="card card-hover d-flex flex-column align-items-center text-center rounded-3 flex-fill p-3">
-                    <div class="stat-icon mb-2">
-                        <i class="bi bi-arrow-right-circle-fill"></i>
-                    </div>
-                    <div class="stat-text w-100">
-                        <div class="stat-label text-light small">Em Rota</div>
-                        <div class="stat-number"><?php echo number_format($trens_em_rota); ?></div>
-                    </div>
-                </div>
-
-                <!-- Card 4: Trens Em Manutenção -->
-                <div class="card card-hover d-flex flex-column align-items-center text-center rounded-3 flex-fill p-3">
-                    <div class="stat-icon mb-2">
-                        <i class="bi bi-tools"></i>
-                    </div>
-                    <div class="stat-text w-100">
-                        <div class="stat-label text-light small">Em Manutenção</div>
-                        <div class="stat-number"><?php echo number_format($trens_manutencao); ?></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Busca e Tabela de Trens -->
+        <!-- Busca e Tabela de Itinerários -->
         <div class="atividades mb-5">
             <div class="d-flex justify-content-between align-items-center mb-3">
-                <h3 class="text-danger fw-bold fs-4 mb-0">Lista de Trens</h3>
+                <h3 class="text-danger fw-bold fs-4 mb-0">Lista de Itinerários</h3>
                 <div class="d-flex gap-2">
-                    <button class="btn btn-outline-danger" onclick="limparModalParaAdicionar()" data-bs-toggle="modal" data-bs-target="#editarModal">
-                        <i class="bi bi-plus-circle me-1"></i> Adicionar Trem
+                    <button class="btn btn-outline-danger" onclick="limparModalParaAdicionar()" data-bs-toggle="modal" data-bs-target="#editarModal" style="width: 300px;" >
+                        <i class="bi bi-plus-circle me-1"></i> Adicionar Itinerário
                     </button>
                     <div class="input-group" style="max-width: 300px;">
-                        <input type="text" class="form-control" id="buscaInput" placeholder="Buscar por modelo ou tipo de carga..." value="<?php echo htmlspecialchars($busca); ?>">
-                        <button class="btn btn-outline-danger" type="button" onclick="filtrarTrens()"><i class="bi bi-search"></i></button>
+                        <input type="text" class="form-control" id="buscaInput" placeholder="Buscar por nome ou descrição..." value="<?php echo htmlspecialchars($busca); ?>">
+                        <button class="btn btn-outline-danger" type="button" onclick="filtrarItinerarios()"><i class="bi bi-search"></i></button>
                     </div>
                 </div>
             </div>
             <div class="table-responsive">
-                <table class="table table-dark table-hover rounded-3 overflow-hidden" id="trensTable">
+                <table class="table table-dark table-hover rounded-3 overflow-hidden" id="itinerariosTable">
                     <thead>
                         <tr>
                             <th scope="col">ID</th>
-                            <th scope="col">Modelo</th>
-                            <th scope="col">Tipo de Carga</th>
-                            <th scope="col">Status</th>
+                            <th scope="col">Nome</th>
+                            <th scope="col">Descrição</th>
                             <th scope="col">Ações</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <?php if (!empty($trens)): ?>
-                            <?php foreach ($trens as $trem): ?>
-                                <tr data-modelo="<?php echo strtolower($trem['modelo']); ?>" data-tipo="<?php echo strtolower($trem['tipo_carga']); ?>">
-                                    <td><?php echo $trem['id']; ?></td>
-                                    <td><?php echo htmlspecialchars($trem['modelo']); ?></td>
-                                    <td><?php echo htmlspecialchars($trem['tipo_carga']); ?></td>
+                        <?php if (!empty($itinerarios)): ?>
+                            <?php foreach ($itinerarios as $itinerario): ?>
+                                <tr data-nome="<?php echo strtolower($itinerario['nome']); ?>" data-descricao="<?php echo strtolower($itinerario['descricao']); ?>">
+                                    <td><?php echo $itinerario['id']; ?></td>
+                                    <td><?php echo htmlspecialchars($itinerario['nome']); ?></td>
+                                    <td><?php echo htmlspecialchars($itinerario['descricao']); ?></td>
                                     <td>
-                                        <?php
-                                        $status = $trem['status'];
-                                        $badge_class = ($status === 'Disponível') ? 'bg-success' : (($status === 'Em rota') ? 'bg-warning' : 'bg-danger');
-                                        ?>
-                                        <span class="badge <?php echo $badge_class; ?>"><?php echo $status; ?></span>
-                                    </td>
-                                    <td>
-                                        <button class="btn btn-sm btn-warning me-1" onclick="editarTrem(<?php echo $trem['id']; ?>, '<?php echo htmlspecialchars(addslashes($trem['modelo'])); ?>', '<?php echo htmlspecialchars(addslashes($trem['tipo_carga'])); ?>', '<?php echo htmlspecialchars(addslashes($trem['status'])); ?>')">
+                                        <button class="btn btn-sm btn-warning me-1" onclick="editarItinerario(<?php echo $itinerario['id']; ?>, '<?php echo htmlspecialchars(addslashes($itinerario['nome'])); ?>', '<?php echo htmlspecialchars(addslashes($itinerario['descricao'])); ?>')">
                                             <i class="bi bi-pencil"></i> Editar
                                         </button>
 
-                                        <form method="POST" action="model/delete_trens.php?id=<?php echo $trem['id']; ?>" style="display: inline;" onsubmit="return confirm('Deletar este trem? Ação irreversível!');">
-                                            <input type="hidden" name="id" value="<?php echo $trem['id']; ?>">
+                                        <form method="POST" action="model/delete_itinerarios.php?id=<?php echo $itinerario['id']; ?>" style="display: inline;" onsubmit="return confirm('Deletar este itinerário? Ação irreversível!');">
+                                            <input type="hidden" name="id" value="<?php echo $itinerario['id']; ?>">
                                             <button type="submit" class="btn btn-sm btn-danger"><i class="bi bi-trash"></i> Deletar</button>
                                         </form>
                                     </td>
@@ -345,7 +279,7 @@ $conn->close();
                             <?php endforeach; ?>
                         <?php else: ?>
                             <tr>
-                                <td colspan="5" class="text-center text-light">Nenhum trem encontrado.</td>
+                                <td colspan="4" class="text-center text-light">Nenhum itinerário encontrado.</td>
                             </tr>
                         <?php endif; ?>
                     </tbody>
@@ -354,32 +288,24 @@ $conn->close();
         </div>
     </main>
 
-    <!-- Modal para Adicionar/Editar Trem -->
+    <!-- Modal para Adicionar/Editar Itinerário -->
     <div class="modal fade" id="editarModal" tabindex="-1" aria-labelledby="editarModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title text-danger" id="editarModalLabel">Adicionar Trem</h5>
+                    <h5 class="modal-title text-danger" id="editarModalLabel">Adicionar Itinerário</h5>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fechar"></button>
                 </div>
-                <form id="editarForm" method="POST" action="model/trem.php">
+                <form id="editarForm" method="POST" action="model/itinerario.php">
                     <div class="modal-body">
                         <input type="hidden" id="editarId" name="id" value="">
                         <div class="mb-3">
-                            <label for="editarModelo" class="form-label">Modelo <span class="text-danger">*</span></label>
-                            <input type="text" class="form-control" id="editarModelo" name="modelo" required maxlength="50">
+                            <label for="editarNome" class="form-label">Nome <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="editarNome" name="nome" required maxlength="100">
                         </div>
                         <div class="mb-3">
-                            <label for="editarTipoCarga" class="form-label">Tipo de Carga <span class="text-danger">*</span></label>
-                            <input type="text" class="form-control" id="editarTipoCarga" name="tipo_carga" required maxlength="50">
-                        </div>
-                        <div class="mb-3">
-                            <label for="editarStatus" class="form-label">Status</label>
-                            <select class="form-select" id="editarStatus" name="status" required>
-                                <option value="Disponível">Disponível</option>
-                                <option value="Em rota">Em rota</option>
-                                <option value="Em manutenção">Em manutenção</option>
-                            </select>
+                            <label for="editarDescricao" class="form-label">Descrição</label>
+                            <textarea class="form-control" id="editarDescricao" name="descricao" maxlength="255"></textarea>
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -414,18 +340,18 @@ $conn->close();
 
     <!-- Scripts JS Inline (para busca e edição) -->
     <script>
-        // Função para filtrar trens na tabela (client-side)
-        function filtrarTrens() {
+        // Função para filtrar itinerarios na tabela (client-side)
+        function filtrarItinerarios() {
             const input = document.getElementById('buscaInput');
             const filter = input.value.toLowerCase();
-            const table = document.getElementById('trensTable');
+            const table = document.getElementById('itinerariosTable');
             const tr = table.getElementsByTagName('tr');
 
             let visibleRows = 0;
             for (let i = 1; i < tr.length; i++) { // Pula o header (i=0)
-                const modelo = tr[i].getAttribute('data-modelo') || '';
-                const tipo = tr[i].getAttribute('data-tipo') || '';
-                if (modelo.includes(filter) || tipo.includes(filter)) {
+                const nome = tr[i].getAttribute('data-nome') || '';
+                const descricao = tr[i].getAttribute('data-descricao') || '';
+                if (nome.includes(filter) || descricao.includes(filter)) {
                     tr[i].style.display = '';
                     visibleRows++;
                 } else {
@@ -434,48 +360,46 @@ $conn->close();
             }
 
             // Atualiza mensagem se nenhum resultado
-            const noResultsRow = table.querySelector('tbody tr td[colspan="5"]');
+            const noResultsRow = table.querySelector('tbody tr td[colspan="4"]');
             if (visibleRows === 0 && filter !== '') {
-                if (!noResultsRow || noResultsRow.textContent !== 'Nenhum trem encontrado.') {
+                if (!noResultsRow || noResultsRow.textContent !== 'Nenhum itinerário encontrado.') {
                     const newRow = table.insertRow(-1);
                     const cell = newRow.insertCell(0);
-                    cell.colSpan = 5;
+                    cell.colSpan = 4;
                     cell.className = 'text-center text-light';
-                    cell.textContent = 'Nenhum trem encontrado.';
+                    cell.textContent = 'Nenhum itinerário encontrado.';
                     newRow.style.display = '';
                 }
             } else if (noResultsRow && filter === '') {
                 // Remove mensagem se busca vazia e há resultados
-                if (table.querySelector('tbody tr td[colspan="5"]')) {
-                    table.querySelector('tbody tr td[colspan="5"]').parentElement.remove();
+                if (table.querySelector('tbody tr td[colspan="4"]')) {
+                    table.querySelector('tbody tr td[colspan="4"]').parentElement.remove();
                 }
             }
         }
 
-        // Função para limpar modal ao adicionar novo trem
+        // Função para limpar modal ao adicionar novo itinerário
         function limparModalParaAdicionar() {
             // Limpa campos
             document.getElementById('editarId').value = ''; // ID vazio = INSERT no PHP
-            document.getElementById('editarModelo').value = ''; // Limpa input texto
-            document.getElementById('editarTipoCarga').value = ''; // Limpa input texto
-            document.getElementById('editarStatus').selectedIndex = 0; // Reseta select para primeira opção (Disponível)
+            document.getElementById('editarNome').value = ''; // Limpa input texto
+            document.getElementById('editarDescricao').value = ''; // Limpa textarea
 
             // Atualiza título do modal para "Adicionar"
-            document.getElementById('editarModalLabel').textContent = 'Adicionar Trem';
+            document.getElementById('editarModalLabel').textContent = 'Adicionar Itinerário';
 
             // Opcional: Foca no primeiro campo para UX
-            document.getElementById('editarModelo').focus();
+            document.getElementById('editarNome').focus();
         }
 
-        // Função para editar trem (popula modal)
-        function editarTrem(id, modelo, tipo_carga, status) {
+        // Função para editar itinerário (popula modal)
+        function editarItinerario(id, nome, descricao) {
             document.getElementById('editarId').value = id;
-            document.getElementById('editarModelo').value = modelo;
-            document.getElementById('editarTipoCarga').value = tipo_carga;
-            document.getElementById('editarStatus').value = status; // Seleciona o status exato
+            document.getElementById('editarNome').value = nome;
+            document.getElementById('editarDescricao').value = descricao;
 
             // Atualiza título para "Editar"
-            document.getElementById('editarModalLabel').textContent = 'Editar Trem';
+            document.getElementById('editarModalLabel').textContent = 'Editar Itinerário';
 
             const modal = new bootstrap.Modal(document.getElementById('editarModal'));
             modal.show();
@@ -483,7 +407,7 @@ $conn->close();
 
         // Event listener para busca em tempo real (opcional: digitação)
         document.getElementById('buscaInput').addEventListener('keyup', function() {
-            filtrarTrens();
+            filtrarItinerarios();
         });
 
         // Event listener para reset automático no show do modal (detecta origem)

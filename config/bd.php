@@ -26,11 +26,11 @@ $conn->set_charset("utf8");
 // ADM
 // Perfil -> Página de gerenciamento de usuários -- Editar cargo no modal
 // Perfil -> Página de gerenciamento de notificações
-// Gerenciamento -> CRUD para manutenção de trens
+// Gerenciamento -> CRUD para manutenção de trens --
 // Gerenciamento -> CRUD para gerenciamento de sensores --
-// Gerenciamento -> CRUD para gerenciamento de itinerários
+// Gerenciamento -> CRUD para gerenciamento de itinerários --
 // Gerenciamento -> CRUD para gerenciamento de linhas
-// Gerenciamento -> CRUD para gerenciamento de trens
+// Gerenciamento -> CRUD para gerenciamento de trens -- 
 
 // MAQUINISTA
 // Todas as páginas
