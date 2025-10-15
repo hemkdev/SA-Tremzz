@@ -264,15 +264,15 @@ $conn->close();
                                 <tr data-nome="<?php echo strtolower($itinerario['nome']); ?>" data-descricao="<?php echo strtolower($itinerario['descricao']); ?>">
                                     <td><?php echo $itinerario['id']; ?></td>
                                     <td><?php echo htmlspecialchars($itinerario['nome']); ?></td>
-                                    <td><?php echo htmlspecialchars($itinerario['descricao']); ?></td>
+                                    <td class="content-align-center" ><?php echo htmlspecialchars($itinerario['descricao']); ?></td>
                                     <td>
                                         <button class="btn btn-sm btn-warning me-1" onclick="editarItinerario(<?php echo $itinerario['id']; ?>, '<?php echo htmlspecialchars(addslashes($itinerario['nome'])); ?>', '<?php echo htmlspecialchars(addslashes($itinerario['descricao'])); ?>')">
                                             <i class="bi bi-pencil"></i> Editar
                                         </button>
 
-                                        <form method="POST" action="model/delete_itinerarios.php?id=<?php echo $itinerario['id']; ?>" style="display: inline;" onsubmit="return confirm('Deletar este itinerário? Ação irreversível!');">
+                                        <form method="POST" action="model/itinerario.php?id=<?php echo $itinerario['id']; ?>" style="display: inline;" onsubmit="return confirm('Deletar este itinerário? Ação irreversível!');">
                                             <input type="hidden" name="id" value="<?php echo $itinerario['id']; ?>">
-                                            <button type="submit" class="btn btn-sm btn-danger"><i class="bi bi-trash"></i> Deletar</button>
+                                            <button type="submit" class="btn btn-sm btn-danger" name="deletar" ><i class="bi bi-trash"></i> Deletar</button>
                                         </form>
                                     </td>
                                 </tr>

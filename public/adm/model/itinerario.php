@@ -7,7 +7,7 @@ if (!isset($_SESSION["conectado"]) || $_SESSION["conectado"] !== true || !isset(
     exit;
 }
 
-require "../../../config/bd.php"; // Sua conexão MySQLi (ajuste o caminho se necessário)
+require "../../../config/bd.php"; 
 
 // Processar apenas se for POST e o botão "editar" foi clicado
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['editar'])) {
