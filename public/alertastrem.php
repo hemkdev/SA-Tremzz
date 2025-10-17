@@ -374,6 +374,4 @@ $alertas = [
                             <small class="text-muted">${novoAlerta.horario}</small>
                         </div>
                         <p class="mb-1">${n
-            
-
-            }
+    

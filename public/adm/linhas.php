@@ -289,6 +289,7 @@ $conn->close();
                             <th>Itinerário</th>
                             <th>Maquinista</th>
                             <th>Trem</th>
+                            <th>Horário de Embarque</th>
                             <th>Estação Origem</th>
                             <th>Estação Destino</th>
                             <th>Via Estação</th>
@@ -303,6 +304,7 @@ $conn->close();
                                     <td><?php echo htmlspecialchars($rota['itinerario']); ?></td>
                                     <td><?php echo htmlspecialchars($rota['maquinista']); ?></td>
                                     <td><?php echo htmlspecialchars($rota['trem']); ?></td>
+                                    <td><?php echo htmlspecialchars($embarque['horario_embarque'] ?? 'N/A'); ?></td>
                                     <td><?php echo htmlspecialchars($rota['estacao_origem']); ?></td>
                                     <td><?php echo htmlspecialchars($rota['estacao_destino']); ?></td>
                                     <td><?php echo htmlspecialchars($rota['via_estacao'] ?? 'N/A'); ?></td>
