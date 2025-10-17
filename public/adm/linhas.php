@@ -65,7 +65,7 @@ $stmt_rotas = $conn->prepare("SELECT r.id, r.itinerario_id,
                               JOIN Estacoes ed ON r.estacao_destino_id = ed.id 
                               LEFT JOIN Estacoes ev ON r.via_estacao_id = ev.id 
                               $where_clause 
-                              ORDER BY r.id DESC 
+                              ORDER BY r.id ASC 
                               LIMIT 20");
 if (!empty($busca)) {
     $stmt_rotas->bind_param($types, ...$params);

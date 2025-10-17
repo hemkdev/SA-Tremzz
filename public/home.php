@@ -235,7 +235,7 @@ if (!isset($_SESSION["conectado"]) || $_SESSION["conectado"] !== true) {
                 </a>
                 
                 <!-- Status do meu trem -->
-                <a href="status_trem.php" class="servico-link">
+                <a href="embarque.php" class="servico-link">
                     <div class="card-servico card card-hover d-flex align-items-center rounded-3 flex-fill p-3">
                         <div class="servico-img flex-shrink-0">
                             <img src="../assets/img/trem.png" alt="Ícone de trem" class="service-img" />
@@ -247,7 +247,7 @@ if (!isset($_SESSION["conectado"]) || $_SESSION["conectado"] !== true) {
                 </a>
                 
                 <!-- Horários de Embarque -->
-                <a href="horarios.php" class="servico-link">
+                <a href="embarque.php" class="servico-link">
                     <div class="card-servico card card-hover d-flex align-items-center rounded-3 flex-fill p-3">
                         <div class="servico-img flex-shrink-0">
                             <img src="../assets/img/relogio.png" alt="Ícone de relógio" class="service-img" />
@@ -283,3 +283,4 @@ if (!isset($_SESSION["conectado"]) || $_SESSION["conectado"] !== true) {
 </body>
 
 </html>
+0

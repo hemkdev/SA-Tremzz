@@ -37,7 +37,7 @@ $types = empty($busca) ? "" : "ss";
 $stmt_itinerarios = $conn->prepare("SELECT i.id, i.nome, i.descricao 
                                    FROM itinerarios i 
                                    $where_clause 
-                                   ORDER BY i.id DESC 
+                                   ORDER BY i.id ASC 
                                    LIMIT 20"); // Paginação simples: 20 por página
 if (!empty($busca)) {
     $stmt_itinerarios->bind_param($types, ...$params);
