@@ -57,7 +57,6 @@ CREATE TABLE Rotas (
     estacao_origem_id INT NOT NULL,
     estacao_destino_id INT NOT NULL,
     via_estacao_id INT, 
-    duracao_estimada INT, 
     FOREIGN KEY (itinerario_id) REFERENCES Itinerarios(id) ON DELETE CASCADE,
     FOREIGN KEY (maquinista_id) REFERENCES usuarios(id) ON DELETE CASCADE,
     FOREIGN KEY (trem_id) REFERENCES Trens(id) ON DELETE CASCADE,

@@ -2,7 +2,7 @@
 
 $servidor = "localhost";
 $usuario = "root";
-$senha = "";
+$senha = "root";
 $dbname = "tremzz_db";
 
 $conn = new mysqli($servidor, $usuario, $senha, $dbname);
@@ -29,7 +29,7 @@ $conn->set_charset("utf8");
 // Gerenciamento -> CRUD para manutenção de trens --
 // Gerenciamento -> CRUD para gerenciamento de sensores --
 // Gerenciamento -> CRUD para gerenciamento de itinerários --
-// Gerenciamento -> CRUD para gerenciamento de rotas
+// Gerenciamento -> CRUD para gerenciamento de rotas --
 // Gerenciamento -> CRUD para gerenciamento de trens -- 
 
 // MAQUINISTA

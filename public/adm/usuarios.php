@@ -470,10 +470,7 @@ $conn->close();
             document.getElementById('editarNome').value = nome;
             document.getElementById('editarEmail').value = email;
             document.getElementById('editarTelefone').value = telefone;
-
-            // Trim e set cargo (remove espaços extras)
-            const cargoTrimmed = (cargo || 'Usuário').trim();
-            document.getElementById('editarCargo').value = cargoTrimmed;
+            document.getElementById('editarCargo').value = cargo;
 
             const modal = new bootstrap.Modal(document.getElementById('editarModal'));
             modal.show();
