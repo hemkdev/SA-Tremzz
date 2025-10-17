@@ -35,6 +35,6 @@ INSERT INTO trens (modelo, tipo_carga, status) VALUES
     ('Trem de passageiros', 'Passageiros', 'Em rota'),
     ('Trem expresso', 'Correio e encomendas', 'Em manutenção');
 
-INSERT INTO rotas (itinerario_id, maquinista_id, trem_id, estacao_origem_id, estacao_destino_id, via_estacao_id, duracao_estimada) VALUES
+INSERT INTO rotas (itinerario_id, maquinista_id, trem_id, estacao_origem_id, estacao_destino_id, via_estacao_id) VALUES
     (1, 2, 1, 1, 4, 2),
     (2, 3, 2, 4, 3, NULL);

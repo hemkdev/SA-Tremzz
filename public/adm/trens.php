@@ -41,7 +41,7 @@ $types = empty($busca) ? "" : "ss";
 $stmt_trens = $conn->prepare("SELECT t.id, t.modelo, t.tipo_carga, t.status 
                                    FROM Trens t 
                                    $where_clause 
-                                   ORDER BY t.id DESC 
+                                   ORDER BY t.id ASC 
                                    LIMIT 20"); // Paginação simples: 20 por página
 if (!empty($busca)) {
     $stmt_trens->bind_param($types, ...$params);

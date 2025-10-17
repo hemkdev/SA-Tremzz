@@ -41,7 +41,7 @@ $types = empty($busca) ? "" : "ss";
 
 $stmt_sensores = $conn->prepare("SELECT id, localizacao, tipo, data_hora_adicao 
                                      FROM sensores $where_clause 
-                                     ORDER BY id DESC 
+                                     ORDER BY id ASC 
                                      LIMIT 20"); // Paginação simples: 20 por página
 if (!empty($busca)) {
     $stmt_sensores->bind_param($types, ...$params);

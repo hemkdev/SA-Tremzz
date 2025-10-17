@@ -44,7 +44,7 @@ $types = "isss";
 
 $stmt_usuarios = $conn->prepare("SELECT u.id, u.nome, u.email, u.telefone, u.cargo 
                                      FROM usuarios u $where_clause 
-                                     ORDER BY u.id DESC 
+                                     ORDER BY u.id ASC 
                                      LIMIT 20"); // Paginação simples: 20 por página
 $stmt_usuarios->bind_param($types, ...$params);
 $stmt_usuarios->execute();
