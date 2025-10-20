@@ -144,6 +144,56 @@ if (!isset($_SESSION["admin"]) || $_SESSION["admin"] !== true) {
                 font-size: 0.9rem;
             }
         }
+
+        @media (max-width: 480px) {
+            header { padding-top: 1rem; }
+            .d-flex.justify-content-between { flex-wrap: nowrap; }
+            .text-oi { text-align: left; }
+            .pfp { text-align: right; }
+            .gerenciamento-titulo { text-align: center; width: 100%; }
+
+            .gerenciamento-cards {
+                padding: 0 1rem;
+                display: grid !important;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 0.6rem;
+                align-items: stretch;
+            }
+
+            .card-gerenciamento {
+                flex: unset !important;
+                max-width: 100% !important;
+                padding: 0.6rem 0.5rem;
+                aspect-ratio: 1 / 1;
+                height: auto;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+            }
+
+            .gerenciamento-icon {
+                font-size: 2rem;
+                margin-bottom: 0.6rem;
+            }
+
+            .gerenciamento-text h5 {
+                font-size: 0.95rem;
+                margin-bottom: 0.25rem;
+            }
+
+            .gerenciamento-text p {
+                font-size: 0.8rem;
+            }
+        }
+        /* ADM HEADER OVERRIDE: manter título à esquerda e pfp à direita em telas <480px */
+        @media (max-width: 480px) {
+            nav.navbar .container-fluid .d-flex { flex-direction: row !important; justify-content: space-between !important; align-items: center !important; gap: .5rem; }
+            .navbar .text-oi { text-align: left !important; }
+            .navbar .pfp { margin-left: auto !important; text-align: right !important; }
+            .navbar { padding-top: .6rem !important; padding-bottom: .25rem !important; }
+            .text-danger.fw-bold.fs-4, .text-danger.fw-bold.fs-5, .text-danger.fw-bold.fs-3 { text-align: center !important; display: block; width: 100%; }
+        }
     </style>
 </head>
 
@@ -154,7 +204,7 @@ if (!isset($_SESSION["admin"]) || $_SESSION["admin"] !== true) {
             <div class="container-fluid">
                 <div class="d-flex justify-content-between align-items-center w-100">
                     <div class="text-oi">
-                        <h1 class="text-light fw-bold mb-0 fs-3">Gerenciamento</h1>
+                        <h1 class="header-titulo text-light fw-bold mb-0 fs-3">Gerenciamento</h1>
                     </div>
                     <div class="pfp">
                         <img src="<?php echo htmlspecialchars($_SESSION["foto"] ?? '../../assets/img/perfil.png'); ?>" alt="Foto de perfil" class="pfp-img" />

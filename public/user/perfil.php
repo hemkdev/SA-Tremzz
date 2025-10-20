@@ -1,7 +1,7 @@
 <?php
 session_start();
 if (!isset($_SESSION["conectado"]) || $_SESSION["conectado"] !== true) {
-    header("Location: login.php");
+    header("Location: ../login.php");
     exit;
 }
 
@@ -14,7 +14,7 @@ if (!isset($_SESSION["conectado"]) || $_SESSION["conectado"] !== true) {
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>TREMzz - Perfil</title>
-    <link rel="shortcut icon" href="../assets/img/tremzz_logo.png" />
+    <link rel="shortcut icon" href="../../assets/img/tremzz_logo.png" />
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
     <!-- Fonte Poppins -->
@@ -57,7 +57,7 @@ if (!isset($_SESSION["conectado"]) || $_SESSION["conectado"] !== true) {
             display: block;
             margin: 0 auto 1rem;
         }
-        
+
         #quadrado {
             background-color: #1e1e1e;
         }
@@ -113,9 +113,7 @@ if (!isset($_SESSION["conectado"]) || $_SESSION["conectado"] !== true) {
 
         .footer-icon:hover img,
         .footer-icon.active img {
-            filter: brightness(0) invert(1)          
-            drop-shadow(0 0 15px rgba(255, 193, 7, 0.8))
-            sepia(1) saturate(5) hue-rotate(-10deg);
+            filter: brightness(0) invert(1) drop-shadow(0 0 15px rgba(255, 193, 7, 0.8)) sepia(1) saturate(5) hue-rotate(-10deg);
         }
 
         .rodape {
@@ -152,6 +150,30 @@ if (!isset($_SESSION["conectado"]) || $_SESSION["conectado"] !== true) {
                 font-size: 0.9rem;
             }
         }
+
+        /* Small-screen header tweaks: keep header layout, add small top padding, center red subtitles only */
+        @media (max-width: 480px) {
+            .navbar {
+                padding-top: .6rem !important;
+                padding-bottom: .25rem !important;
+            }
+
+            .text-oi {
+                text-align: left;
+            }
+
+            .pfp {
+                text-align: right;
+            }
+
+            .text-danger.fw-bold.fs-4,
+            .text-danger.fw-bold.fs-5,
+            .text-danger.fw-bold.fs-3 {
+                text-align: center;
+                display: block;
+                width: 100%;
+            }
+        }
     </style>
 </head>
 
@@ -165,7 +187,7 @@ if (!isset($_SESSION["conectado"]) || $_SESSION["conectado"] !== true) {
                         <h1 class="text-light fw-bold mb-0 fs-3">Perfil</h1>
                     </div>
                     <div class="pfp">
-                        <img src="<?php echo htmlspecialchars($_SESSION['foto'] ?? '../assets/img/perfil.png'); ?>" alt="Foto de perfil" class="pfp-img" />
+                        <img src="<?php echo htmlspecialchars($_SESSION['foto'] ?? '../../assets/img/perfil.png'); ?>" alt="Foto de perfil" class="pfp-img" />
                     </div>
                 </div>
             </div>
@@ -176,7 +198,7 @@ if (!isset($_SESSION["conectado"]) || $_SESSION["conectado"] !== true) {
 
         <!-- Seção de perfil principal -->
         <section class="perfil-header card rounded-3 text-center mb-4 p-4" id="quadrado">
-            <img src="<?php echo htmlspecialchars($_SESSION['foto'] ?? '../assets/img/perfil.png'); ?>" alt="Foto de perfil" class="perfil-foto" />
+            <img src="<?php echo htmlspecialchars($_SESSION['foto'] ?? '../../assets/img/perfil.png'); ?>" alt="Foto de perfil" class="perfil-foto" />
             <div class="perfil-nome fw-bold fs-4 text-light mb-2">
                 <?php echo htmlspecialchars($_SESSION['nome']); ?>
             </div>
@@ -191,7 +213,7 @@ if (!isset($_SESSION["conectado"]) || $_SESSION["conectado"] !== true) {
             <div class="opcoes-cards d-flex flex-wrap justify-content-between gap-3">
                 <a href="editarperfil.php" class="card-opcao" tabindex="0" aria-label="Editar informações do perfil">
                     <div class="opcao-img">
-                        <img src="../assets/img/perfil.png" alt="Ícone de perfil" />
+                        <img src="../../assets/img/perfil.png" alt="Ícone de perfil" />
                     </div>
                     <div class="opcao-text">
                         <h5>Editar Informações</h5>
@@ -200,7 +222,7 @@ if (!isset($_SESSION["conectado"]) || $_SESSION["conectado"] !== true) {
                 </a>
                 <a href="#" class="card-opcao" tabindex="0" aria-label="Ajustes de notificações">
                     <div class="opcao-img">
-                        <img src="../assets/img/alerta.png" alt="Ícone de alerta" />
+                        <img src="../../assets/img/alerta.png" alt="Ícone de alerta" />
                     </div>
                     <div class="opcao-text">
                         <h5>Notificações</h5>
@@ -209,34 +231,34 @@ if (!isset($_SESSION["conectado"]) || $_SESSION["conectado"] !== true) {
                 </a>
                 <a href="privacidade.php" class="card-opcao" tabindex="0" aria-label="Configurações de privacidade">
                     <div class="opcao-img">
-                        <img src="../assets/img/seguranca.png" alt="Ícone de segurança" />
+                        <img src="../../assets/img/seguranca.png" alt="Ícone de segurança" />
                     </div>
                     <div class="opcao-text">
                         <h5>Privacidade e Segurança</h5>
                         <p>Proteja sua conta</p>
                     </div>
                 </a>
-                <a href="sobre.php" class="card-opcao" tabindex="0" aria-label="Sobre o aplicativo TREMzz">
+                <a href="../sobre.php" class="card-opcao" tabindex="0" aria-label="Sobre o aplicativo TREMzz">
                     <div class="opcao-img">
-                        <img src="../assets/img/info.png" alt="Ícone de informação" />
+                        <img src="../../assets/img/info.png" alt="Ícone de informação" />
                     </div>
                     <div class="opcao-text">
                         <h5>Sobre o TREMzz</h5>
                         <p>Versão e informações</p>
                     </div>
                 </a>
-                <a href="ajuda-suporte.php" class="card-opcao" tabindex="0" aria-label="Ajuda e suporte">
+                <a href="../ajuda-suporte.php" class="card-opcao" tabindex="0" aria-label="Ajuda e suporte">
                     <div class="opcao-img">
-                        <img src="../assets/img/chat.png" alt="Ícone de chat" />
+                        <img src="../../assets/img/chat.png" alt="Ícone de chat" />
                     </div>
                     <div class="opcao-text">
                         <h5>Ajuda e Suporte</h5>
                         <p>Entre em contato conosco</p>
                     </div>
                 </a>
-                <a name="logout" href="logout.php" class="card-opcao" tabindex="0" aria-label="Sair da conta" >
+                <a name="logout" href="../logout.php" class="card-opcao" tabindex="0" aria-label="Sair da conta">
                     <div class="opcao-img">
-                        <img src="../assets/img/sair.png" alt="Ícone de saída" />
+                        <img src="../../assets/img/sair.png" alt="Ícone de saída" />
                     </div>
                     <div class="opcao-text">
                         <h5>Sair da Conta</h5>
@@ -250,16 +272,16 @@ if (!isset($_SESSION["conectado"]) || $_SESSION["conectado"] !== true) {
     <footer class="rodape position-fixed bottom-0 w-100 py-2 px-3" style="max-width: 900px; margin: 0 auto; left: 50%; transform: translateX(-50%); z-index: 1000;" role="contentinfo" aria-label="Menu de navegação inferior">
         <div class="d-flex justify-content-around align-items-center">
             <a href="home.php" class="footer-icon text-center text-decoration-none p-2" aria-label="Início">
-                <img src="../assets/img/casa.png" alt="Início" />
+                <img src="../../assets/img/casa.png" alt="Início" />
             </a>
             <a href="buscar.php" class="footer-icon text-center text-decoration-none p-2" aria-label="Buscar">
-                <img src="../assets/img/lupa.png" alt="Buscar" />
+                <img src="../../assets/img/lupa.png" alt="Buscar" />
             </a>
             <a href="chat.php" class="footer-icon text-center text-decoration-none p-2" aria-label="Chat">
-                <img src="../assets/img/chat.png" alt="Chat" />
+                <img src="../../assets/img/chat.png" alt="Chat" />
             </a>
             <a href="perfil.php" class="footer-icon active text-center text-decoration-none p-2" aria-label="Perfil">
-                <img src="../assets/img/perfil.png" alt="Perfil" />
+                <img src="../../assets/img/perfil.png" alt="Perfil" />
             </a>
         </div>
     </footer>

@@ -142,16 +142,16 @@ if (!isset($_SESSION["admin"]) && !isset($_SESSION["maquinista"]) && !isset($_SE
     <!-- Footer (mantido idêntico ao dashboard) -->
     <footer class="rodape position-fixed bottom-0 w-100 py-2 px-3" style="max-width: 900px; margin: 0 auto; left: 50%; transform: translateX(-50%);" role="contentinfo" aria-label="Menu de navegação inferior">
         <div class="d-flex justify-content-around align-items-center">
-            <a href="<?php echo htmlspecialchars($home); ?>" class="footer-icon text-center text-decoration-none p-2" aria-label="Início">
+            <a href="user/home.php" class="footer-icon text-center text-decoration-none p-2" aria-label="Início">
                 <img src="../assets/img/casa.png" alt="Ícone Início" />
             </a>
-            <a href="<?php echo htmlspecialchars($arquivo); ?>" class="footer-icon text-center text-decoration-none p-2" aria-label="Buscar">
-                <img src="../assets/img/<?php echo htmlspecialchars($icone); ?>" alt="Ícone Buscar" />  <!-- Padronizei o caminho para ../ -->
+            <a href="user/buscar.php" class="footer-icon text-center text-decoration-none p-2" aria-label="Buscar">
+                <img src="../assets/img/lupa.png" alt="Ícone Buscar" />
             </a>
-            <a href="<?php echo htmlspecialchars($chat); ?>" class="footer-icon text-center text-decoration-none p-2" aria-label="Chat">
+            <a href="user/chat.php" class="footer-icon text-center text-decoration-none p-2" aria-label="Chat">
                 <img src="../assets/img/chat.png" alt="Ícone Chat" />
             </a>
-            <a href="<?php echo htmlspecialchars($perfil); ?>" class="footer-icon text-center text-decoration-none p-2" aria-label="Perfil">
+            <a href="user/perfil.php" class="footer-icon text-center text-decoration-none p-2" aria-label="Perfil">
                 <img src="../assets/img/perfil.png" alt="Ícone Perfil" />
             </a>
         </div>

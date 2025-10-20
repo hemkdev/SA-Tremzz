@@ -1,19 +1,14 @@
 <?php
 session_start();
-require "../config/bd.php";
+require "../../config/bd.php";
 
 $_SESSION['erro'] = "";
 $_SESSION['sucesso'] = "";
 
+
 // Verificação de login
 if (!isset($_SESSION["conectado"]) || $_SESSION["conectado"] !== true) {
     header("Location: login.php");
-    exit;
-}
-
-if (!isset($_SESSION['id'])) {
-    $_SESSION['erro'] = "ID de usuário não encontrado na sessão.";
-    header("Location: perfil.php");
     exit;
 }
 
@@ -28,62 +23,88 @@ unset($_SESSION['erro'], $_SESSION['sucesso']); // Limpa para próxima vez
 
 if (isset($_POST['editar'])) {
     $nome = trim($_POST["nome"] ?? "");
-    $email = trim($_POST["email"] ?? "");
-    $senha = trim($_POST["senha"] ?? "");
+    $alteracao_feita = false;
+    $erros = [];
 
-    // Validação básica (senha opcional)
-    if (empty($nome) || empty($email)) {
-        $_SESSION['erro'] = "Nome e email são obrigatórios.";
-    } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        $_SESSION['erro'] = "Email inválido.";
-    } elseif (!empty($senha) && strlen($senha) < 6) {
-        $_SESSION['erro'] = "Senha deve ter pelo menos 6 caracteres.";
+    // Processar edição de nome
+    $stmt_nome = $conn->prepare("UPDATE usuarios SET nome = ? WHERE id = ?");
+    if (!$stmt_nome) {
+        $erros[] = "Erro ao preparar query para nome: " . $conn->error;
     } else {
-        // Senha: Se vazia, busca atual do BD
-        $senha_hash = '';
-        if (empty($senha)) {
-            $stmt_atual = $conn->prepare("SELECT senha FROM usuarios WHERE id = ?");
-            if ($stmt_atual) {
-                $stmt_atual->bind_param("i", $id);
-                $stmt_atual->execute();
-                $result = $stmt_atual->get_result();
-                if ($row = $result->fetch_assoc()) {
-                    $senha_hash = $row['senha']; // Mantém a senha atual
-                } else {
-                    $_SESSION['erro'] = "Usuário não encontrado no BD.";
-                }
-                $stmt_atual->close();
-            } else {
-                $_SESSION['erro'] = "Erro ao buscar senha atual: " . $conn->error;
+        $stmt_nome->bind_param("si", $nome, $id);
+        if ($stmt_nome->execute()) {
+            if ($stmt_nome->affected_rows > 0) {
+                $_SESSION['nome'] = $nome; // Atualiza sessão
+                $alteracao_feita = true;
             }
         } else {
-            $senha_hash = password_hash($senha, PASSWORD_DEFAULT); // Hash novo
+            $erros[] = "Erro ao executar atualização de nome: " . $stmt_nome->error;
+        }
+        $stmt_nome->close();
+    }
+
+    // Processar upload de foto (se enviada)
+    $foto_atual = $_SESSION['foto'] ?? '../../assets/img/perfil.png';
+    if (isset($_FILES['foto']) && $_FILES['foto']['error'] === UPLOAD_ERR_OK) {
+    $upload_dir = '../../assets/img/usuarios/';
+        if (!is_dir($upload_dir)) {
+            mkdir($upload_dir, 0777, true);
         }
 
-        if (empty($_SESSION['erro'])) { // Só prossegue se sem erro
-            // Prepared statement com placeholders corretos
-            $stmt = $conn->prepare("UPDATE usuarios SET nome = ?, email = ?, senha = ? WHERE id = ?");
-            if (!$stmt) {
-                $_SESSION['erro'] = "Erro ao preparar query: " . $conn->error;
-            } else {
-                $stmt->bind_param("sssi", $nome, $email, $senha_hash, $id); // Agora $id existe
-                if ($stmt->execute()) {
-                    if ($stmt->affected_rows > 0) {
-                        $_SESSION['nome'] = $nome; // Atualiza sessão
-                        $_SESSION['email'] = $email;
-                        $_SESSION['sucesso'] = "Perfil atualizado com sucesso!";
-                        $sucesso = true;
-                        header("Location: perfil.php?sucesso=1"); // Redirect com param
-                        exit;
-                    } else {
-                        $_SESSION['erro'] = "Nenhuma alteração foi feita (valores iguais aos atuais).";
-                    }
-                } else {
-                    $_SESSION['erro'] = "Erro ao executar: " . $stmt->error;
+        $file_name = $_FILES['foto']['name'];
+        $file_tmp = $_FILES['foto']['tmp_name'];
+        $file_size = $_FILES['foto']['size'];
+        $file_extension = strtolower(pathinfo($file_name, PATHINFO_EXTENSION));
+
+        // Validações
+        $allowed_extensions = ['jpg', 'jpeg', 'png', 'gif'];
+        $max_size = 5 * 1024 * 1024; // 5MB
+
+        if (!in_array($file_extension, $allowed_extensions)) {
+            $erros[] = "Tipo de arquivo não permitido. Use JPG, JPEG, PNG ou GIF.";
+        } elseif ($file_size > $max_size) {
+            $erros[] = "Arquivo muito grande. Máximo 5MB.";
+        } else {
+            // Gerar nome único para o arquivo
+            $new_filename = 'usuario_' . $id . '_' . time() . '.' . $file_extension;
+            $upload_path = $upload_dir . $new_filename;
+
+        if (move_uploaded_file($file_tmp, $upload_path)) {
+            // Deletar foto antiga se não for a padrão
+            if ($foto_atual !== '../../assets/img/perfil.png' && file_exists($foto_atual)) {
+                    unlink($foto_atual);
                 }
-                $stmt->close();
+
+                // Atualizar banco de dados
+                $stmt_foto = $conn->prepare("UPDATE usuarios SET foto = ? WHERE id = ?");
+                if (!$stmt_foto) {
+                    $erros[] = "Erro ao preparar query para foto: " . $conn->error;
+                } else {
+                    $stmt_foto->bind_param("si", $upload_path, $id); // "s" para string (caminho), "i" para int (id)
+                    if ($stmt_foto->execute() && $stmt_foto->affected_rows > 0) {
+                        $_SESSION['foto'] = $upload_path; // Atualiza sessão
+                        $alteracao_feita = true;
+                    } else {
+                        $erros[] = "Erro ao atualizar foto no banco de dados: " . $stmt_foto->error;
+                    }
+                    $stmt_foto->close();
+                }
+            } else {
+                $erros[] = "Erro ao mover o arquivo para o servidor.";
             }
         }
+    }
+
+    // Definir mensagens baseadas nos resultados
+    if (!empty($erros)) {
+        $_SESSION['erro'] = implode(' ', $erros);
+    } elseif ($alteracao_feita) {
+        $_SESSION['sucesso'] = "Perfil atualizado com sucesso!";
+        $sucesso = true;
+        header("Location: perfil.php?sucesso=1"); // Redirect com param
+        exit;
+    } else {
+        $_SESSION['erro'] = "Nenhuma alteração foi feita (valores iguais aos atuais).";
     }
 }
 
@@ -99,7 +120,7 @@ if (isset($conn)) {
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>TREMzz - Editar Perfil</title>
-    <<link rel="shortcut icon" href="../assets/img/tremzz_logo.png" />
+    <link rel="shortcut icon" href="../../assets/img/tremzz_logo.png" />
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
     <!-- Fonte Poppins -->
@@ -110,7 +131,7 @@ if (isset($conn)) {
         rel="stylesheet" />
     <!-- Bootstrap Icons para ícones opcionais -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
-    
+
     <!-- CSS mínimo para fundos exatos, hovers e filtros (essencial para fidelidade ao tema) -->
     <style>
         body {
@@ -120,13 +141,16 @@ if (isset($conn)) {
             min-height: 100vh;
             padding-bottom: 70px;
         }
+
         .bg-custom {
             background-color: #1e1e1e !important;
         }
+
         .bg-custom-hover:hover {
             background-color: #2a2a2a !important;
             color: #fff !important;
         }
+
         .pfp-img {
             width: 50px;
             height: 50px;
@@ -135,6 +159,7 @@ if (isset($conn)) {
             border: 2px solid transparent;
             transition: border-color 0.3s ease;
         }
+
         .perfil-foto {
             width: 120px;
             height: 120px;
@@ -145,55 +170,72 @@ if (isset($conn)) {
             border: 2px solid transparent;
             transition: border-color 0.3s ease;
         }
+
         .foto-container {
             position: relative;
             display: inline-block;
             cursor: pointer;
         }
+
         .foto-container .badge {
             opacity: 0;
             transition: opacity 0.3s ease;
             transform: translate(-50%, -50%);
         }
+
         .foto-container:hover .badge {
             opacity: 1;
         }
+
         .form-control-custom {
             background-color: #2a2a2a !important;
             color: #e0e0e0 !important;
             border: #121212;
         }
+
         .form-control-custom:focus {
             background-color: #2a2a2a !important;
             color: #e0e0e0 !important;
         }
+
         .form-control-custom::placeholder {
             color: #b0b0b0 !important;
         }
+
         .footer-icon img {
             width: 28px;
             height: 28px;
             filter: brightness(0) invert(1);
             transition: filter 0.3s ease;
         }
+
         .footer-icon:hover img,
         .footer-icon.active img {
-            filter: brightness(0) invert(1)          
-            drop-shadow(0 0 15px rgba(255, 193, 7, 0.8))
-            sepia(1) saturate(5) hue-rotate(-10deg);
+            filter: brightness(0) invert(1) drop-shadow(0 0 15px rgba(255, 193, 7, 0.8)) sepia(1) saturate(5) hue-rotate(-10deg);
         }
+
         .rodape {
             background-color: #121212;
             border: none;
             box-shadow: none;
             z-index: 1000;
         }
+
         /* Responsividade mínima para mobile */
         @media (max-width: 768px) {
             .perfil-foto {
                 width: 100px;
                 height: 100px;
             }
+        }
+        /* Small-screen header tweaks: keep header layout, add small top padding, center red subtitles only */
+        @media (max-width: 480px) {
+            .navbar { padding-top: .6rem !important; padding-bottom: .25rem !important; }
+            .text-oi { text-align: left; }
+            .pfp { text-align: right; }
+            .text-danger.fw-bold.fs-4,
+            .text-danger.fw-bold.fs-5,
+            .text-danger.fw-bold.fs-3 { text-align: center; display: block; width: 100%; }
         }
     </style>
 </head>
@@ -205,10 +247,10 @@ if (isset($conn)) {
             <div class="container-fluid">
                 <div class="d-flex justify-content-between align-items-center w-100">
                     <div class="text-oi">
-                        <h1 class="text-light fw-bold mb-0 fs-3">Privacidade e Segurança</h1>
+                        <h1 class="text-light fw-bold mb-0 fs-3">Editar Perfil</h1>
                     </div>
                     <div class="pfp">
-                        <img src="<?php echo htmlspecialchars($_SESSION['foto'] ?? '../assets/img/perfil.png'); ?>" alt="Foto de perfil" class="pfp-img" />
+                        <img src="<?php echo htmlspecialchars($_SESSION['foto'] ?? '../../assets/img/perfil.png'); ?>" alt="Foto de perfil" class="pfp-img" />
                     </div>
                 </div>
             </div>
@@ -223,51 +265,28 @@ if (isset($conn)) {
             </div>
         <?php endif; ?>
 
-        <!-- Alert de Sucesso (se processado na mesma página) -->
-        <?php if (!empty($sucesso_msg)): ?>
-            <div class="alert alert-success text-center rounded-3" role="alert">
-                <?php echo htmlspecialchars($sucesso_msg); ?>
-            </div>
-        <?php endif; ?>
-
         <!-- Seção de edição principal -->
         <section class="perfil-header card bg-custom rounded-3 text-center mb-4 p-4">
             <form id="editProfileForm" method="POST" action="" enctype="multipart/form-data">
-    
 
-                <!-- Email -->
+                <!-- Foto de perfil -->
                 <div class="mb-3">
-                    <label for="email" class="form-label fw-bold fs-6 text-light mb-2">Email</label>
-                    <input type="email" class="form-control form-control-custom fs-6 text-center" id="email" name="email" value="<?php echo htmlspecialchars($_SESSION['email'] ?? ''); ?>" placeholder="Digite seu email" required />
+                    <label for="fotoPerfil" class="foto-container">
+                        <img src="<?php echo htmlspecialchars($_SESSION['foto'] ?? '../../assets/img/perfil.png'); ?>" alt="Foto de perfil" id="previewFoto" class="perfil-foto" />
+                        <span class="position-absolute top-0 start-50 translate-middle badge rounded-pill bg-danger">
+                            <i class="bi bi-camera-fill"></i> Alterar
+                        </span>
+                    </label>
+                    <small class="text-white d-block text-center mt-2">Apenas imagens (JPG, PNG, GIF). Máximo 5MB.</small>
+                    <input type="file" class="form-control form-control-custom mt-2 d-none" id="fotoPerfil" name="foto" accept="image/*" onchange="previewImage(this)" />
                 </div>
 
-                <!-- Telefone -->
+                <!-- Nome -->
                 <div class="mb-3">
-                    <label for="telefone" class="form-label fw-bold fs-6 text-light mb-2">Telefone</label>
-                    <input type="telefone" class="form-control form-control-custom fs-6 text-center" id="telefone" name="telefone" value="<?php echo htmlspecialchars($_SESSION['telefone'] ?? ''); ?>" placeholder="Adicionar Telefone" required />
-                </div>
-
-                      <!-- Senha -->
-                <div class="mb-3 position-relative">
-                    <label for="senha" class="form-label fw-bold fs-6 text-light mb-2">Mudar Senha</label>
+                    <label for="nome" class="form-label fw-bold fs-4 text-light mb-2">Nome Completo</label>
                     <div class="input-group">
-                        <input type="password" class="form-control form-control-custom fs-6 text-center" id="senha" name="senha" value="" placeholder="Adicionar Nova Senha" required />
-                        <button type="button" class="btn btn-outline-secondary" id="toggleSenha" tabindex="-1" style="border-radius: 0 0.375rem 0.375rem 0;">
-                            <i class="bi bi-eye" id="iconSenha"></i>
-                        </button>
+                        <input type="text" class="form-control form-control-custom fs-5 text-center" id="nome" name="nome" value="<?php echo htmlspecialchars($_SESSION['nome'] ?? ''); ?>" placeholder="Digite seu nome" required />
                     </div>
-                </div>
-
-                <!-- Autenticação de Dois Fatores -->
-                <div class="mb-3">
-                    <label class="form-label fw-bold fs-6 text-light mb-2">Autenticação de Dois Fatores</label>
-                    <div class="form-check form-switch d-flex justify-content-center">
-                        <input class="form-check-input" type="checkbox" id="doisFatores" name="doisFatores" <?php echo !empty($_SESSION['doisFatores']) ? 'checked' : ''; ?>>
-                        <label class="form-check-label ms-2" for="doisFatores" style="color: #e0e0e0;">
-                            Ativar autenticação via código SMS
-                        </label>
-                    </div>
-                    <small class="text-secondary">Receba um código por SMS ou Email ao fazer login.</small>
                 </div>
 
                 <!-- Botões de ação -->
@@ -277,23 +296,6 @@ if (isset($conn)) {
                 </div>
             </form>
         </section>
-
-        <script>
-                    const senhaInput = document.getElementById('senha');
-                    const toggleSenha = document.getElementById('toggleSenha');
-                    const iconSenha = document.getElementById('iconSenha');
-                    toggleSenha.addEventListener('click', function () {
-                        if (senhaInput.type === 'password') {
-                            senhaInput.type = 'text';
-                            iconSenha.classList.remove('bi-eye');
-                            iconSenha.classList.add('bi-eye-slash');
-                        } else {
-                            senhaInput.type = 'password';
-                            iconSenha.classList.remove('bi-eye-slash');
-                            iconSenha.classList.add('bi-eye');
-                        }
-                    });
-                </script>
 
         <!-- Suporte a GET sucesso (para redirect) -->
         <?php if (isset($_GET['sucesso'])): ?>
@@ -307,19 +309,32 @@ if (isset($conn)) {
     <footer class="rodape position-fixed bottom-0 w-100 py-2 px-3" style="max-width: 900px; margin: 0 auto; left: 50%; transform: translateX(-50%); z-index: 1000;" role="contentinfo" aria-label="Menu de navegação inferior">
         <div class="d-flex justify-content-around align-items-center">
             <a href="home.php" class="footer-icon text-center text-decoration-none p-2" aria-label="Início">
-                <img src="../assets/img/casa.png" alt="Início" />
+                <img src="../../assets/img/casa.png" alt="Início" />
             </a>
             <a href="buscar.php" class="footer-icon text-center text-decoration-none p-2" aria-label="Buscar">
-                <img src="../assets/img/lupa.png" alt="Buscar" />
+                <img src="../../assets/img/lupa.png" alt="Buscar" />
             </a>
             <a href="chat.php" class="footer-icon text-center text-decoration-none p-2" aria-label="Chat">
-                <img src="../assets/img/chat.png" alt="Chat" />
+                <img src="../../assets/img/chat.png" alt="Chat" />
             </a>
             <a href="perfil.php" class="footer-icon text-center text-decoration-none p-2" aria-label="Perfil">
-                <img src="../assets/img/perfil.png" alt="Perfil" />
+                <img src="../../assets/img/perfil.png" alt="Perfil" />
             </a>
         </div>
     </footer>
+
+    <!-- Script para preview da imagem -->
+    <script>
+        function previewImage(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('previewFoto').src = e.target.result;
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+    </script>
 
 </body>
 

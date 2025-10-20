@@ -17,7 +17,7 @@ $conn->set_charset("utf8");
 // FALTANTES //
 
 // USUÁRIO
-// Perfil -> Página de suporte
+// Perfil -> Página de suporte/FAQ --
 // Perfil -> Página de notificações
 // Perfil -> Privacidade -> Verificação de telefone
 // Perfil -> Página de ultimas atividades/Relatórios

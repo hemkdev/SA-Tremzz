@@ -1,7 +1,7 @@
 <?php
 session_start();
 if (!isset($_SESSION["conectado"]) || $_SESSION["conectado"] !== true) {
-    header("Location: login.php");
+    header("Location: ../login.php");
     exit;
 }
 ?>
@@ -13,7 +13,7 @@ if (!isset($_SESSION["conectado"]) || $_SESSION["conectado"] !== true) {
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>TREMzz - Buscar</title>
-    <link rel="shortcut icon" href="../assets/img/tremzz_logo.png" />
+    <link rel="shortcut icon" href="../../assets/img/tremzz_logo.png" />
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
     <!-- Fonte Poppins -->
@@ -128,6 +128,15 @@ if (!isset($_SESSION["conectado"]) || $_SESSION["conectado"] !== true) {
                 height: 400px;
             }
         }
+        /* Small-screen header tweaks: keep header layout, add small top padding, center red subtitles only */
+        @media (max-width: 480px) {
+            .navbar { padding-top: .6rem !important; padding-bottom: .25rem !important; }
+            .text-oi { text-align: left; }
+            .pfp { text-align: right; }
+            .text-danger.fw-bold.fs-4,
+            .text-danger.fw-bold.fs-5,
+            .text-danger.fw-bold.fs-3 { text-align: center; display: block; width: 100%; }
+        }
     </style>
 </head>
 
@@ -141,7 +150,7 @@ if (!isset($_SESSION["conectado"]) || $_SESSION["conectado"] !== true) {
                         <h1 class="text-light fw-bold mb-0 fs-3">Olá, <?php echo htmlspecialchars($_SESSION['nome']); ?>!</h1>
                     </div>
                     <div class="pfp">
-                        <img src="<?php echo htmlspecialchars($_SESSION['foto'] ?? '../assets/img/perfil.png'); ?>" alt="Foto de perfil" class="pfp-img" />
+                        <img src="<?php echo htmlspecialchars($_SESSION['foto'] ?? '../../assets/img/perfil.png'); ?>" alt="Foto de perfil" class="pfp-img" />
                     </div>
                 </div>
             </div>
@@ -157,7 +166,7 @@ if (!isset($_SESSION["conectado"]) || $_SESSION["conectado"] !== true) {
                 </div>
             </div>
             <div class="img-bar">
-                <img src="../assets/img/lupa.png" alt="Ícone de lupa para busca" class="search-icon" id="searchBtn" />
+                <img src="../../assets/img/lupa.png" alt="Ícone de lupa para busca" class="search-icon" id="searchBtn" />
             </div>
         </div>
     </header>
@@ -178,16 +187,16 @@ if (!isset($_SESSION["conectado"]) || $_SESSION["conectado"] !== true) {
     <footer class="rodape position-fixed bottom-0 w-100 py-2 px-3" style="max-width: 900px; margin: 0 auto; left: 50%; transform: translateX(-50%); z-index: 1000;" role="contentinfo" aria-label="Menu de navegação inferior">
         <div class="d-flex justify-content-around align-items-center">
             <a href="home.php" class="footer-icon text-center text-decoration-none p-2" aria-label="Início">
-                <img src="../assets/img/casa.png" alt="Início" />
+                <img src="../../assets/img/casa.png" alt="Início" />
             </a>
             <a href="buscar.php" class="footer-icon active text-center text-decoration-none p-2" aria-label="Buscar">
-                <img src="../assets/img/lupa.png" alt="Buscar" />
+                <img src="../../assets/img/lupa.png" alt="Buscar" />
             </a>
             <a href="chat.php" class="footer-icon text-center text-decoration-none p-2" aria-label="Chat">
-                <img src="../assets/img/chat.png" alt="Chat" />
+                <img src="../../assets/img/chat.png" alt="Chat" />
             </a>
             <a href="perfil.php" class="footer-icon text-center text-decoration-none p-2" aria-label="Perfil">
-                <img src="../assets/img/perfil.png" alt="Perfil" />
+                <img src="../../assets/img/perfil.png" alt="Perfil" />
             </a>
         </div>
     </footer>
@@ -197,7 +206,7 @@ if (!isset($_SESSION["conectado"]) || $_SESSION["conectado"] !== true) {
     <!-- Leaflet JS -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     
-    <script src="../js/APIs/mapa.js"> </script>
+    <script src="../../js/APIs/mapa.js"> </script>
 </body>
 
 </html>

@@ -1,5 +1,5 @@
 <?php
-require_once ("../config/bd.php");
+require_once ("../../config/bd.php");
 
     $nome = trim($_POST["nome"] ?? "");
     $alteracao_feita = false;
@@ -23,9 +23,9 @@ require_once ("../config/bd.php");
     }
 
     // Processar upload de foto (se enviada)
-    $foto_atual = $_SESSION['foto'] ?? '../assets/img/perfil.png';
+    $foto_atual = $_SESSION['foto'] ?? '../../assets/img/perfil.png';
     if (isset($_FILES['foto']) && $_FILES['foto']['error'] === UPLOAD_ERR_OK) {
-        $upload_dir = '../assets/img/usuarios/';
+    $upload_dir = '../../assets/img/usuarios/';
         if (!is_dir($upload_dir)) {
             mkdir($upload_dir, 0777, true);
         }
@@ -50,7 +50,7 @@ require_once ("../config/bd.php");
 
             if (move_uploaded_file($file_tmp, $upload_path)) {
                 // Deletar foto antiga se não for a padrão
-                if ($foto_atual !== '../assets/img/perfil.png' && file_exists($foto_atual)) {
+                if ($foto_atual !== '../../assets/img/perfil.png' && file_exists($foto_atual)) {
                     unlink($foto_atual);
                 }
 
@@ -80,7 +80,7 @@ require_once ("../config/bd.php");
     } elseif ($alteracao_feita) {
         $_SESSION['sucesso'] = "Perfil atualizado com sucesso!";
         $sucesso = true;
-        header("Location: perfil.php?sucesso=1"); // Redirect com param
+    header("Location: perfil.php?sucesso=1"); // Redirect com param (perfil.php está na mesma pasta user/)
         exit;
     } else {
         $_SESSION['erro'] = "Nenhuma alteração foi feita (valores iguais aos atuais).";

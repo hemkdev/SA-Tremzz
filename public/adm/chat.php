@@ -148,6 +148,14 @@ $conn->close();
                 margin-right: 0.75rem;
             }
         }
+
+        @media (max-width: 480px) {
+            nav.navbar .container-fluid .d-flex { flex-direction: row !important; justify-content: space-between !important; align-items: center !important; gap: .5rem; }
+            .navbar .text-oi { text-align: left !important; }
+            .navbar .pfp { margin-left: auto !important; text-align: right !important; }
+            .navbar { padding-top: .6rem !important; padding-bottom: .25rem !important; }
+            .text-danger.fw-bold.fs-4, .text-danger.fw-bold.fs-5, .text-danger.fw-bold.fs-3 { text-align: center !important; display: block; width: 100%; }
+        }
     </style>
 </head>
 

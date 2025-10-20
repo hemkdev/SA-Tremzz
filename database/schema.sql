@@ -9,7 +9,7 @@ CREATE TABLE usuarios (
     telefone VARCHAR(15),
     senha VARCHAR(255) NOT NULL,
     cargo ENUM('usuario', 'administrador', 'maquinista') NOT NULL DEFAULT 'usuario',
-    foto VARCHAR(255) DEFAULT '../assets/img/perfil.png' NOT NULL
+    foto VARCHAR(255) DEFAULT '../../assets/img/perfil.png' NOT NULL
 );
 
 CREATE TABLE mensagens (

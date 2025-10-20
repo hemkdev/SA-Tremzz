@@ -6,11 +6,11 @@ if (!isset($_SESSION["conectado"]) || $_SESSION["conectado"] !== true) {
     exit;
 }
 // Inicialize variáveis com defaults (para evitar undefined)
-$home = 'home.php';
-$arquivo = 'buscar.php';
+$home = 'user/home.php';
+$arquivo = 'user/buscar.php';
 $icone = 'lupa.png';
-$chat = 'chat.php';
-$perfil = 'perfil.php';
+$chat = 'user/chat.php';
+$perfil = 'user/perfil.php';
 // Lógica corrigida para roles (sem exit; aqui, só define variáveis)
 if (isset($_SESSION["admin"]) && $_SESSION["admin"] === true) {
     $home = 'adm/home.php';

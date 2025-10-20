@@ -37,7 +37,7 @@ $alertas = [
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>TREMzz - Alertas em Tempo Real</title>
-    <link rel="shortcut icon" href="../assets/img/tremzz_logo.png" />
+    <link rel="shortcut icon" href="../../assets/img/tremzz_logo.png" />
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
     <!-- Fonte Poppins -->
@@ -169,6 +169,17 @@ $alertas = [
                 margin-bottom: 0; /* Remove margem extra em mobile */
             }
         }
+        /* Small-screen header tweaks: keep name/image positions, add small top padding; center red subtitles only */
+        @media (max-width: 480px) {
+            .navbar { padding-top: .6rem !important; padding-bottom: .25rem !important; }
+            /* keep original header layout (name left, image right) */
+            .text-oi { text-align: left; }
+            .pfp { text-align: right; }
+            /* centralizar apenas subtítulos em vermelho */
+            .text-danger.fw-bold.fs-4,
+            .text-danger.fw-bold.fs-5,
+            .text-danger.fw-bold.fs-3 { text-align: center; display: block; width: 100%; }
+        }
     </style>
 </head>
 
@@ -297,16 +308,16 @@ $alertas = [
     <footer class="rodape position-fixed bottom-0 w-100 py-2 px-3" style="max-width: 900px; margin: 0 auto; left: 50%; transform: translateX(-50%); z-index: 1000;" role="contentinfo" aria-label="Menu de navegação inferior">
         <div class="d-flex justify-content-around align-items-center">
             <a href="home.php" class="footer-icon text-center text-decoration-none p-2" aria-label="Início">
-                <img src="../assets/img/casa.png" alt="Início" />
+                <img src="../../assets/img/casa.png" alt="Início" />
             </a>
             <a href="buscar.php" class="footer-icon text-center text-decoration-none p-2" aria-label="Buscar">
-                <img src="../assets/img/lupa.png" alt="Buscar" />
+                <img src="../../assets/img/lupa.png" alt="Buscar" />
             </a>
             <a href="chat.php" class="footer-icon text-center text-decoration-none p-2" aria-label="Chat">
-                <img src="../assets/img/chat.png" alt="Chat" />
+                <img src="../../assets/img/chat.png" alt="Chat" />
             </a>
             <a href="perfil.php" class="footer-icon text-center text-decoration-none p-2" aria-label="Perfil">
-                <img src="../assets/img/perfil.png" alt="Perfil" />
+                <img src="../../assets/img/perfil.png" alt="Perfil" />
             </a>
         </div>
     </footer>
@@ -356,7 +367,7 @@ $alertas = [
         });
 
         // Simulação de atualização em tempo real (a cada 30s, adicione um alerta fictício)
-        setInterval(function()) {
+        setInterval(function() {
             if (document.getElementById('alertasSection').style.display !== 'none') {
                 const list = document.getElementById('alertasList');
                 const novoAlerta = {
@@ -364,14 +375,23 @@ $alertas = [
                     mensagem: 'Atualização: Trem atrasado em 20 minutos devido a incidente.',
                     horario: 'Agora',
                     status: 'Urgente'
-                }
-            }        
                 };
+
                 const novoItem = `
                     <div class="list-group-item list-group-item-action alerta-card urgente">
                         <div class="d-flex w-100 justify-content-between">
                             <h5 class="mb-1 text-light">${novoAlerta.tipo}</h5>
                             <small class="text-muted">${novoAlerta.horario}</small>
                         </div>
-                        <p class="mb-1">${n
+                        <p class="mb-1">${novoAlerta.mensagem}</p>
+                        <span class="badge badge-urgente">${novoAlerta.status}</span>
+                    </div>`;
+
+                // Prepend para aparecer no topo
+                list.insertAdjacentHTML('afterbegin', novoItem);
+            }
+        }, 30000); // 30 segundos
+    </script>
+</body>
+</html>
     

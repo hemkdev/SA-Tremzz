@@ -40,7 +40,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                     header("location: maquinista/home.php");
                     exit;
                 } else {
-                    header("location: home.php");
+                    header("location: user/home.php");
                     exit;
                 }
             } else {

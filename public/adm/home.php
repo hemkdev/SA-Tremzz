@@ -151,11 +151,32 @@ $mensagens_hoje = 320;
                 margin-bottom: 1rem;
             }
         }
+            /* Small-screen header tweaks: centraliza título e reduz padding do header */
+            @media (max-width: 480px) {
+                /* keep title left and pfp right; small top padding for spacing */
+                .navbar { padding-top: .6rem !important; padding-bottom: .25rem !important; }
+                .d-flex.justify-content-between { flex-wrap: nowrap; }
+                .text-oi { text-align: left; }
+                .pfp { text-align: right; }
+                /* center only section subtitles in red */
+                .text-danger.fw-bold.fs-4,
+                .text-danger.fw-bold.fs-5 { text-align: center; display: block; width: 100%; }
+            }
 
         @media (min-width: 769px) {
             .stats-grid {
                 gap: 1rem;
             }
+        }
+        /* ADM HEADER OVERRIDE: manter título à esquerda e pfp à direita em telas <480px */
+        @media (max-width: 480px) {
+            nav.navbar .container-fluid .d-flex { flex-direction: row !important; justify-content: space-between !important; align-items: center !important; gap: .5rem; }
+            .navbar .text-oi { text-align: left !important; }
+            .navbar .pfp { margin-left: auto !important; text-align: right !important; }
+            .navbar .pfp .pfp-img { margin-left: 0 !important; }
+            .navbar { padding-top: .6rem !important; padding-bottom: .25rem !important; }
+            /* Centralizar apenas subtítulos em vermelho */
+            .text-danger.fw-bold.fs-4, .text-danger.fw-bold.fs-5, .text-danger.fw-bold.fs-3 { text-align: center !important; display: block; width: 100%; }
         }
     </style>
 </head>

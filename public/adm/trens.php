@@ -208,6 +208,22 @@ $conn->close();
                 margin-bottom: 1rem;
             }
         }
+        @media (max-width: 480px) {
+            .navbar { padding-top: .6rem !important; padding-bottom: .25rem !important; }
+            .d-flex.justify-content-between { flex-wrap: nowrap; }
+            .text-oi { text-align: left; }
+            .pfp { text-align: right; }
+            .text-danger.fw-bold.fs-4,
+            .text-danger.fw-bold.fs-5 { text-align: center; display: block; width: 100%; }
+        }
+        /* ADM HEADER OVERRIDE: manter título à esquerda e pfp à direita em telas <480px */
+        @media (max-width: 480px) {
+            nav.navbar .container-fluid .d-flex { flex-direction: row !important; justify-content: space-between !important; align-items: center !important; gap: .5rem; }
+            .navbar .text-oi { text-align: left !important; }
+            .navbar .pfp { margin-left: auto !important; text-align: right !important; }
+            .navbar { padding-top: .6rem !important; padding-bottom: .25rem !important; }
+            .text-danger.fw-bold.fs-4, .text-danger.fw-bold.fs-5, .text-danger.fw-bold.fs-3 { text-align: center !important; display: block; width: 100%; }
+        }
     </style>
 
 </head>
