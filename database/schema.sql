@@ -30,6 +30,16 @@ CREATE TABLE sensores (
     data_hora_adicao DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL
 );
 
+CREATE TABLE dados_sensores (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY;
+    id_sensor INT NOT NULL,
+    id_itinerario INT NOT NULL, 
+    valor DECIMAL(12,4) NOT NULL,
+    carimbo_data DATETIME,
+    FOREIGN KEY (id_sensor) REFERENCES sensores(id) ON DELETE CASCADE,
+    FOREIGN KEY (id_itinerario) REFERENCES itinerarios(id) ON DELETE CASCADE
+)
+
 CREATE TABLE estacoes (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nome ENUM('Estação 1', 'Estação 2', 'Estação 3', 'Estação principal') NOT NULL,
@@ -48,6 +58,16 @@ CREATE TABLE Trens (
     tipo_carga VARCHAR(50) NOT NULL,
     status ENUM('Disponível', 'Em rota', 'Em manutenção')
 );
+
+CREATE TABLE manutencoes (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    id_trem INT,
+    tipo ENUM('técnica', 'sistema'),
+    data_agendada DATE NOT NULL,
+    data_conclusao DATE NOT NULL,
+    status ENUM ('Pendente', 'Em andamento', 'Concluída')
+    FOREIGN KEY (id_trem) REFERENCES Trens(id) ON DELETE CASCADE
+    )
 
 CREATE TABLE Rotas (
     id INT PRIMARY KEY AUTO_INCREMENT,
