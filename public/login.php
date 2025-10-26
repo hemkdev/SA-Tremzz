@@ -73,17 +73,39 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     <!-- Bootstrap Icons para ícones -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
 
-    <!-- STYLE -->
+    <!-- STYLE: keep page fixed and make inner content scrollable (Option C) -->
     <style>
+        /* placeholder color */
         .form-control::placeholder {
             color: #ccb2b2ff !important;
             /* Mude esta cor conforme necessário */
             opacity: 1;
         }
+
+        html, body {
+            height: 100%;
+            margin: 0;
+        }
+
+        #page {
+            height: 100vh;  
+            overflow: hidden; 
+        }
+
+        #content {
+            height: 100%;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch; 
+        }
+
+        #content::-webkit-scrollbar { display: none; }
+        #content { scrollbar-width: none; -ms-overflow-style: none; }
     </style>
 </head>
 
 <body style="font-family: 'Poppins', sans-serif;" class="bg-dark text-light min-vh-100">
+    <div id="page">
+        <div id="content">
     <header class="text-center my-5">
         <h1 class="display-3 text-danger fw-bold text-uppercase lh-1">TREMzz</h1>
     </header>
@@ -164,6 +186,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     <!-- Bootstrap JS (opcional) -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+        </div> <!-- #content -->
+    </div> <!-- #page -->
 </body>
 
 </html>
