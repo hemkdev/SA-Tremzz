@@ -206,6 +206,140 @@ if (!isset($_SESSION["conectado"]) || $_SESSION["conectado"] !== true) {
     <!-- Leaflet JS -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     
+    <script>
+        // Mapa apenas em modo visualização para a página de busca
+        (function() {
+            let map;
+            let stationMarkers = [];
+            let routeLines = [];
+
+            function initMap() {
+                const centerLat = -14.2350;
+                const centerLng = -51.9253;
+                map = L.map('map').setView([centerLat, centerLng], 5);
+
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                }).addTo(map);
+
+                loadStations();
+                loadRoutes();
+            }
+
+            function loadStations() {
+                // Usar text() e parse manual para capturar respostas inválidas (warnings/php/html)
+                fetch('../adm/model/mapa.php?action=get_stations')
+                    .then(r => r.text())
+                    .then(text => {
+                        try {
+                            const data = JSON.parse(text);
+                            renderStations(data);
+                        } catch (e) {
+                            console.error('Resposta inválida ao obter estações (não-JSON):', text);
+                            showMapError('Erro ao carregar estações: resposta inválida do servidor. Verifique o console (Network -> Response).');
+                        }
+                    })
+                    .catch(err => {
+                        console.error('Erro ao conectar ao endpoint de estações:', err);
+                        showMapError('Erro ao conectar ao servidor de mapas. Verifique a conexão com a internet e o servidor.');
+                    });
+            }
+
+            function loadRoutes() {
+                fetch('../adm/model/mapa.php?action=get_routes')
+                    .then(r => r.text())
+                    .then(text => {
+                        try {
+                            const data = JSON.parse(text);
+                            renderRoutes(data);
+                        } catch (e) {
+                            console.error('Resposta inválida ao obter rotas (não-JSON):', text);
+                            showMapError('Erro ao carregar rotas: resposta inválida do servidor. Verifique o console (Network -> Response).');
+                        }
+                    })
+                    .catch(err => {
+                        console.error('Erro ao conectar ao endpoint de rotas:', err);
+                        showMapError('Erro ao conectar ao servidor de mapas. Verifique a conexão com a internet e o servidor.');
+                    });
+            }
+
+            function clearMapLayers() {
+                stationMarkers.forEach(m => { if (m) map.removeLayer(m); });
+                stationMarkers = [];
+                routeLines.forEach(l => { if (l) map.removeLayer(l); });
+                routeLines = [];
+            }
+
+            function renderStations(stations) {
+                stationMarkers.forEach(m => { if (m) map.removeLayer(m); });
+                stationMarkers = [];
+
+                const bounds = [];
+                stations.forEach(station => {
+                    if (station.latitude != null && station.longitude != null) {
+                        const marker = L.marker([station.latitude, station.longitude]).addTo(map);
+                        const popup = `<div><strong>${escapeHtml(station.nome)}</strong><div>${escapeHtml(station.descricao || '')}</div></div>`;
+                        marker.bindPopup(popup);
+                        stationMarkers.push(marker);
+                        bounds.push([station.latitude, station.longitude]);
+                    }
+                });
+                if (bounds.length) map.fitBounds(bounds, { padding: [40, 40] });
+            }
+
+            function renderRoutes(routes) {
+                routeLines.forEach(l => { if (l) map.removeLayer(l); });
+                routeLines = [];
+
+                routes.forEach(route => {
+                    if (!Array.isArray(route.estacoes)) return;
+                    const coords = route.estacoes
+                        .filter(s => s.latitude != null && s.longitude != null)
+                        .map(s => [s.latitude, s.longitude]);
+                    if (coords.length > 1) {
+                        const line = L.polyline(coords, { color: '#333', weight: 5, opacity: 0.8 }).addTo(map);
+                        const shadow = L.polyline(coords, { color: '#e74c3c', weight: 7, opacity: 0.25 }).addTo(map);
+                        routeLines.push(line, shadow);
+                    }
+                });
+            }
+
+            function escapeHtml(text) {
+                if (!text) return '';
+                return String(text)
+                    .replace(/&/g, '&amp;')
+                    .replace(/</g, '&lt;')
+                    .replace(/>/g, '&gt;')
+                    .replace(/"/g, '&quot;')
+                    .replace(/'/g, '&#039;');
+            }
+
+            function showMapError(msg) {
+                const el = document.getElementById('mapError');
+                if (el) {
+                    el.textContent = msg;
+                    el.style.display = 'block';
+                }
+            }
+
+            document.addEventListener('DOMContentLoaded', function() {
+                // Verificar se a biblioteca Leaflet foi carregada (CDN pode estar inacessível)
+                if (typeof L === 'undefined') {
+                    console.error('Leaflet não foi carregado (L is undefined). Verifique acesso à CDN e à internet.');
+                    showMapError('Biblioteca de mapas (Leaflet) não foi carregada. Verifique a conexão com a internet ou carregue os arquivos localmente.');
+                    return;
+                }
+
+                try {
+                    initMap();
+                } catch (e) {
+                    console.error('Erro inicializando mapa visual:', e);
+                    showMapError('Erro ao inicializar o mapa. Verifique o console para mais detalhes.');
+                }
+            });
+        })();
+    </script>
+
     <script src="../../js/APIs/mapa.js"> </script>
 </body>
 

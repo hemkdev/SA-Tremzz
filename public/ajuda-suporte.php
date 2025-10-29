@@ -239,9 +239,9 @@ if (!isset($_SESSION["admin"]) && !isset($_SESSION["maquinista"]) && !isset($_SE
             <!-- Opção 2: Chat In-App -->
             <div class="col-12">
                 <div class="suporte-card">
-                    <h5>Chat em Tempo Real</h5>
-                    <p>Converse diretamente com nossa equipe de suporte para problemas urgentes, como atrasos ou relatos de incidentes.</p>
-                    <a href="<?php echo htmlspecialchars($chat); ?>" class="suporte-link">Abrir Chat</a>
+                    <h5> Relatar problema</h5>
+                    <p>Relate diretamente a nossa equipe de suporte para problemas urgentes, como atrasos ou relatos de incidentes.</p>
+                    <a href="" class="suporte-link">Abrir chamado</a>
                 </div>
             </div>
         </div>

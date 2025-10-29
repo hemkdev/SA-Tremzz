@@ -2,7 +2,7 @@
 
 $servidor = "localhost";
 $usuario = "root";
-$senha = "";
+$senha = "root";
 $dbname = "tremzz_db";
 
 $conn = new mysqli($servidor, $usuario, $senha, $dbname);
@@ -14,10 +14,7 @@ if ($conn->connect_error) {
 
 $conn->set_charset("utf8");
 
-// FALTANTES //
-
 // USUÁRIO
-// Perfil -> Página de suporte/FAQ --
 // Perfil -> Página de notificações
 // Perfil -> Privacidade -> Verificação de telefone
 // Perfil -> Página de ultimas atividades/Relatórios
@@ -27,23 +24,3 @@ $conn->set_charset("utf8");
 // Perfil -> Página de gerenciamento de usuários -- Editar cargo no modal
 // Perfil -> Página de gerenciamento de notificações
 // Gerenciamento -> CRUD para manutenção de trens --
-// Gerenciamento -> CRUD para gerenciamento de sensores --
-// Gerenciamento -> CRUD para gerenciamento de itinerários --
-// Gerenciamento -> CRUD para gerenciamento de rotas --
-// Gerenciamento -> CRUD para gerenciamento de trens -- 
-
-// MAQUINISTA
-// Todas as páginas
-// Página home com vizualização de trens,linhas e rotas que estão ligadas ao maquinista
-// Página para adição de itinerários e relatórios, com horário de partida e chegada
-// Página de perfil 
-// Página de chat para mandar mensagens para usuários
-
-// BANCO DE DADOS
-// Tabela -> linhas --
-// Tabela -> rotas --
-// Tabela -> trens --
-// Tabela -> itinerários --
-// Tabela -> sensores -- 
-// FOREIGN KEY do maquinista -> trens, itinerários e linhas --
-// FOREIGN KEY do trens -> rotas, linhas -- 
