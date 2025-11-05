@@ -17,9 +17,20 @@ CREATE TABLE mensagens (
     usuario_id INT NOT NULL,
     nome VARCHAR(30) NOT NULL,
     texto VARCHAR(87) NOT NULL,
-    imagem ENUM('estação', 'bate-papo', 'usuario', 'trem') NOT NULL,
+    imagem ENUM('estação', 'bate-papo', 'usuario', 'trem', 'alerta') NOT NULL,
     data_hora_envio DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL,
     CONSTRAINT fk_usuario_mensagem FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE
+);
+
+CREATE TABLE suporte (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    usuario_id INT NOT NULL,
+    assunto VARCHAR(100) NOT NULL,
+    descricao TEXT NOT NULL,
+    status ENUM('aberto', 'em andamento', 'resolvido') NOT NULL DEFAULT 'aberto',
+    data_hora_abertura DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    data_hora_fechamento DATETIME,
+    CONSTRAINT fk_usuario_suporte FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE
 );
 
 CREATE TABLE sensores (
@@ -39,7 +50,8 @@ CREATE TABLE estacoes (
 CREATE TABLE itinerarios (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nome VARCHAR(100) NOT NULL,  
-    descricao TEXT
+    descricao TEXT,
+    status ENUM('ativo', 'inativo') NOT NULL DEFAULT 'ativo'
 );
 
 CREATE TABLE dados_sensores (

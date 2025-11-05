@@ -5,7 +5,53 @@ if (!isset($_SESSION["conectado"]) || $_SESSION["conectado"] !== true) {
     header("Location: login.php");
     exit;
 }
-// Inicialize variáveis com defaults (para evitar undefined)
+require "../config/bd.php"; // Conexão com BD
+
+// Processar envio do formulário no mesmo arquivo
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Sanitizar inputs
+    $assunto = trim($_POST['assunto'] ?? '');
+    $descricao = trim($_POST['descricao'] ?? '');
+    $usuario_id = $_SESSION['id'] ?? 0; // ID do usuário logado
+
+    // Validações básicas
+    if (empty($assunto) || strlen($assunto) > 100) {
+        $_SESSION['erro'] = "Assunto inválido ou obrigatório (máx. 100 caracteres).";
+        header("Location: ajuda-suporte.php");
+        exit;
+    }
+
+    if (empty($descricao) || strlen($descricao) > 1000) {
+        $_SESSION['erro'] = "Descrição inválida ou obrigatória (máx. 1000 caracteres).";
+        header("Location: ajuda-suporte.php");
+        exit;
+    }
+
+    if ($usuario_id <= 0) {
+        $_SESSION['erro'] = "Erro de sessão. Faça login novamente.";
+        header("Location: login.php");
+        exit;
+    }
+
+    // Inserir no banco (assume colunas: usuario_id, assunto, descricao, data_hora_abertura, status)
+    $stmt = $conn->prepare("INSERT INTO suporte (usuario_id, assunto, descricao, data_hora_abertura, status) VALUES (?, ?, ?, NOW(), 'aberto')");
+    if ($stmt) {
+        $stmt->bind_param("iss", $usuario_id, $assunto, $descricao);
+        if ($stmt->execute()) {
+            $_SESSION['sucesso'] = "Chamado enviado com sucesso.";
+        } else {
+            $_SESSION['erro'] = "Erro ao enviar chamado. Tente novamente.";
+        }
+        $stmt->close();
+    } else {
+        $_SESSION['erro'] = "Erro ao preparar consulta SQL.";
+    }
+
+    $conn->close();
+    header("Location: ajuda-suporte.php");
+    exit;
+}
+// Inicialize variáveis com defaults (para evitar )
 $home = 'user/home.php';
 $arquivo = 'user/buscar.php';
 $icone = 'lupa.png';
@@ -131,10 +177,41 @@ if (!isset($_SESSION["admin"]) && !isset($_SESSION["maquinista"]) && !isset($_SE
             drop-shadow(0 0 15px rgba(255, 193, 7, 0.8))
             sepia(1) saturate(5) hue-rotate(-10deg);
         }
+        /* Estilos para modal */
+        .modal-content {
+            background-color: #1e1e1e;
+            color: #e0e0e0;
+            border: none;
+        }
+        .modal-header, .modal-footer {
+            border-color: #333;
+        }
+        .form-control, .form-select {
+            background-color: #2a2a2a;
+            border-color: #333;
+            color: #e0e0e0;
+        }
+        .form-control:focus, .form-select:focus {
+            background-color: #2a2a2a;
+            border-color: #b02a37;
+            color: #e0e0e0;
+            box-shadow: 0 0 0 0.25rem rgba(176, 42, 55, 0.25);
+        }
     </style>
 </head>
 
 <body>
+    <?php
+    // Mostrar mensagens de sucesso/erro armazenadas na sessão e limpar
+    if (!empty($_SESSION['sucesso'])) {
+        echo '<div class="container mt-3"><div class="alert alert-success alert-dismissible fade show" role="alert">'.htmlspecialchars($_SESSION['sucesso']).'<button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Fechar"></button></div></div>';
+        unset($_SESSION['sucesso']);
+    }
+    if (!empty($_SESSION['erro'])) {
+        echo '<div class="container mt-3"><div class="alert alert-danger alert-dismissible fade show" role="alert">'.htmlspecialchars($_SESSION['erro']).'<button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Fechar"></button></div></div>';
+        unset($_SESSION['erro']);
+    }
+    ?>
     <main class="container px-3" style="max-width: 900px; margin: 0 auto; padding-top: 2rem;">
         <!-- Título -->
         <div class="row justify-content-center mb-5">
@@ -241,7 +318,7 @@ if (!isset($_SESSION["admin"]) && !isset($_SESSION["maquinista"]) && !isset($_SE
                 <div class="suporte-card">
                     <h5> Relatar problema</h5>
                     <p>Relate diretamente a nossa equipe de suporte para problemas urgentes, como atrasos ou relatos de incidentes.</p>
-                    <a href="" class="suporte-link">Abrir chamado</a>
+                    <a href="#" data-bs-toggle="modal" data-bs-target="#modalSuporte" class="suporte-link">Abrir chamado</a>
                 </div>
             </div>
         </div>
@@ -257,6 +334,34 @@ if (!isset($_SESSION["admin"]) && !isset($_SESSION["maquinista"]) && !isset($_SE
             </div>
         </div>
     </main>
+
+    <!-- Modal para Abrir Chamado -->
+    <div class="modal fade" id="modalSuporte" tabindex="-1" aria-labelledby="modalSuporteLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title text-danger" id="modalSuporteLabel">Abrir Chamado de Suporte</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fechar"></button>
+                </div>
+                <form method="POST" action=""> <!-- envia para este mesmo arquivo -->
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label for="assunto" class="form-label">Assunto <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="assunto" name="assunto" required maxlength="100" placeholder="Ex: Problema com horário de trem">
+                        </div>
+                        <div class="mb-3">
+                            <label for="descricao" class="form-label">Descrição <span class="text-danger">*</span></label>
+                            <textarea class="form-control" id="descricao" name="descricao" required maxlength="1000" rows="4" placeholder="Descreva o problema em detalhes..."></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-danger">Enviar Chamado</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 
     <!-- Footer (mantido idêntico ao dashboard) -->
     <footer class="rodape position-fixed bottom-0 w-100 py-2 px-3" style="max-width: 900px; margin: 0 auto; left: 50%; transform: translateX(-50%);" role="contentinfo" aria-label="Menu de navegação inferior">
@@ -276,7 +381,7 @@ if (!isset($_SESSION["admin"]) && !isset($_SESSION["maquinista"]) && !isset($_SE
         </div>
     </footer>
 
-    <!-- Bootstrap JS (necessário para accordions) -->
+    <!-- Bootstrap JS (necessário para accordions e modal) -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 

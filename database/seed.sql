@@ -14,6 +14,10 @@ INSERT INTO mensagens (usuario_id, nome, texto, imagem) VALUES
     (2, 'Amigo do rogério maquinista', 'To chegando Rogério', 'estacao'),
     (3, 'Rogério maquinista', 'To chegando!', 'usuario');
 
+INSERT INTO suporte (usuario_id, assunto, descricao) VALUES
+    (3, 'Problema no login', 'Não consigo fazer login na minha conta. Sempre recebo uma mensagem de erro dizendo que minhas credenciais são inválidas. Já tentei redefinir minha senha, mas o problema persiste. Preciso de ajuda urgente para acessar minha conta novamente.'),
+    (4, 'Erro ao enviar mensagem', 'Estou enfrentando um problema ao tentar enviar mensagens através do sistema. Sempre que tento enviar uma mensagem, recebo um erro indicando que a mensagem não pôde ser entregue. Já verifiquei minha conexão com a internet e está funcionando corretamente. Preciso de assistência para resolver esse problema.');
+
 INSERT INTO sensores (localizacao, tipo, status) VALUES
     ('Estação 1', 'LDR', 'ativado'),
     ('Estação 2', 'Ultrassônico', 'ativado'),
@@ -38,3 +42,13 @@ INSERT INTO trens (modelo, tipo_carga, status) VALUES
 INSERT INTO rotas (itinerario_id, maquinista_id, trem_id, estacao_origem_id, estacao_destino_id, via_estacao_id) VALUES
     (1, 2, 1, 1, 4, 2),
     (2, 3, 2, 4, 3, NULL);
+
+
+INSERT INTO dados_sensores (id_sensor, id_itinerario, valor, carimbo_data) VALUES
+    (1, 1, 123.4567, '2025-11-05 09:00:00'),
+    (2, 1, 10.0000, '2025-11-05 09:05:00'),
+    (3, 2, 25.5000, '2025-11-05 09:10:00');
+
+INSERT INTO manutencoes (id_trem, tipo, data_agendada, data_conclusao, status) VALUES
+    (1, 'técnica', '2025-11-10', '2025-11-12', 'Pendente'),
+    (3, 'sistema', '2025-11-01', '2025-11-02', 'Concluída');

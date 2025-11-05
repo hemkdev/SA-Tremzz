@@ -9,26 +9,18 @@ if (!isset($_SESSION["conectado"]) || $_SESSION["conectado"] !== true || ($_SESS
     exit;
 }
 
-// Busca todas as mensagens de usuários (excluindo o admin), ordenadas por mais recente
-$conversas = [];
-$stmt = $conn->prepare("SELECT m.*, u.nome as usuario_nome 
-    FROM mensagens m 
-    INNER JOIN usuarios u ON m.usuario_id = u.id 
-    WHERE m.usuario_id != ? 
-    ORDER BY m.data_hora_envio DESC
+// Busca todos os tickets de suporte, ordenados por mais recente
+$tickets = [];
+$stmt = $conn->prepare("SELECT s.*, u.nome as usuario_nome 
+    FROM suporte s 
+    INNER JOIN usuarios u ON s.usuario_id = u.id 
+    ORDER BY s.data_hora_abertura DESC
 ");
-$admin_id = $_SESSION['id'] ?? 1; // ID do admin para filtro
-$stmt->bind_param("i", $admin_id);
 $stmt->execute();
 $result = $stmt->get_result();
 
-$usuarios_vistos = [];
 while ($row = $result->fetch_assoc()) {
-    $usuario_id = $row['usuario_id'];
-    if (!isset($usuarios_vistos[$usuario_id])) {
-        $conversas[] = $row;
-        $usuarios_vistos[$usuario_id] = true;
-    }
+    $tickets[] = $row;
 }
 $stmt->close();
 
@@ -41,7 +33,7 @@ $conn->close();
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>TREMzz - Admin Conversas</title>
+    <title>TREMzz - Suporte</title>
     <link rel="shortcut icon" href="../assets/img/tremzz_logo.png" />
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
@@ -54,7 +46,7 @@ $conn->close();
     <!-- Bootstrap Icons para ícones opcionais -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
 
-    <!-- CSS mínimo para fundos exatos, filtros de ícones e hovers essenciais (Bootstrap não suporta nativamente #121212 ou filter invert) -->
+    <!-- CSS mínimo para fundos exatos, filtros de ícones e hovers essenciais -->
     <style>
         body {
             font-family: 'Poppins', sans-serif;
@@ -73,28 +65,6 @@ $conn->close();
             color: #fff !important;
         }
 
-        .chat-icon {
-            width: 56px;
-            height: 56px;
-            object-fit: contain;
-            filter: brightness(0) invert(1);
-            border-radius: 50%;
-            border: 2px solid transparent;
-            transition: border-color 0.3s ease;
-        }
-
-        .search-icon {
-            width: 24px;
-            height: 24px;
-            filter: brightness(0) invert(1);
-            transition: filter 0.3s ease;
-            cursor: pointer;
-        }
-
-        .search-icon:hover {
-            filter: brightness(0) invert(0.7) sepia(1) saturate(5) hue-rotate(-10deg);
-        }
-
         .pfp-img {
             width: 50px;
             height: 50px;
@@ -109,16 +79,16 @@ $conn->close();
             transition: all 0.3s ease;
         }
 
-        .unread-dot {
-            position: absolute;
-            top: 12px;
-            left: 44px;
-            width: 12px;
-            height: 12px;
-            background-color: #dc3545;
-            border-radius: 50%;
-            border: 2px solid #121212;
-            pointer-events: none;
+        .search-icon {
+            width: 24px;
+            height: 24px;
+            filter: brightness(0) invert(1);
+            transition: filter 0.3s ease;
+            cursor: pointer;
+        }
+
+        .search-icon:hover {
+            filter: brightness(0) invert(0.7) sepia(1) saturate(5) hue-rotate(-10deg);
         }
 
         .footer-icon img {
@@ -140,12 +110,31 @@ $conn->close();
             z-index: 1000;
         }
 
-        /* Responsividade mínima para mobile (Bootstrap cuida do resto) */
+        .accordion-button {
+            background-color: #1e1e1e !important;
+            color: #e0e0e0 !important;
+            border: none;
+        }
+
+        .accordion-button:not(.collapsed) {
+            background-color: #2a2a2a !important;
+            color: #fff !important;
+        }
+
+        .accordion-body {
+            background-color: #1e1e1e !important;
+            color: #e0e0e0 !important;
+            border: none;
+        }
+
+        .status-badge {
+            font-size: 0.75rem;
+        }
+
+        /* Responsividade mínima para mobile */
         @media (max-width: 768px) {
-            .chat-icon {
-                width: 48px;
-                height: 48px;
-                margin-right: 0.75rem;
+            .accordion-button {
+                font-size: 0.9rem;
             }
         }
 
@@ -166,7 +155,7 @@ $conn->close();
             <div class="container-fluid">
                 <div class="d-flex justify-content-between align-items-center w-100">
                     <div class="text-oi">
-                        <h1 class="text-light fw-bold mb-0 fs-3">Conversas</h1>
+                        <h1 class="text-light fw-bold mb-0 fs-3">Suporte</h1>
                     </div>
                     <div class="pfp">
                         <img src="<?php echo htmlspecialchars($_SESSION['foto'] ?? '../../assets/img/perfil.png'); ?>" alt="Foto de perfil" class="pfp-img" />
@@ -177,7 +166,7 @@ $conn->close();
         <!-- Searchbar -->
         <div class="searchbar bg-custom d-flex justify-content-between align-items-center mx-3 mb-3 p-3 rounded-3">
             <div class="text-bar">
-                <span class="fw-semibold fs-5 text-light">Buscar conversas de usuários</span>
+                <span class="fw-semibold fs-5 text-light">Buscar</span>
             </div>
             <div class="img-bar">
                 <img src="../../assets/img/lupa.png" alt="Ícone de lupa para busca" class="search-icon" />
@@ -186,81 +175,53 @@ $conn->close();
     </header>
 
     <main class="container px-3" style="max-width: 900px; margin-bottom: 2rem; overflow-y: auto;">
-        <div class="list-group list-group-flush">
-
+        <div class="accordion" id="suporteAccordion">
             <?php
-            if (!empty($conversas)) {
-                foreach ($conversas as $conversa) {
-                    switch ($conversa['imagem']) {
-                        case 'estação':
-                            $arquivoImagem = 'localizacao.png';
-                            break;
-                        case 'bate-papo':
-                            $arquivoImagem = 'chat.png';
-                            break;
-                        case 'usuario':
-                            $arquivoImagem = 'perfil.png';
-                            break;
-                        case 'trem':
-                            $arquivoImagem = 'trem.png';
-                            break;
-                        default:
-                            $arquivoImagem = 'perfil.png'; // arquivo padrão
-                            break;
-                    }
-
-                    // Lógica de formatação para data_hora_envio (DATETIME) - Igual ao arquivo anterior
-                    $dataHoraEnvio = $conversa['data_hora_envio']; // Ex.: '2023-10-15 14:30:00'
-                    $dataAtual = date('Y-m-d'); // Data de hoje: '2023-10-15'
-                    $dataDaMensagem = date('Y-m-d', strtotime($dataHoraEnvio)); // Extrai só a data da mensagem
+            if (!empty($tickets)) {
+                foreach ($tickets as $index => $ticket) {
+                    // Formatação de data_hora_abertura (igual ao original)
+                    $dataHoraAbertura = $ticket['data_hora_abertura'];
+                    $dataAtual = date('Y-m-d');
+                    $dataDaMensagem = date('Y-m-d', strtotime($dataHoraAbertura));
 
                     if ($dataDaMensagem === $dataAtual) {
-                        // Mensagem de hoje: Mostra apenas horário (HH:MM)
-                        $tempoFormatado = date('H:i', strtotime($dataHoraEnvio));
+                        $tempoFormatado = date('H:i', strtotime($dataHoraAbertura));
                     } else {
-                        // Mensagem de outro dia: Mostra apenas dia e mês (DD/MM)
-                        $tempoFormatado = date('d/m', strtotime($dataHoraEnvio));  // Ex.: "15/10"
+                        $tempoFormatado = date('d/m', strtotime($dataHoraAbertura));
                     }
 
-                    // Prefixo para remetente (quem mandou a última mensagem)
-                    $remetente = htmlspecialchars($conversa['nome']); // Nome de quem enviou (ex: "Admin" ou "João")
-                    $texto_com_prefixo = $remetente . ': ' . htmlspecialchars($conversa['texto']); // Ex: "Admin: Olá!"
+                    // Badge de status
+                    $statusClass = ($ticket['status'] === 'aberto') ? 'bg-warning' : (($ticket['status'] === 'em andamento') ? 'bg-info' : 'bg-success');
+                    $statusText = ucfirst($ticket['status']);
             ?>
-                    <a href="admin_chat_detalhe.php?id=<?php echo $conversa['usuario_id']; ?>" class="list-group-item list-group-item-action bg-custom bg-custom-hover d-flex align-items-center rounded-3 mb-3 p-3 text-decoration-none border-0" tabindex="0" aria-current="true" aria-label="Chat com <?php echo htmlspecialchars($conversa['usuario_nome']); ?>, última mensagem de <?php echo $remetente; ?>: <?php echo htmlspecialchars($conversa['texto']); ?>" style="transition: background-color 0.2s ease;">
-                        <div class="position-relative flex-shrink-0 me-3">
-                            <img src="../../assets/img/<?php echo $arquivoImagem; ?>" alt="Avatar <?php echo htmlspecialchars($conversa['usuario_nome']); ?>" class="chat-icon" />
-                            <span class="unread-dot"></span>
+                    <div class="accordion-item bg-custom border-0 mb-3 rounded-3">
+                        <h2 class="accordion-header" id="heading<?php echo $index; ?>">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse<?php echo $index; ?>" aria-expanded="false" aria-controls="collapse<?php echo $index; ?>">
+                                <div class="d-flex justify-content-between align-items-center w-100">
+                                    <div class="flex-grow-1">
+                                        <div class="fw-bold text-light"><?php echo htmlspecialchars($ticket['assunto']); ?></div>
+                                        <div class="small text-light">De: <?php echo htmlspecialchars($ticket['usuario_nome']); ?></div>
+                                    </div>
+                                    <div class="d-flex flex-column align-items-end ms-3">
+                                        <span class="badge <?php echo $statusClass; ?> status-badge"><?php echo $statusText; ?></span>
+                                        <div class="small text-light mt-1"><?php echo $tempoFormatado; ?></div>
+                                    </div>
+                                </div>
+                            </button>
+                        </h2>
+                        <div id="collapse<?php echo $index; ?>" class="accordion-collapse collapse" aria-labelledby="heading<?php echo $index; ?>" data-bs-parent="#suporteAccordion">
+                            <div class="accordion-body">
+                                <p><?php echo nl2br(htmlspecialchars($ticket['descricao'])); ?></p>
+                                <!-- Opcional: Adicionar ações como responder ou fechar ticket -->
+                            </div>
                         </div>
-                        <div class="flex-grow-1 min-width-0">
-                            <!-- Nome do Destinatário -->
-                            <div class="chat-name fw-bold fs-6 text-light mb-1" style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
-                                <?php echo htmlspecialchars($conversa['usuario_nome']); ?>
-                            </div>
-                            <!-- Linha para Remetente -->
-                            <div class="remetente small text-light mb-1" style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
-                                De: <span class="fw-semibold text-danger"><?php echo htmlspecialchars($conversa['nome']); ?></span>
-                            </div>
-                            <!-- Mensagem -->
-                            <div class="chat-last-message text-light small" style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
-                                <?php echo htmlspecialchars($conversa['texto']); ?>
-                            </div>
-                        </div>
-                        <div class="d-flex flex-column align-items-end ms-3 flex-shrink-0" style="min-width: 60px;">
-                            <div class="chat-time text-light small mb-2" style="white-space: nowrap;">
-                                <?php echo $tempoFormatado; ?> <!-- Tempo formatado: hora ou dia/mês -->
-                            </div>
-                            <span class="badge bg-danger rounded-pill" aria-label="1 mensagem não lida" style="font-size: 0.75rem; padding: 0.25rem 0.5rem; min-width: 24px; text-align: center;">1</span>
-                        </div>
-                    </a>
+                    </div>
             <?php
                 }
             } else {
-                // Caso não tenha conversas
-                echo '<p class="text-light text-center mt-4">Nenhuma conversa encontrada.</p>';
+                echo '<p class="text-light text-center mt-4">Nenhum ticket de suporte encontrado.</p>';
             }
             ?>
-
-
         </div>
     </main>
 
@@ -281,7 +242,7 @@ $conn->close();
         </div>
     </footer>
 
-    <!-- Bootstrap JS (opcional) -->
+    <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 
