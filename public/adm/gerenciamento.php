@@ -17,7 +17,7 @@ if (!isset($_SESSION["admin"]) || $_SESSION["admin"] !== true) {
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>TREMzz - Gerenciamento</title>
-    <link rel="shortcut icon" href="../assets/img/tremzz_logo.png" />
+    <link rel="shortcut icon" href="../../assets/img/tremzz_logo.png" />
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
     <!-- Fonte Poppins -->
@@ -258,6 +258,26 @@ if (!isset($_SESSION["admin"]) || $_SESSION["admin"] !== true) {
                     <div class="gerenciamento-text">
                         <h5>Trens</h5>
                         <p>Cadastrar e editar trens</p>
+                    </div>
+                </a>
+
+                <a href="" class="card-gerenciamento" tabindex="0" aria-label="Gerenciar Chamados de Suporte">
+                    <div class="gerenciamento-icon">
+                        <i class="bi bi-chat-dots"></i> <!-- Ícone para Chamados de Suporte -->
+                    </div>
+                    <div class="gerenciamento-text">
+                        <h5>Chamados de Suporte</h5>
+                        <p>Gerenciar chamados de suporte</p>
+                    </div>
+                </a>
+
+                <a href="manutencoes.php" class="card-gerenciamento" tabindex="0" aria-label="Gerenciar manutenção de trens">
+                    <div class="gerenciamento-icon">
+                        <i class="bi bi-tools"></i> <!-- Ícone para manutenção de trens -->
+                    </div>
+                    <div class="gerenciamento-text">
+                        <h5>Manutenção de Trens</h5>
+                        <p>Gerenciar manutenção de trens</p>
                     </div>
                 </a>
                 

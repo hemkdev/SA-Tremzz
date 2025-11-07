@@ -76,7 +76,7 @@ CREATE TABLE manutencoes (
     id_trem INT,
     tipo ENUM('técnica', 'sistema'),
     data_agendada DATE NOT NULL,
-    data_conclusao DATE NOT NULL,
+    data_conclusao DATE,
     status ENUM ('Pendente', 'Em andamento', 'Concluída'),
     FOREIGN KEY (id_trem) REFERENCES Trens(id) ON DELETE CASCADE
     );
