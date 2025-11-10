@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Bootstrap CSS (CDN) -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <title>Document</title>
+</head>
+<body>
+    <style>
+        /* Minimo CSS: só a animação e ajuste de imagem; layout usa utilitários Bootstrap */
+        .logo { width: 180px; max-width: 45%; opacity: 0; transform: translateY(6px); animation: fadeIn 900ms ease forwards; }
+        .brand-text { opacity: 0; transform: translateY(8px); animation: fadeIn 900ms ease 200ms forwards; color: #fff; font-weight:600; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(8px) scale(.98);} to { opacity: 1; transform: translateY(0) scale(1);} }
+    </style>
+
+    <div style="font-family: 'Poppins', sans-serif;" class="bg-dark vh-100 d-flex justify-content-center align-items-center text-center text-light">
+        <div>
+            <img class="logo img-fluid" src="assets/img/tremzz_logo.png" alt="TREMzz logo">
+            <div class="brand-text mt-3">TREMzz</div>
+        </div>
+    </div>
+
+    <script>
+        // redireciona após 2s; mantém comportamento anterior
+        setTimeout(function(){
+            window.location.href = 'public/login.php';
+        }, 2000);
+    </script>
+</body>
+</html>

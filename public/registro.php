@@ -39,6 +39,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 $stmt->bind_param("ssss", $nome, $email, $telefone, $senha_hash);
 
                 if ($stmt->execute()) {
+                    // Indica sucesso via sessão para mostrar alerta na tela de login
+                    $_SESSION['sucesso'] = "Cadastro realizado com sucesso. Faça login.";
                     header("Location: login.php");
                     exit;
                 } else {

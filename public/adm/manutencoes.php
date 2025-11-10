@@ -353,7 +353,7 @@ $conn->close();
                                             <i class="bi bi-pencil"></i> Editar
                                         </button>
 
-                                        <form method="POST" action="model/delete_manutencoes.php?id=<?php echo $manutencao['id']; ?>" style="display: inline;" onsubmit="return confirm('Deletar esta manutenção? Ação irreversível!');">
+                                        <form method="POST" action="model/manutencao.php?id=<?php echo $manutencao['id']; ?>" style="display: inline;" onsubmit="return confirm('Deletar esta manutenção? Ação irreversível!');">
                                             <input type="hidden" name="id" value="<?php echo $manutencao['id']; ?>">
                                             <button type="submit" class="btn btn-sm btn-danger"><i class="bi bi-trash"></i></button>
                                         </form>
@@ -379,7 +379,7 @@ $conn->close();
                     <h5 class="modal-title text-danger" id="editarModalLabel">Adicionar Manutenção</h5>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fechar"></button>
                 </div>
-                <form id="editarForm" method="POST" action="model/manutencoesAction.php">
+                <form id="editarForm" method="POST" action="model/manutencao.php">
                     <div class="modal-body">
                         <input type="hidden" id="editarId" name="id" value="">
                         <div class="mb-3">

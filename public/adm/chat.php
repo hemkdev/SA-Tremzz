@@ -9,6 +9,46 @@ if (!isset($_SESSION["conectado"]) || $_SESSION["conectado"] !== true || ($_SESS
     exit;
 }
 
+// Processar ações de status enviadas via POST (iniciar atendimento / concluir)
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['ticket_id'], $_POST['acao'])) {
+    $ticketId = intval($_POST['ticket_id']);
+    $acao = $_POST['acao'];
+
+    if ($ticketId > 0) {
+        if ($acao === 'iniciar') {
+            $upd = $conn->prepare("UPDATE suporte SET status = 'em andamento' WHERE id = ?");
+            if ($upd) {
+                $upd->bind_param('i', $ticketId);
+                if ($upd->execute()) {
+                    $_SESSION['sucesso'] = 'Chamado colocado em andamento.';
+                } else {
+                    $_SESSION['erro'] = 'Falha ao atualizar o status.';
+                }
+                $upd->close();
+            } else {
+                $_SESSION['erro'] = 'Erro ao preparar atualização.';
+            }
+        } elseif ($acao === 'concluir') {
+            $upd = $conn->prepare("UPDATE suporte SET status = 'resolvido', data_hora_fechamento = NOW() WHERE id = ?");
+            if ($upd) {
+                $upd->bind_param('i', $ticketId);
+                if ($upd->execute()) {
+                    $_SESSION['sucesso'] = 'Chamado marcado como resolvido.';
+                } else {
+                    $_SESSION['erro'] = 'Falha ao atualizar o status.';
+                }
+                $upd->close();
+            } else {
+                $_SESSION['erro'] = 'Erro ao preparar atualização.';
+            }
+        }
+    }
+
+    // Redireciona para evitar reenvio de formulário
+    header('Location: chat.php');
+    exit;
+}
+
 // Busca todos os tickets de suporte, ordenados por mais recente
 $tickets = [];
 $stmt = $conn->prepare("SELECT s.*, u.nome as usuario_nome 
@@ -149,6 +189,17 @@ $conn->close();
 </head>
 
 <body class="text-light">
+    <?php
+    // Mostrar mensagens de sucesso/erro armazenadas na sessão e limpar
+    if (!empty($_SESSION['sucesso'])) {
+        echo '<div class="container mt-3"><div class="alert alert-success alert-dismissible fade show" role="alert">'.htmlspecialchars($_SESSION['sucesso']).'<button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Fechar"></button></div></div>';
+        unset($_SESSION['sucesso']);
+    }
+    if (!empty($_SESSION['erro'])) {
+        echo '<div class="container mt-3"><div class="alert alert-danger alert-dismissible fade show" role="alert">'.htmlspecialchars($_SESSION['erro']).'<button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Fechar"></button></div></div>';
+        unset($_SESSION['erro']);
+    }
+    ?>
     <!-- Header -->
     <header class="bg-transparent">
         <nav class="navbar navbar-expand-lg navbar-dark bg-transparent px-3 py-2">
@@ -212,7 +263,22 @@ $conn->close();
                         <div id="collapse<?php echo $index; ?>" class="accordion-collapse collapse" aria-labelledby="heading<?php echo $index; ?>" data-bs-parent="#suporteAccordion">
                             <div class="accordion-body">
                                 <p><?php echo nl2br(htmlspecialchars($ticket['descricao'])); ?></p>
-                                <!-- Opcional: Adicionar ações como responder ou fechar ticket -->
+                                <!-- Ações: iniciar atendimento / marcar como resolvido -->
+                                <div class="mt-3">
+                                    <?php if ($ticket['status'] === 'aberto'): ?>
+                                        <form method="post" style="display:inline-block; margin-right:.5rem;">
+                                            <input type="hidden" name="ticket_id" value="<?php echo intval($ticket['id']); ?>">
+                                            <input type="hidden" name="acao" value="iniciar">
+                                            <button type="submit" class="btn btn-sm btn-primary">Colocar em andamento</button>
+                                        </form>
+                                    <?php elseif ($ticket['status'] === 'em andamento'): ?>
+                                        <form method="post" style="display:inline-block; margin-right:.5rem;">
+                                            <input type="hidden" name="ticket_id" value="<?php echo intval($ticket['id']); ?>">
+                                            <input type="hidden" name="acao" value="concluir">
+                                            <button type="submit" class="btn btn-sm btn-success">Marcar como resolvido</button>
+                                        </form>
+                                    <?php endif; ?>
+                                </div>
                             </div>
                         </div>
                     </div>

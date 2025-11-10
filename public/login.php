@@ -159,6 +159,12 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                             </form>
 
                             <?php
+                            // Mostrar mensagem de sucesso vinda do registro (uma única vez)
+                            if (!empty($_SESSION['sucesso'])) {
+                                echo "<div class='alert alert-success mt-3 mb-0'><i class='bi bi-check-circle-fill me-2'></i>" . htmlspecialchars($_SESSION['sucesso']) . "</div>";
+                                unset($_SESSION['sucesso']);
+                            }
+
                             if ($erro) {
                                 echo "<div class='alert alert-danger mt-3 mb-0'><i class='bi bi-exclamation-triangle-fill me-2'></i>$erro</div>";
                             }

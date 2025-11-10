@@ -210,13 +210,13 @@ if (!isset($_SESSION["admin"]) || $_SESSION["admin"] !== true) {
                         <p>Gerencie alertas e avisos</p>
                     </div>
                 </a>
-                <a href="mapas.php" class="card-opcao" tabindex="0" aria-label="Configurações de privacidade">
+                <a href="relatorio.php" class="card-opcao" tabindex="0" aria-label="Configurações de privacidade">
                     <div class="opcao-img">
-                        <img src="../../assets/img/seguranca.png" alt="Ícone de segurança" />
+                        <img src="../../assets/img/relatorio.png" alt="Ícone de relatório" />
                     </div>
                     <div class="opcao-text">
-                        <h5>Privacidade e Segurança</h5>
-                        <p>Proteja sua conta</p>
+                        <h5>Gerar relatórios</h5>
+                        <p>Gere relatórios detalhados</p>
                     </div>
                 </a>
                 <a href="../sobre.php" class="card-opcao" tabindex="0" aria-label="Sobre o aplicativo TREMzz">

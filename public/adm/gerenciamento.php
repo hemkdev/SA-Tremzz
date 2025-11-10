@@ -261,16 +261,6 @@ if (!isset($_SESSION["admin"]) || $_SESSION["admin"] !== true) {
                     </div>
                 </a>
 
-                <a href="" class="card-gerenciamento" tabindex="0" aria-label="Gerenciar Chamados de Suporte">
-                    <div class="gerenciamento-icon">
-                        <i class="bi bi-chat-dots"></i> <!-- Ícone para Chamados de Suporte -->
-                    </div>
-                    <div class="gerenciamento-text">
-                        <h5>Chamados de Suporte</h5>
-                        <p>Gerenciar chamados de suporte</p>
-                    </div>
-                </a>
-
                 <a href="manutencoes.php" class="card-gerenciamento" tabindex="0" aria-label="Gerenciar manutenção de trens">
                     <div class="gerenciamento-icon">
                         <i class="bi bi-tools"></i> <!-- Ícone para manutenção de trens -->
