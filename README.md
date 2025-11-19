@@ -1,4 +1,7 @@
-# Tremzz: Sistema de Gerenciamento de Transportes Ferroviários
+# Tremzz: Gerenciamento de Transportes Ferroviários
+
+<img width="2920" height="1080" alt="image" src="../assets/img/TREMZZ.png" />
+
 
 ## Visão Geral
 
