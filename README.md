@@ -1,7 +1,6 @@
 # Tremzz: Gerenciamento de Transportes Ferroviários
 
-<img width="2920" height="1080" alt="image" src="../assets/img/TREMZZ.png" />
-
+<img width="2880" height="1620" alt="image" src="https://github.com/user-attachments/assets/4812184c-157e-49d4-8708-1442e9b7960d" />
 
 ## Visão Geral
 
